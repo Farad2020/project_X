@@ -1,32 +1,42 @@
 package com.example.projectX.dao;
 
 import com.example.projectX.models.Company;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Repository("testDao")
+@Repository("postgres")
 public class CompanyDataAccessService implements CompanyDao{
 
-    private static List<Company> db = new ArrayList<>() {
-        {
-            add(new Company(UUID.randomUUID(), "IQ hub", "iqhub07@gmail.com", "87777777777"));
-            add(new Company(UUID.randomUUID(), "Destination", "destination07@gmail.com", "87776666666"));
-            add(new Company(UUID.randomUUID(), "Bolashak", "bolashak07@gmail.com", "87775555555"));
-            add(new Company(UUID.randomUUID(), "NIS", "nis07@gmail.com", "87774444444"));
-        }
-    };
+    private final JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    public CompanyDataAccessService(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     @Override
     public int insertCompany(UUID id, Company company) {
-        db.add(new Company(id, company.getName(), company.getEmail(), company.getTelephone()));
-        return 1;
+        return 0;
     }
 
     @Override
     public List<Company> getAllCompanies() {
-        return db;
+        final String sql = "SELECT id, name, email, telephone FROM Companies";
+
+        return jdbcTemplate.query(
+                sql,
+                ((resultSet, i) -> {
+                    UUID id = UUID.fromString(resultSet.getString("id"));
+                    String name = resultSet.getString("name");
+                    String email = resultSet.getString("email");
+                    String telephone = resultSet.getString("telephone");
+                    return new Company(id, name, email, telephone);
+                })
+        );
     }
 }
