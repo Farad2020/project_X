@@ -14,7 +14,7 @@ public class CompanyService {
     private final CompanyDao companyDao;
 
     @Autowired
-    public CompanyService(@Qualifier("testDao") CompanyDao companyDao) {
+    public CompanyService(@Qualifier("postgres") CompanyDao companyDao) {
         this.companyDao = companyDao;
     }
 
