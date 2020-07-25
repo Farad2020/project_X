@@ -1,0 +1,133 @@
+/* Color palletes 1 */
+:root {
+  /* Color palletes 1 */
+  --main-colors-white: #ffffff;
+  --main-colors-light-grey: #f0f3f6;
+  --main-colors-bleak-blue: #e0f2ff;
+  --main-colors-light-blue: #8fbfff;
+  --main-colors-blue: #509aff;
+  --main-colors-brown: #2e1115;
+
+  /* Color palletes 2 */
+  --main-colors-grey: #adadad;
+  --main-colors-heathery: #83687b;
+  --main-colors-mauve: #64495c;
+  --main-colors-syrup: #4f1b1d;
+  --main-colors-brown: #2e1115;
+  --main-colors-white: #ffffff;
+
+}
+
+html{
+  height: 100%;
+  font-family: 'Montserrat';
+
+  align-items: center;
+
+  --bg: var(--main-colors-white);
+  --main-color: var(--main-colors-bleak-blue);
+  --text-color: var(--main-colors-brown);
+  --color-1: var(--main-colors-light-grey);
+  --color-2: var(--main-colors-light-blue);
+  --color-3: var(--main-colors-blue);
+
+}
+
+html[data-theme='dark']{
+  --bg: var(--main-colors-grey);
+  --main-color: var(--main-colors-mauve);
+  --text-color: var(--main-colors-white);
+  --color-1: var(--main-colors-heathery);
+  --color-2: var(--main-colors-syrup);
+  --color-3: var(--main-colors-brown);
+
+}
+
+
+html.transition,
+html.transition *,
+html.transition *:before,
+html.transition *:after {
+  transition: all 750ms !important;
+  transition-delay: 0 !important;
+}
+
+.navbar-light{
+  background-color: var(--main-color);
+  color: var(--text-color);
+ }
+
+
+
+body{
+  height: 100%;
+  background-color: var(--bg);
+}
+
+.container{
+  margin: 0em;
+  margin-top: 1em;
+}
+
+.info-bar{
+  float: left; 
+  width: 20%; 
+  margin-right: 2em;
+  margin-top: 3em;
+  margin-left: 2em;
+}
+
+.main-content{
+  float: right;
+  width: 70%;
+  margin-right: 2em;
+}
+
+.place-box{
+  
+  align-items: center;
+}
+
+.info-card-text{
+  height: 4em;
+  margin: 0.3em;
+}
+
+.card{
+  background-color: var(--main-color);
+  color: var(--text-color);
+}
+
+.btn-default{
+  background-color: var(--color-2);
+}
+
+.list-group-item:hover{
+  background-color: var(--main-color);
+  color: var(--text-color);
+}
+
+.alert{
+  margin: 0em;
+}
+
+
+/* scroll-bar *//* width */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
