@@ -14,6 +14,12 @@ https://www.youtube.com/watch?v=ZYV6dYtz4HA&t=1015s
 learn JS in general
 
 
+Searchbars:
+https://www.mockplus.com/blog/post/search-bar-design
+
+
+Another SB tutorial:
+https://www.youtube.com/watch?v=vtPkZShrvXQ&t=3997s
 
 Docker:
 https://www.youtube.com/watch?v=aHbE3pTyG-Q
