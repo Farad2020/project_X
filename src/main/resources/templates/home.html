@@ -110,24 +110,16 @@
             </div>
 
         </div>
-
-        <div class="container mt-5">
-            <div class="card mt-2">
-                <h5 class="card-header">Test Title</h5>
-                <p class="info-card-text">Here is general text that will be displayed on show, 
-                    Btw, dont forget to create snippet function,
-                    that retunrs on part of an whole textHere is general text that will be displayed on show, 
-                    Btw, dont forget to create snippet function,
-                    that retunrs on part of an whole text</p>
-                <a class="btn btn-default">More...</a>
-            </div>
-
-        </div>
+        
     </div>
 
     <div th:each="company : ${companies}">
         <p th:text="${company.getName()}"></p>
     </div>
+
+    <footer>
+        <img src="../static/design-flow/footer.png" style="margin: 0; padding: 0; margin-top: 2em; max-width: 100%; max-height: 100%; " >
+    </footer>
 
 <script src="../static/js/main.js"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
