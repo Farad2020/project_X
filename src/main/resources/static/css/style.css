@@ -1,3 +1,4 @@
+/* TODO: Multi- paged news bar cards */
 /* Color palletes 1 */
 :root {
   /* Color palletes 1 */
@@ -43,6 +44,10 @@ html[data-theme='dark']{
 
 }
 
+body{
+  height: 100%;
+  background-color: var(--bg);
+}
 
 html.transition,
 html.transition *,
@@ -52,21 +57,25 @@ html.transition *:after {
   transition-delay: 0 !important;
 }
 
+/*navbar */
+
 .navbar-light{
   background-color: var(--main-color);
   color: var(--text-color);
+  margin-bottom: 0.5em;
+ }
+
+ /*Main menu bar*/
+
+ .info-bar-text{
+   color: var(--text-color);
+   text-decoration-line: none;
+   text-align: left;
  }
 
 
-
-body{
-  height: 100%;
-  background-color: var(--bg);
-}
-
-.container{
-  margin: 0em;
-  margin-top: 1em;
+ .info-bar-text:hover{
+  color: var(--text-color);
 }
 
 .info-bar{
@@ -77,15 +86,39 @@ body{
   margin-left: 2em;
 }
 
-.main-content{
-  float: right;
-  width: 70%;
-  margin-right: 2em;
+.place_box:hover{
+  text-decoration: none;
+}
+
+/* Maybe leave border???????????????????????????????????? */
+.list-group-item{
+  border: none;
+}
+
+.list-group-item{
+  background-color: var(--bg);
+}
+
+.list-group-item:hover{
+  background-color: var(--main-color);
 }
 
 .place-box{
-  
   align-items: center;
+}
+
+/* Main content part*/
+.container{
+  margin: 0em;
+  margin-top: 1em;
+}
+
+
+
+.main-content{
+  float: right;
+  width: 70%;
+  margin-right: 5em;
 }
 
 .info-card-text{
@@ -100,11 +133,6 @@ body{
 
 .btn-default{
   background-color: var(--color-2);
-}
-
-.list-group-item:hover{
-  background-color: var(--main-color);
-  color: var(--text-color);
 }
 
 .alert{

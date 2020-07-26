@@ -14,6 +14,17 @@ https://www.youtube.com/watch?v=ZYV6dYtz4HA&t=1015s
 learn JS in general
 
 
+Calendar:
+https://uicookies.com/html-calendar/
+https://www.developerdrive.com/9-best-embeddable-calendars/
+Responsive Calendar Pattern
+
+Searchbars:
+https://www.mockplus.com/blog/post/search-bar-design
+
+
+Another SB tutorial:
+https://www.youtube.com/watch?v=vtPkZShrvXQ&t=3997s
 
 Docker:
 https://www.youtube.com/watch?v=aHbE3pTyG-Q
