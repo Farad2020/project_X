@@ -113,8 +113,6 @@ html.transition *:after {
   margin-top: 1em;
 }
 
-
-
 .main-content{
   float: right;
   width: 70%;
@@ -139,6 +137,35 @@ html.transition *:after {
   margin: 0em;
 }
 
+/* My Page Style */
+.account-img{
+  height: 16em;
+  width: 12em;
+  margin-top: 2em;
+  margin: 1em;
+}
+.account-img-box{
+  background-color: var(--color-1);
+  float: left;
+  align-items: center;
+  margin-right: 2em;
+  border-radius: .5em;
+}
+
+#edit-account-btn{
+  width: 12em;
+  margin: 1em;
+  margin-top: 0em;
+}
+.account-content{
+  float: right;
+  width: 70%;
+  margin-right: 5em;
+}
+
+.account-info-box{
+  margin-left: 2em;
+}
 
 /* scroll-bar *//* width */
 ::-webkit-scrollbar {
