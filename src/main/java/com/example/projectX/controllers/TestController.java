@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequestMapping("/")
 public class TestController {
 
     private final CompanyService companyService;
@@ -17,9 +19,14 @@ public class TestController {
         this.companyService = companyService;
     }
 
-    @GetMapping("/")
+    @GetMapping()
     public String home(Model model) {
         model.addAttribute("companies", companyService.getAllCompanies());
         return "home";
+    }
+
+    @GetMapping("login")
+    public String getLoginView() {
+        return "login-page";
     }
 }
