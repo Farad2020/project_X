@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 @RequestMapping("/")
@@ -22,7 +21,7 @@ public class TestController {
         this.userAuthenticationService = userAuthenticationService;
     }
 
-    @GetMapping()
+    @GetMapping("")
     public String home(Model model) {
         model.addAttribute("companies", companyService.getAllCompanies());
         return "home";
@@ -38,17 +37,13 @@ public class TestController {
         return "registration-page";
     }
 
-    @PostMapping("registration")
-    @ResponseStatus(code = HttpStatus.CREATED)
-    public RedirectView performRegistration(@RequestParam(name = "username") String login,
+    @PostMapping("perform_registration")
+    //@ResponseStatus(code = HttpStatus.CREATED)
+    public String performRegistration(@RequestParam(name = "username") String login,
                                             @RequestParam(name = "name") String name,
                                             @RequestParam(name = "password") String password) {
         boolean result = userAuthenticationService.saveUserStudent(login, name, password, null);
         System.out.println(result);
-        if (result) {
-            return new RedirectView("login", true);
-        } else {
-            return new RedirectView("registration", true);
-        }
+        return result ? "redirect:/login" : "redirect:/registration";
     }
 }
