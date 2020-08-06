@@ -11,13 +11,19 @@ responsive website:
 
 https://www.youtube.com/watch?v=ZYV6dYtz4HA&t=1015s
 
+Back to Top Button with HTML, CSS and JavaScript:
+https://www.youtube.com/watch?v=gphMli74Chk
+
 learn JS in general
+https://www.youtube.com/watch?v=Mus_vwhTCq0&t=28s
+https://www.youtube.com/watch?v=x7Xzvm0iLCI
 
 
 Calendar:
 https://uicookies.com/html-calendar/
 https://www.developerdrive.com/9-best-embeddable-calendars/
 Responsive Calendar Pattern
+
 
 Searchbars:
 https://www.mockplus.com/blog/post/search-bar-design

@@ -15,3 +15,16 @@ let trans = () => {
         document.documentElement.classList.remove('transition')
     }, 100)
 }
+
+function showMoreAccountInfo() {
+    var fullInfo = document.getElementById("account-info-card-text");
+    var btnShowAll = document.getElementById("show-full-account-desc-btn");
+  
+    if (fullInfo.style.display != "inline") {
+        fullInfo.style.display = "inline";
+        btnShowAll.innerHTML = "Скрыть подробную информацию";
+    } else {
+        fullInfo.style.display = "none";
+        btnShowAll.innerHTML = "Показать подробную информацию"; 
+    }
+  }

@@ -18,7 +18,6 @@
   --main-colors-white: #ffffff;
 
 }
-
 html{
   height: 100%;
   font-family: 'Montserrat';
@@ -82,13 +81,21 @@ html.transition *:after {
   float: left; 
   width: 20%; 
   margin-right: 2em;
-  margin-top: 3em;
+  margin-top: 1em;
   margin-left: 2em;
 }
 
 .place_box:hover{
   text-decoration: none;
 }
+
+
+/*
+.navbar-light{
+  position: sticky;
+  top: 0;
+}
+*/
 
 /* Maybe leave border???????????????????????????????????? */
 .list-group-item{
@@ -115,7 +122,7 @@ html.transition *:after {
 
 .main-content{
   float: right;
-  width: 70%;
+  width: 65%;
   margin-right: 5em;
 }
 
@@ -138,6 +145,13 @@ html.transition *:after {
 }
 
 /* My Page Style */
+
+#account-info-card{
+  padding: 1em;
+  height: auto;
+  word-wrap:break-word;
+}
+
 .account-img{
   height: 16em;
   width: 12em;
@@ -159,13 +173,35 @@ html.transition *:after {
 }
 .account-content{
   float: right;
-  width: 70%;
+  width: 65%;
   margin-right: 5em;
+  margin-top: 1em;
 }
 
 .account-info-box{
   margin-left: 2em;
 }
+
+#account-info-card-text{
+  display: none;
+  height: auto;
+}
+
+.soc-media-link-ico{
+  height: 1.5em;
+  width: 1.5em;
+  margin-right: 1em;
+}
+
+.account-divider{
+  color: var(--text-color);
+  border-bottom: 0.1em solid var(--text-color);
+}
+
+#show-full-account-desc-btn{
+ margin-top: 1em; 
+}
+
 
 /* scroll-bar *//* width */
 ::-webkit-scrollbar {
