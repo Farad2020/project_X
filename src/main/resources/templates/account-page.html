@@ -74,19 +74,37 @@
     <div class="account-content">
         <div class="account-img-box">
             <img class="account-img" src="../static/design-flow/avatars/avatar_cat.jpg"><br>
-            <a class="btn btn-default" id="edit-account-btn" href="../templates/news-page.html">Edit</a>
+            <a class="btn btn-default" id="edit-account-btn" href="#">Edit</a>
         </div>
 
         <div class="account-info-box">
-            <div class="card mt-2">
-                <h5 class="card-header">Mr Truthful Cat</h5>
-                <h6 style="color: gray;">Mr Truthful Cat's Status is probably o'right!</h5>
-                <p class="info-card-text">So, I'm just a cat that lives on a streets. I may be dead, or I may be alive, 
+            <div class="card" id="account-info-card">
+                <h5 class="account-name">Mr Truthful Cat</h5>
+                <h6 class="account-status">Mr Truthful Cat's Status is probably o'right!</h5>
+                <div class="account-divider"></div>
+                <button class="btn btn-default" id="show-full-account-desc-btn" onclick="showMoreAccountInfo()">Показать подробную информацию</button>
+                
+                <div class="info-card-text" id="account-info-card-text">
+                <p>So, I'm just a cat that lives on a streets. I may be dead, or I may be alive, 
                     depends on how friendly streets will be during my lifeyime. May be it sucks in a way, but atleast Im not
                     smart enough to get into deep feelings and be dreadful about vicious life cycle that awaits me and everyone else.
                     Is it good? Idk, Im just a cat! :)
+
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><img class="soc-media-link-ico" src="../static/design-flow/soc-media icons/icons8-реддит.svg" > my reddit link</li>
+                        <li class="list-group-item"><img class="soc-media-link-ico" src="../static/design-flow/soc-media icons/icons8-вконтакте-480.svg" > my vk link</li>
+                        <li class="list-group-item"><img class="soc-media-link-ico" src="../static/design-flow/soc-media icons/icons8-instagram-480.svg" > my instagram link</li>
+                        <li class="list-group-item"><img class="soc-media-link-ico" src="../static/design-flow/soc-media icons/icons8-whatsapp.svg" > my whatsapp link</li>
+                        <li class="list-group-item"><img class="soc-media-link-ico" src="../static/design-flow/soc-media icons/icons8-facebook-480.svg" > my facebook link</li>
+                        <li class="list-group-item"><img class="soc-media-link-ico" src="../static/design-flow/soc-media icons/icons8-github-octocat-480.svg" > my github link</li>
+                        <li class="list-group-item"><img class="soc-media-link-ico" src="../static/design-flow/soc-media icons/icons8-гугл-плюс.svg" > my gmail link</li>
+                        <li class="list-group-item"><img class="soc-media-link-ico" src="../static/design-flow/soc-media icons/icons8-телеграмма-app.svg" > my telegram link</li>
+                        <li class="list-group-item"><img class="soc-media-link-ico" src="../static/design-flow/soc-media icons/icons8-тик-так.svg" > my facebook link</li>
+                      </ul>
+
                 </p>
-                <a class="btn btn-default" href="../templates/news-page.html"> Show more details</a>
+            </div>
+
             </div>
         </div>
     </div>
