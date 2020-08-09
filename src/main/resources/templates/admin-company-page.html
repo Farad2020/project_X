@@ -5,6 +5,30 @@
     <title>Title</title>
 </head>
 <body>
+    <h2>Managers:</h2>
+    <div th:each="manager : ${managers}" style="background-color: aqua;">
+        <p th:text="${manager.getName()} + ' ' + ${manager.getSurname()} + ' ' + ${manager.getLogin()}"></p>
+        <a> Edit </a>
+        <a> Delete </a>
+    </div>
+    <form action="/$2a$10$HZR3IGneje95jJVEomN.vuEKlxwRt6Tn5oeLEXySZXh7L/WLiX6fm/add_manager" method="post">
+        <input type="text" name="login" placeholder="Login" required="">
+        <select name="role">
+            <option value="0">Ordinary manager</option>
+            <option value="1">The BOSS</option>
+        </select>
+        <input type="hidden" name="company_id" th:value="${company_id}">
+        <input type="submit">
+    </form>
 
+    <h2>Teachers:</h2>
+    <div>
+
+    </div>
+
+    <h2>Students:</h2>
+    <div>
+
+    </div>
 </body>
 </html>

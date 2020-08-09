@@ -19,7 +19,7 @@ public class UserAuthenticationService implements UserDetailsService {
     private final UserDao userDao;
 
     @Autowired
-    public UserAuthenticationService(@Qualifier("user_auth") UserDao userDao) {
+    public UserAuthenticationService(@Qualifier("postgres") UserDao userDao) {
         this.userDao = userDao;
     }
 

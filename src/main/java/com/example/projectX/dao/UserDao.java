@@ -15,6 +15,8 @@ public interface UserDao {
 
     Optional<UserStudent> selectUserStudentByLogin(String login);
 
+    Optional<ManagementStaff> selectManagementStaffByLogin(String login);
+
     boolean saveUserStudent(String login, String name, String password, UUID companyId);
 
     List<ManagementStaff> selectAllCompanyManagers(Company company);

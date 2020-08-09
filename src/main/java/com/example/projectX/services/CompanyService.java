@@ -32,4 +32,8 @@ public class CompanyService {
         return companyDao.getAllCompanies();
     }
 
+    public boolean addManagerToCompany(String managerLogin, int managerRole, UUID companyId) {
+        return companyDao.insertManager(managerLogin, managerRole, companyId);
+    }
+
 }

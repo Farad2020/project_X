@@ -21,4 +21,5 @@ public interface CompanyDao {
 
     List<Company> getAllCompanies();
 
+    boolean insertManager(String managerLogin, int role, UUID companyId);
 }

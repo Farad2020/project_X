@@ -46,11 +46,22 @@ public class AdminController {
     }
 
     @GetMapping(path = "company/{company_id}")
-    public String getManagersView(@PathVariable("company_id") UUID id) {
+    public String getCompanyUsersView(@PathVariable("company_id") UUID id, Model model) {
         Optional<Company> company = companyService.getCompanyById(id);
         if (company.isPresent()) {
             List<ManagementStaff> managementStaffList = userAuthenticationService.getAllCompanyManagers(company.get());
+            model.addAttribute("managers", managementStaffList);
         }
+        model.addAttribute("company_id", id);
         return "admin-company-page";
+    }
+
+    @PostMapping("add_manager")
+    public String addManager(@RequestParam(name = "login") String managerLogin,
+                             @RequestParam(name = "role") int managerRole,
+                             @RequestParam(name = "company_id") UUID companyId) {
+        System.out.println(companyId);
+        boolean result = companyService.addManagerToCompany(managerLogin, managerRole, companyId);
+        return "redirect:/$2a$10$HZR3IGneje95jJVEomN.vuEKlxwRt6Tn5oeLEXySZXh7L/WLiX6fm/company/" + companyId.toString();
     }
 }

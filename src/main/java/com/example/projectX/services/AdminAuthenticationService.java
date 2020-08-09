@@ -14,7 +14,7 @@ public class AdminAuthenticationService implements UserDetailsService {
     private final AdminDao adminDao;
 
     @Autowired
-    public AdminAuthenticationService(@Qualifier("user_auth") AdminDao adminDao) {
+    public AdminAuthenticationService(@Qualifier("postgres") AdminDao adminDao) {
         this.adminDao = adminDao;
     }
 
