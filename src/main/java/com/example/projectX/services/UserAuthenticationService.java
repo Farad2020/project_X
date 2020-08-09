@@ -1,6 +1,7 @@
 package com.example.projectX.services;
 
 import com.example.projectX.dao.UserDao;
+import com.example.projectX.models.ManagementStaff;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -27,5 +29,9 @@ public class UserAuthenticationService implements UserDetailsService {
 
     public boolean saveUserStudent(String login, String name, String password, UUID company_id) {
         return userDao.saveUserStudent(login, name, password, company_id);
+    }
+
+    public List<ManagementStaff> getAllCompanyManagers(UUID id) {
+        return null;
     }
 }

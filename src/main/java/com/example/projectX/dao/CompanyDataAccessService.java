@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository("postgres")
@@ -19,8 +20,20 @@ public class CompanyDataAccessService implements CompanyDao{
     }
 
     @Override
-    public int insertCompany(UUID id, Company company) {
-        return 0;
+    public boolean insertCompany(UUID id, Company company) {
+        if (getCompanyByName(company.getName()).isPresent()) {
+            return false;
+        }
+
+        final String sql = String.format("INSERT INTO Companies (id, name, email, telephone) VALUES ('%s', '%s', '%s', '%s')",
+                id.toString(), company.getName(), company.getEmail(), company.getTelephone());
+        jdbcTemplate.execute(sql);
+        return true;
+    }
+
+    @Override
+    public Optional<Company> getCompanyByName(String name) {
+        return Optional.empty();
     }
 
     @Override

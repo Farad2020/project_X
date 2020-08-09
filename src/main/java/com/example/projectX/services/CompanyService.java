@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class CompanyService {
@@ -18,8 +19,12 @@ public class CompanyService {
         this.companyDao = companyDao;
     }
 
-    public int addCompany(Company company) {
+    public boolean addCompany(Company company) {
         return companyDao.insertCompany(company);
+    }
+
+    public Company getCompanyById(UUID id) {
+        return null;
     }
 
     public List<Company> getAllCompanies() {
