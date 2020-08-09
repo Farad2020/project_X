@@ -1,0 +1,14 @@
+merge 
+
+git merge branch_name --no ff
+
+
+change to existing branch
+git checkout branch_name
+
+rebase branch from current one
+git rebase branch_name
+
+get git info
+git log --oneline --graph --all
+

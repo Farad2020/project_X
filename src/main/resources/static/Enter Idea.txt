@@ -1,0 +1,2 @@
+When person first enters his account, 
+he will get his login and default password
