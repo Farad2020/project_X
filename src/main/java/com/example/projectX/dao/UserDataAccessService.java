@@ -37,16 +37,16 @@ public class UserDataAccessService implements UserDao, AdminDao {
 
     @Override
     public Optional<UserStudent> selectUserStudentByLogin(String login) {
-        final String sql = String.format("SELECT * FROM User_Students WHERE login = '%s';", login);
+        final String sql = String.format("SELECT * FROM User_Students WHERE user_student_login = '%s';", login);
         List<UserStudent> userStudents = jdbcTemplate.query(sql, ((resultSet, i) -> {
-            UUID id = UUID.fromString(resultSet.getString("id"));
-            String name = resultSet.getString("name");
-            String surname = resultSet.getString("surname");
-            String lastname = resultSet.getString("lastname");
-            String login_ = resultSet.getString("login");
-            String password = resultSet.getString("password");
-            String email = resultSet.getString("email");
-            String telephone = resultSet.getString("telephone");
+            UUID id = UUID.fromString(resultSet.getString("user_student_id"));
+            String name = resultSet.getString("user_student_name");
+            String surname = resultSet.getString("user_student_surname");
+            String lastname = resultSet.getString("user_student_lastname");
+            String login_ = resultSet.getString("user_student_login");
+            String password = resultSet.getString("user_student_password");
+            String email = resultSet.getString("user_student_email");
+            String telephone = resultSet.getString("user_student_telephone");
             UUID companyId = null;
             if (resultSet.getString("company_id") != null) {
                 companyId = UUID.fromString(resultSet.getString("company_id"));
@@ -67,7 +67,7 @@ public class UserDataAccessService implements UserDao, AdminDao {
         }
         password = passwordEncoder.encode(password);
         final String sql = String.format("INSERT INTO User_Students " +
-                "(id, name, login, password, is_account_non_expired, is_account_non_locked, is_credentials_non_expired, is_enabled) " +
+                "(user_student_id, user_student_name, user_student_login, user_student_password, is_account_non_expired, is_account_non_locked, is_credentials_non_expired, is_enabled) " +
                 "VALUES (uuid_generate_v4(), '%s', '%s', '%s', True, True, True, True);", name, login, password);
         jdbcTemplate.execute(sql);
         return true;
@@ -80,11 +80,11 @@ public class UserDataAccessService implements UserDao, AdminDao {
 
     @Override
     public Optional<Admin> selectAdminByLogin(String login) {
-        final String sql = String.format("SELECT * FROM Admins WHERE login = '%s'", login);
+        final String sql = String.format("SELECT * FROM Admins WHERE admin_login = '%s'", login);
         List<Admin> admins = jdbcTemplate.query(sql, ((resultSet, i) -> {
-            UUID id = UUID.fromString(resultSet.getString("id"));
-            String login_ = resultSet.getString("login");
-            String password = resultSet.getString("password");
+            UUID id = UUID.fromString(resultSet.getString("admin_id"));
+            String login_ = resultSet.getString("admin_login");
+            String password = resultSet.getString("admin_password");
             return new Admin(id, login_, password);
         }));
         return admins.stream().findFirst();
