@@ -50,15 +50,15 @@ public class CompanyDataAccessService implements CompanyDao{
 
     @Override
     public List<Company> getAllCompanies() {
-        final String sql = "SELECT id, name, email, telephone FROM Companies";
+        final String sql = "SELECT * FROM Companies";
 
         return jdbcTemplate.query(
                 sql,
                 ((resultSet, i) -> {
-                    UUID id = UUID.fromString(resultSet.getString("id"));
-                    String name = resultSet.getString("name");
-                    String email = resultSet.getString("email");
-                    String telephone = resultSet.getString("telephone");
+                    UUID id = UUID.fromString(resultSet.getString("company_id"));
+                    String name = resultSet.getString("company_name");
+                    String email = resultSet.getString("company_email");
+                    String telephone = resultSet.getString("company_telephone");
                     return new Company(id, name, email, telephone);
                 })
         );

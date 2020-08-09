@@ -29,6 +29,8 @@ public class AuthenticationController {
         return "home";
     }
 
+
+
     @GetMapping("login")
     public String getLoginView() {
         return "login-page";
@@ -46,5 +48,36 @@ public class AuthenticationController {
         boolean result = userAuthenticationService.saveUserStudent(login, name, password, null);
         System.out.println(result);
         return result ? "redirect:/login" : "redirect:/registration";
+    }
+
+
+    @GetMapping("/profile")
+    public String profile(Model model) {
+        return "account-page";
+    }
+
+    @GetMapping("/user_attendance")
+    public String userAttendance(Model model) {
+        return "my-attendance-journal";
+    }
+
+    @GetMapping("user_courses")
+    public String user_courses(Model model) {
+        return "my-courses-page";
+    }
+
+    @GetMapping("user_tasks")
+    public String user_tasks(Model model) {
+        return "my-tasks-page";
+    }
+
+    @GetMapping("user_teachers")
+    public String user_teachers(Model model) {
+        return "my-teachers-page";
+    }
+
+    @GetMapping("home")
+    public String home2(Model model) {
+        return "home";
     }
 }

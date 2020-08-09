@@ -11,48 +11,7 @@
 <body>
 <header th:insert="blocks/header :: header"></header>
 
-
-    <div class="info-bar">
-        <ul class="list-group">
-            <a class="place_box" href="../templates/account-page.html">
-                <li class="list-group-item">
-                    <h5 class="info-bar-text">Мой Профиль</h5>
-                </li>
-            </a>
-
-
-            <a class="place_box" href="../templates/home.html" >
-                <li class="list-group-item">
-                    <h5 class="info-bar-text">Новости</h5>
-                </li>
-            </a>
-
-            <a class="place_box" href="../templates/my-courses-page.html" >
-                <li class="list-group-item">
-                    <h5 class="info-bar-text">Мои Курсы</h5>
-                </li>
-            </a>
-
-            <a class="place_box" href="../templates/my-tasks-page.html">
-                <li class="list-group-item">
-                    <h5 class="info-bar-text" >Мои Задания</h5>
-                </li>
-            </a>
-
-            <a class="place_box" href="../templates/my-attendance-journal.html" >
-                <li class="list-group-item">
-                    <h5 class="info-bar-text">Журнал Посещения</h5>
-                </li>
-            </a>
-
-            <a class="place_box" href="../templates/my-teachers-page.html" >
-                <li class="list-group-item">
-                    <h5 class="info-bar-text">Мои Учителя</h5>
-                </li>
-            </a>
-
-        </ul>
-    </div>
+<header th:insert="blocks/user-left-menu-bar :: user-left-menu-bar"></header>
 
     <div class="main-content">
         <div class="container mt-5">
@@ -95,14 +54,6 @@
         </div>
         
     </div>
-
-    <div th:each="company : ${companies}">
-        <p th:text="${company.getName()}"></p>
-    </div>
-
-    <footer>
-        <img src="/design-flow/footer.png" style="margin: 0; padding: 0; margin-top: 2em; max-width: 100%; max-height: 100%; " >
-    </footer>
 
 <footer th:insert="blocks/footer :: footer"></footer>
 </body>
