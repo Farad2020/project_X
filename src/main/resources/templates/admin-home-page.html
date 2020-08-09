@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div th:each="company : ${companies}">
+        <a th:href="@{company/} + ${company.getId()}" th:text='${company.getName()}'></a>
+    </div>
+    <form action="/$2a$10$HZR3IGneje95jJVEomN.vuEKlxwRt6Tn5oeLEXySZXh7L/WLiX6fm/add_company" method="post">
+        <input type="text" name="company_name" placeholder="Company name" required="">
+        <input type="text" name="company_email" placeholder="Company email" required="">
+        <input type="tel" name="company_telephone" placeholder="Company telephone" pattern="[0-9]{1}-[0-9]{3}-[0-9]{3}-[0-9]{2}-[0-9]{2}" required="">
+        <input type="submit">
+    </form>
+</body>
+</html>

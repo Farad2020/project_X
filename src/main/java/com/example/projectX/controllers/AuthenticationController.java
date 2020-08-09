@@ -3,20 +3,22 @@ package com.example.projectX.controllers;
 import com.example.projectX.services.CompanyService;
 import com.example.projectX.services.UserAuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/")
-public class TestController {
+public class AuthenticationController {
 
     private final CompanyService companyService;
     private final UserAuthenticationService userAuthenticationService;
 
     @Autowired
-    public TestController(CompanyService companyService, UserAuthenticationService userAuthenticationService) {
+    public AuthenticationController(CompanyService companyService, UserAuthenticationService userAuthenticationService) {
         this.companyService = companyService;
         this.userAuthenticationService = userAuthenticationService;
     }
@@ -38,10 +40,9 @@ public class TestController {
     }
 
     @PostMapping("perform_registration")
-    //@ResponseStatus(code = HttpStatus.CREATED)
     public String performRegistration(@RequestParam(name = "username") String login,
-                                            @RequestParam(name = "name") String name,
-                                            @RequestParam(name = "password") String password) {
+                                      @RequestParam(name = "name") String name,
+                                      @RequestParam(name = "password") String password) {
         boolean result = userAuthenticationService.saveUserStudent(login, name, password, null);
         System.out.println(result);
         return result ? "redirect:/login" : "redirect:/registration";
