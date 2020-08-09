@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Controller
@@ -46,8 +47,10 @@ public class AdminController {
 
     @GetMapping(path = "company/{company_id}")
     public String getManagersView(@PathVariable("company_id") UUID id) {
-        Company company = companyService.getCompanyById();
-        List<ManagementStaff> managementStaffList = userAuthenticationService.getAllCompanyManagers(id);
+        Optional<Company> company = companyService.getCompanyById(id);
+        if (company.isPresent()) {
+            List<ManagementStaff> managementStaffList = userAuthenticationService.getAllCompanyManagers(company.get());
+        }
         return "admin-company-page";
     }
 }

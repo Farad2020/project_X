@@ -17,6 +17,8 @@ public interface CompanyDao {
 
     Optional<Company> getCompanyByName(String name);
 
+    Optional<Company> getCompanyById(UUID id);
+
     List<Company> getAllCompanies();
 
 }

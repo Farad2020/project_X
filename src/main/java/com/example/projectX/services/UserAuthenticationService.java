@@ -1,6 +1,7 @@
 package com.example.projectX.services;
 
 import com.example.projectX.dao.UserDao;
+import com.example.projectX.models.Company;
 import com.example.projectX.models.ManagementStaff;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -31,7 +32,7 @@ public class UserAuthenticationService implements UserDetailsService {
         return userDao.saveUserStudent(login, name, password, company_id);
     }
 
-    public List<ManagementStaff> getAllCompanyManagers(UUID id) {
-        return null;
+    public List<ManagementStaff> getAllCompanyManagers(Company company) {
+        return userDao.selectAllCompanyManagers(company);
     }
 }

@@ -1,8 +1,6 @@
 package com.example.projectX.dao;
 
-import com.example.projectX.models.Admin;
-import com.example.projectX.models.User;
-import com.example.projectX.models.UserStudent;
+import com.example.projectX.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -73,6 +71,11 @@ public class UserDataAccessService implements UserDao, AdminDao {
                 "VALUES (uuid_generate_v4(), '%s', '%s', '%s', True, True, True, True);", name, login, password);
         jdbcTemplate.execute(sql);
         return true;
+    }
+
+    @Override
+    public List<ManagementStaff> selectAllCompanyManagers(Company company) {
+        return null;
     }
 
     @Override
