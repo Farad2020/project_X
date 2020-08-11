@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" data-theme="light">
+<head>
+    <title th:text="${title}" > </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" href="/css/style.css" />
+</head>
+<body>
+<header th:insert="blocks/header :: header"></header>
+
+<div th:insert="blocks/company-left-menu-bar :: company-left-menu-bar"></div>
+
+<div class="account-content">
+    <div class="account-img-box">
+        <img class="account-img" src="/design-flow/avatars/test1.png"><br>
+        <a class="btn btn-default" id="edit-account-btn" href="#">Edit</a>
+    </div>
+
+    <div class="account-info-box">
+        <div class="card" id="account-info-card">
+            <h5 class="company-name">Real Company</h5>
+            <h6 class="company-address">21Б Бейкерстрит</h6>
+            <h6 class="company-phone">8-800-555-3535(Легче позвонить чем у кого-то занимать!)</h6>
+            <div class="info-card-text" id="company-info-card-text">
+                <p>This is legit description of totally real company based on Mane.
+
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><img class="soc-media-link-ico" src="/design-flow/soc-media icons/icons8-вконтакте-480.svg" > company vk link</li>
+                    <li class="list-group-item"><img class="soc-media-link-ico" src="/design-flow/soc-media icons/icons8-instagram-480.svg" > company instagram link</li>
+                    <li class="list-group-item"><img class="soc-media-link-ico" src="/design-flow/soc-media icons/icons8-телеграмма-app.svg" > company telegram link</li>
+                </ul>
+
+                </p>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<footer th:insert="blocks/footer :: footer"></footer>
+</body>
+</html>
