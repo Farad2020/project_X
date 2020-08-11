@@ -64,4 +64,12 @@ public class AdminController {
         boolean result = companyService.addManagerToCompany(managerLogin, managerRole, companyId);
         return "redirect:/$2a$10$HZR3IGneje95jJVEomN.vuEKlxwRt6Tn5oeLEXySZXh7L/WLiX6fm/company/" + companyId.toString();
     }
+
+    @GetMapping(path = "company/{company_id}/manager/{manager_id}/edit")
+    public String editManager(@PathVariable("company_id") UUID companyId,
+                              @PathVariable("manager_id") UUID managerId) {
+        Optional<Company> company = companyService.getCompanyById(companyId);
+        //Optional<ManagementStaff> manager = userAuthenticationService.get
+        return "redirect:/";
+    }
 }
