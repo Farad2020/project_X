@@ -1,4 +1,9 @@
 <!DOCTYPE HTML>
+<!--
+кнопка на создание нового поста
+(создание: выбор курса и другая инфа)
+список его постов, и фильтр
+-->
 <html xmlns:th="http://www.thymeleaf.org" data-theme="light">
 <head>
     <title th:text="${title}" > </title>
@@ -14,7 +19,51 @@
 <div th:insert="blocks/teacher-left-menu-bar :: teacher-left-menu-bar"></div>
 
 
+<div class="main-content">
+    <div class="container mt-5">
+        <div class="card mt-2">
+            <h5 class="card-header">Test Title</h5>
+            <p class="info-card-text">Here is general text that will be displayed on show,
+                Btw, dont forget to create snippet function,
+                that retunrs on part of an whole textHere is general text that will be displayed on show,
+                Btw, dont forget to create snippet function,
+                that retunrs on part of an whole text</p>
+            <a class="btn btn-default" href="../templates/news-page.html">More...</a>
+        </div>
 
+    </div>
+
+    <div class="container mt-5">
+        <div class="card mt-2">
+            <h5 class="card-header">Test Title</h5>
+            <p class="info-card-text">Here is general text that will be displayed on show,
+                Btw, dont forget to create snippet function,
+                that retunrs on part of an whole textHere is general text that will be displayed on show,
+                Btw, dont forget to create snippet function,
+                that retunrs on part of an whole text</p>
+            <a class="btn btn-default">More...</a>
+        </div>
+
+    </div>
+
+    <div class="container mt-5">
+        <div class="card mt-2">
+            <h5 class="card-header">Test Title</h5>
+            <p class="info-card-text">Here is general text that will be displayed on show,
+                Btw, dont forget to create snippet function,
+                that retunrs on part of an whole textHere is general text that will be displayed on show,
+                Btw, dont forget to create snippet function,
+                that retunrs on part of an whole text</p>
+            <a class="btn btn-default">More...</a>
+        </div>
+
+    </div>
+    <div id="data-container">
+        <div id="pagination-container"></div>
+
+    </div>
+
+</div>
 <footer th:insert="blocks/footer :: footer"></footer>
 </body>
 </html>

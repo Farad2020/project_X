@@ -133,7 +133,7 @@ public class AuthenticationController {
 
     @GetMapping("teacher_courses")
     public String teacherCourses(Model model) {
-        return "teacher-courses";
+        return "teacher-courses-page";
     }
 
     @GetMapping("teacher_posts")
@@ -154,6 +154,16 @@ public class AuthenticationController {
     @GetMapping("teacher_tasks")
     public String teacherTasks(Model model) {
         return "teacher-tasks-page";
+    }
+
+    @GetMapping("generic_course")
+    public String genericCourse(Model model) {
+        return "course-page";
+    }
+
+    @GetMapping("generic_task")
+    public String genericTask(Model model) {
+        return "task-page";
     }
 
 }
