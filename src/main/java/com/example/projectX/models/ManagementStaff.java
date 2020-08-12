@@ -22,6 +22,14 @@ public class ManagementStaff implements UserDetails {
     private final boolean isEnabled;
     private final UUID companyId;
     private final int role;
+    private final boolean isAbleToDeleteManager;
+    private final boolean isAbleToDeleteTeacher;
+    private final boolean isAbleToDeleteStudent;
+    private final boolean isAbleToAddManager;
+    private final boolean isAbleToAddTeacher;
+    private final boolean isAbleToAddStudent;
+    private final boolean isAbleToDeleteCourse;
+    private final boolean isAbleToAddCourse;
 
     public ManagementStaff(UUID id,
                            String name,
@@ -36,7 +44,15 @@ public class ManagementStaff implements UserDetails {
                            boolean isCredentialsNonExpired,
                            boolean isEnabled,
                            UUID companyId,
-                           int role) {
+                           int role,
+                           boolean isAbleToDeleteManager,
+                           boolean isAbleToDeleteTeacher,
+                           boolean isAbleToDeleteStudent,
+                           boolean isAbleToAddManager,
+                           boolean isAbleToAddTeacher,
+                           boolean isAbleToAddStudent,
+                           boolean isAbleToDeleteCourse,
+                           boolean isAbleToAddCourse) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -51,6 +67,14 @@ public class ManagementStaff implements UserDetails {
         this.isEnabled = isEnabled;
         this.companyId = companyId;
         this.role = role;
+        this.isAbleToDeleteManager = isAbleToDeleteManager;
+        this.isAbleToDeleteTeacher = isAbleToDeleteTeacher;
+        this.isAbleToDeleteStudent = isAbleToDeleteStudent;
+        this.isAbleToAddManager = isAbleToAddManager;
+        this.isAbleToAddTeacher = isAbleToAddTeacher;
+        this.isAbleToAddStudent = isAbleToAddStudent;
+        this.isAbleToDeleteCourse = isAbleToDeleteCourse;
+        this.isAbleToAddCourse = isAbleToAddCourse;
     }
 
     @Override
@@ -122,5 +146,37 @@ public class ManagementStaff implements UserDetails {
 
     public int getRole() {
         return role;
+    }
+
+    public boolean isAbleToDeleteManager() {
+        return isAbleToDeleteManager;
+    }
+
+    public boolean isAbleToDeleteTeacher() {
+        return isAbleToDeleteTeacher;
+    }
+
+    public boolean isAbleToDeleteStudent() {
+        return isAbleToDeleteStudent;
+    }
+
+    public boolean isAbleToAddManager() {
+        return isAbleToAddManager;
+    }
+
+    public boolean isAbleToAddTeacher() {
+        return isAbleToAddTeacher;
+    }
+
+    public boolean isAbleToAddStudent() {
+        return isAbleToAddStudent;
+    }
+
+    public boolean isAbleToDeleteCourse() {
+        return isAbleToDeleteCourse;
+    }
+
+    public boolean isAbleToAddCourse() {
+        return isAbleToAddCourse;
     }
 }

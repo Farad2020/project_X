@@ -8,7 +8,7 @@
     <h2>Managers:</h2>
     <div th:each="manager : ${managers}" style="background-color: aqua;">
         <p th:text="${manager.getName()} + ' ' + ${manager.getSurname()} + ' ' + ${manager.getLogin()}"></p>
-        <a th:href="@{manager/} + ${manager.getId()} + '/edit'"> Edit </a>
+        <a th:href="@{${company_id}} + '/manager/' + ${manager.getId()} + '/edit'"> Edit </a>
         <a> Delete </a>
     </div>
     <form action="/$2a$10$HZR3IGneje95jJVEomN.vuEKlxwRt6Tn5oeLEXySZXh7L/WLiX6fm/add_manager" method="post">

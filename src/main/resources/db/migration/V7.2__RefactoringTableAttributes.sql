@@ -1,0 +1,1 @@
+ALTER TABLE Courses ADD company_id UUID REFERENCES Companies(company_id) NOT NULL;

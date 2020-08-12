@@ -92,6 +92,37 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
     }
 
     @Override
+    public Optional<ManagementStaff> getManagerById(UUID id) {
+        final String sql = String.format("SELECT * FROM Management_Staff WHERE management_staff_id = '%s'", id);
+        List<ManagementStaff> managers = jdbcTemplate.query(sql, ((resultSet, i) -> {
+            UUID id_ = UUID.fromString(resultSet.getString("management_staff_id"));
+            String name = resultSet.getString("management_staff_name");
+            String surname = resultSet.getString("management_staff_surname");
+            String lastname = resultSet.getString("management_staff_lastname");
+            String login_ = resultSet.getString("management_staff_login");
+            String password = resultSet.getString("management_staff_password");
+            String email = resultSet.getString("management_staff_email");
+            String telephone = resultSet.getString("management_staff_telephone");
+            boolean isAccountNonExpired = resultSet.getBoolean("is_account_non_expired");
+            boolean isAccountNonLocked = resultSet.getBoolean("is_account_non_locked");
+            boolean isCredentialsNonExpired = resultSet.getBoolean("is_credentials_non_expired");
+            boolean isEnabled = resultSet.getBoolean("is_enabled");
+            UUID companyId = UUID.fromString(resultSet.getString("company_id"));
+            int role = resultSet.getInt("role");
+            boolean isAbleToDeleteManager = resultSet.getBoolean("is_able_to_delete_manager");
+            boolean isAbleToDeleteTeacher = resultSet.getBoolean("is_able_to_delete_teacher");
+            boolean isAbleToDeleteStudent = resultSet.getBoolean("is_able_to_delete_student");
+            boolean isAbleToAddManager = resultSet.getBoolean("is_able_to_add_manager");
+            boolean isAbleToAddTeacher = resultSet.getBoolean("is_able_to_add_teacher");
+            boolean isAbleToAddStudent = resultSet.getBoolean("is_able_to_add_student");
+            boolean isAbleToDeleteCourse = resultSet.getBoolean("is_able_to_delete_course");
+            boolean isAbleToAddCourse = resultSet.getBoolean("is_able_to_add_course");
+            return new ManagementStaff(id_, name, surname, lastname, login_, password, email, telephone, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled, companyId, role, isAbleToDeleteManager, isAbleToDeleteTeacher, isAbleToDeleteStudent, isAbleToAddManager, isAbleToAddTeacher, isAbleToAddStudent, isAbleToDeleteCourse, isAbleToAddCourse);
+        }));
+        return managers.stream().findFirst();
+    }
+
+    @Override
     public Optional<? extends UserDetails> selectUserByUsername(String username) {
         Optional<UserStudent> student = selectUserStudentByLogin(username);
         if (student.isPresent()) {
@@ -147,7 +178,15 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
             boolean isEnabled = resultSet.getBoolean("is_enabled");
             UUID companyId = UUID.fromString(resultSet.getString("company_id"));
             int role = resultSet.getInt("role");
-            return new ManagementStaff(id, name, surname, lastname, login_, password, email, telephone, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled, companyId, role);
+            boolean isAbleToDeleteManager = resultSet.getBoolean("is_able_to_delete_manager");
+            boolean isAbleToDeleteTeacher = resultSet.getBoolean("is_able_to_delete_teacher");
+            boolean isAbleToDeleteStudent = resultSet.getBoolean("is_able_to_delete_student");
+            boolean isAbleToAddManager = resultSet.getBoolean("is_able_to_add_manager");
+            boolean isAbleToAddTeacher = resultSet.getBoolean("is_able_to_add_teacher");
+            boolean isAbleToAddStudent = resultSet.getBoolean("is_able_to_add_student");
+            boolean isAbleToDeleteCourse = resultSet.getBoolean("is_able_to_delete_course");
+            boolean isAbleToAddCourse = resultSet.getBoolean("is_able_to_add_course");
+            return new ManagementStaff(id, name, surname, lastname, login_, password, email, telephone, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled, companyId, role, isAbleToDeleteManager, isAbleToDeleteTeacher, isAbleToDeleteStudent, isAbleToAddManager, isAbleToAddTeacher, isAbleToAddStudent, isAbleToDeleteCourse, isAbleToAddCourse);
         })).stream().findFirst();
     }
 
@@ -207,7 +246,15 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
             boolean isEnabled = resultSet.getBoolean("is_enabled");
             UUID companyId = UUID.fromString(resultSet.getString("company_id"));
             int role = resultSet.getInt("role");
-            return new ManagementStaff(id, name, surname, lastname, login, password, email, telephone, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled, companyId, role);
+            boolean isAbleToDeleteManager = resultSet.getBoolean("is_able_to_delete_manager");
+            boolean isAbleToDeleteTeacher = resultSet.getBoolean("is_able_to_delete_teacher");
+            boolean isAbleToDeleteStudent = resultSet.getBoolean("is_able_to_delete_student");
+            boolean isAbleToAddManager = resultSet.getBoolean("is_able_to_add_manager");
+            boolean isAbleToAddTeacher = resultSet.getBoolean("is_able_to_add_teacher");
+            boolean isAbleToAddStudent = resultSet.getBoolean("is_able_to_add_student");
+            boolean isAbleToDeleteCourse = resultSet.getBoolean("is_able_to_delete_course");
+            boolean isAbleToAddCourse = resultSet.getBoolean("is_able_to_add_course");
+            return new ManagementStaff(id, name, surname, lastname, login, password, email, telephone, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled, companyId, role, isAbleToDeleteManager, isAbleToDeleteTeacher, isAbleToDeleteStudent, isAbleToAddManager, isAbleToAddTeacher, isAbleToAddStudent, isAbleToDeleteCourse, isAbleToAddCourse);
         }));
     }
 

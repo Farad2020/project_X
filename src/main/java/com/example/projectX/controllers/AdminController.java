@@ -1,14 +1,18 @@
 package com.example.projectX.controllers;
 
+import com.example.projectX.models.Admin;
 import com.example.projectX.models.Company;
 import com.example.projectX.models.ManagementStaff;
 import com.example.projectX.services.CompanyService;
 import com.example.projectX.services.UserAuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.RegEx;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -67,9 +71,23 @@ public class AdminController {
 
     @GetMapping(path = "company/{company_id}/manager/{manager_id}/edit")
     public String editManager(@PathVariable("company_id") UUID companyId,
-                              @PathVariable("manager_id") UUID managerId) {
+                              @PathVariable("manager_id") UUID managerId,
+                              Model model) {
         Optional<Company> company = companyService.getCompanyById(companyId);
-        //Optional<ManagementStaff> manager = userAuthenticationService.get
-        return "redirect:/";
+        Optional<ManagementStaff> manager = companyService.getManagerById(managerId);
+        company.ifPresent(value -> model.addAttribute("company", value));
+        manager.ifPresent(managementStaff -> model.addAttribute("manager", managementStaff));
+        return "admin-company-manager-edit";
     }
+
+//    @PostMapping("edit_manager")
+//    public String editManager(@RequestParam(name = "name") String name,
+//                              @RequestParam(name = "surname") String surname,
+//                              @RequestParam(name = "lastname") String lastname,
+//                              @RequestParam(name = "login") String login,
+//                              @RequestParam(name = "password") String password,
+//                              @RequestParam(name = "email") String email,
+//                              @RequestParam(name = "telephone") String telephone) {
+//        return "";
+//    }
 }

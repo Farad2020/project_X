@@ -2,6 +2,7 @@ package com.example.projectX.services;
 
 import com.example.projectX.dao.CompanyDao;
 import com.example.projectX.models.Company;
+import com.example.projectX.models.ManagementStaff;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,10 @@ public class CompanyService {
 
     public boolean addManagerToCompany(String managerLogin, int managerRole, UUID companyId) {
         return companyDao.insertManager(managerLogin, managerRole, companyId);
+    }
+
+    public Optional<ManagementStaff> getManagerById(UUID managerId) {
+        return companyDao.getManagerById(managerId);
     }
 
 }

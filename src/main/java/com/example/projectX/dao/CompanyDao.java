@@ -1,6 +1,8 @@
 package com.example.projectX.dao;
 
 import com.example.projectX.models.Company;
+import com.example.projectX.models.ManagementStaff;
+import org.checkerframework.checker.nullness.Opt;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,4 +24,6 @@ public interface CompanyDao {
     List<Company> getAllCompanies();
 
     boolean insertManager(String managerLogin, int role, UUID companyId);
+
+    Optional<ManagementStaff> getManagerById(UUID id);
 }
