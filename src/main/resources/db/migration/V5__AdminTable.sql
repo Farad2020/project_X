@@ -1,0 +1,5 @@
+CREATE TABLE Admins (
+    id UUID PRIMARY KEY NOT NULL,
+    login VARCHAR(100) NOT NULL,
+    password VARCHAR(100) NOT NULL
+);

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form action="#" method="post">
+        <div><input type="text" name="name" placeholder="name" th:value="${manager.getName()}"></div>
+        <div><input type="text" name="surname" placeholder="surname" th:value="${manager.getSurname()}"></div>
+        <div><input type="text" name="lastname" placeholder="lastname" th:value="${manager.getLastname()}"></div>
+        <div><input type="text" name="login" placeholder="login" th:value="${manager.getLogin()}"></div>
+        <div><input type="text" name="password" placeholder="password" th:value="${manager.getPassword()}"></div>
+        <div><input type="text" name="email" placeholder="email" th:value="${manager.getEmail()}"></div>
+        <div><input type="text" name="telephone" placeholder="telephone" th:value="${manager.getTelephone()}"></div>
+        <div>
+            <p>Is account non expired</p>
+            <select name="is_account_non_expired">
+                <option value="1" th:selected="${manager.isAccountNonExpired()}">True</option>
+                <option value="0" th:selected="${!manager.isAccountNonExpired()}">False</option>
+            </select>
+        </div>
+        <div>
+            <p>Is account non locked</p>
+            <select name="is_account_non_locked">
+                <option value="1" th:selected="${manager.isAccountNonLocked()}">True</option>
+                <option value="0" th:selected="${!manager.isAccountNonLocked()}">False</option>
+            </select>
+        </div>
+        <div>
+            <p>Is credentials non expired</p>
+            <select name="is_credentials_non_expired">
+                <option value="1" th:selected="${manager.isCredentialsNonExpired()}">True</option>
+                <option value="0" th:selected="${!manager.isCredentialsNonExpired()}">False</option>
+            </select>
+        </div>
+        <div>
+            <p>Is enabled</p>
+            <select name="is_enabled">
+                <option value="1" th:selected="${manager.isEnabled()}">True</option>
+                <option value="0" th:selected="${!manager.isEnabled()}">False</option>
+        </select>
+        </div>
+        <div>
+            <input type="text" name="company_id" placeholder="company id" th:value="${manager.getCompanyId()}">
+        </div>
+        <div>
+            <p>Role</p>
+            <select name="role">
+                <option value="1" th:selected="${manager.getRole() == 1}">The BOSS</option>
+                <option value="0" th:selected="${manager.getRole() == 0}">Ordinary manager</option>
+            </select>
+        </div>
+        <div>
+            <p>Is able to delete manager</p>
+            <select name="is_able_to_delete_manager">
+                <option value="1" th:selected="${manager.isAbleToDeleteManager()}">True</option>
+                <option value="0" th:selected="${!manager.isAbleToDeleteManager()}">False</option>
+            </select>
+        </div>
+        <div>
+            <p>is_able_to_delete_teacher</p>
+            <select name="is_able_to_delete_teacher">
+                <option value="1" th:selected="${manager.isAbleToDeleteTeacher()}">True</option>
+                <option value="0" th:selected="${!manager.isAbleToDeleteTeacher()}">False</option>
+            </select>
+        </div>
+        <div>
+            <p>is_able_to_delete_student</p>
+            <select name="is_able_to_delete_student">
+                <option value="1" th:selected="${manager.isAbleToDeleteStudent()}">True</option>
+                <option value="0" th:selected="${!manager.isAbleToDeleteStudent()}">False</option>
+            </select>
+        </div>
+        <div>
+            <p>is_able_to_add_manager</p>
+            <select name="is_able_to_add_manager">
+                <option value="1" th:selected="${manager.isAbleToAddManager()}">True</option>
+                <option value="0" th:selected="${!manager.isAbleToAddManager()}">False</option>
+            </select>
+        </div>
+        <div>
+            <p>is_able_to_add_teacher</p>
+            <select name="is_able_to_add_teacher">
+                <option value="1" th:selected="${manager.isAbleToAddTeacher()}">True</option>
+                <option value="0" th:selected="${!manager.isAbleToAddTeacher()}">False</option>
+            </select>
+        </div>
+        <div>
+            <p>is_able_to_add_student</p>
+            <select name="is_able_to_add_student">
+                <option value="1" th:selected="${manager.isAbleToAddStudent()}">True</option>
+                <option value="0" th:selected="${!manager.isAbleToAddStudent()}">False</option>
+            </select>
+        </div>
+        <div><p>is_able_to_delete_course</p>
+            <select name="is_able_to_delete_course">
+                <option value="1" th:selected="${manager.isAbleToDeleteCourse()}">True</option>
+                <option value="0" th:selected="${!manager.isAbleToDeleteCourse()}">False</option>
+            </select>
+        </div>
+        <div>
+            <p>is_able_to_add_course</p>
+            <select name="is_able_to_add_course">
+                <option value="1" th:selected="${manager.isAbleToAddCourse()}">True</option>
+                <option value="0" th:selected="${!manager.isAbleToAddCourse()}">False</option>
+            </select>
+        </div>
+        <div>
+            <input type="submit">
+        </div>
+    </form>
+</body>
+</html>

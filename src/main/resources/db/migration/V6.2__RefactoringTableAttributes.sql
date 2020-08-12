@@ -1,0 +1,1 @@
+ALTER TABLE Management_Staff ADD role SMALLINT NOT NULL;
