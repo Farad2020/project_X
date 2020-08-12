@@ -3,6 +3,7 @@ package com.example.projectX.dao;
 import com.example.projectX.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
@@ -77,7 +78,9 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
 
     @Override
     public boolean insertManager(String managerLogin, int role, UUID companyId) {
-        if (selectManagementStaffByLogin(managerLogin).isPresent()) {
+        if (selectManagementStaffByLogin(managerLogin).isPresent() ||
+            selectUserStudentByLogin(managerLogin).isPresent() ||
+            selectUserTeacherByLogin(managerLogin).isPresent()) {
             return false;
         }
         final String sql = String.format("INSERT INTO Management_Staff " +
@@ -89,16 +92,16 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
     }
 
     @Override
-    public Optional<User> selectUserByUsername(String username) {
-        final String sql = String.format("SELECT * FROM Users WHERE username = '%s';", username);
-        List<User> users = jdbcTemplate.query(sql, ((resultSet, i) -> {
-            UUID uuid = UUID.fromString(resultSet.getString("id"));
-            String username_ = resultSet.getString("username");
-            String password = passwordEncoder.encode(resultSet.getString("password"));
-
-            return new User(uuid, username_, password, null, true, true, true, true);
-        }));
-        return users.stream().findFirst();
+    public Optional<? extends UserDetails> selectUserByUsername(String username) {
+        Optional<UserStudent> student = selectUserStudentByLogin(username);
+        if (student.isPresent()) {
+            return student;
+        }
+        Optional<UserTeacher> teacher = selectUserTeacherByLogin(username);
+        if (teacher.isPresent()) {
+            return teacher;
+        }
+        return selectManagementStaffByLogin(username);
     }
 
     @Override
@@ -149,8 +152,32 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
     }
 
     @Override
+    public Optional<UserTeacher> selectUserTeacherByLogin(String login) {
+        final String sql = String.format("SELECT * FROM User_Teachers WHERE user_teacher_login = '%s';", login);
+        List<UserTeacher> teachers = jdbcTemplate.query(sql, ((resultSet, i) -> {
+            UUID id = UUID.fromString(resultSet.getString("user_teacher_id"));
+            String name = resultSet.getString("user_teacher_name");
+            String surname = resultSet.getString("user_teacher_surname");
+            String lastname = resultSet.getString("user_teacher_lastname");
+            String login_ = resultSet.getString("user_teacher_login");
+            String password = resultSet.getString("user_teacher_password");
+            String email = resultSet.getString("user_teacher_email");
+            String telephone = resultSet.getString("user_teacher_telephone");
+            boolean isAccountNonExpired = resultSet.getBoolean("is_account_non_expired");
+            boolean isAccountNonLocked = resultSet.getBoolean("is_account_non_locked");
+            boolean isCredentialsNonExpired = resultSet.getBoolean("is_credentials_non_expired");
+            boolean isEnabled = resultSet.getBoolean("is_enabled");
+            UUID companyId = UUID.fromString(resultSet.getString("company_id"));
+            return new UserTeacher(id, name, surname, lastname, login_, password, email, telephone, companyId, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
+        }));
+        return teachers.stream().findFirst();
+    }
+
+    @Override
     public boolean saveUserStudent(String login, String name, String password, UUID companyId) {
-        if (selectUserStudentByLogin(login).isPresent()) {
+        if (selectUserStudentByLogin(login).isPresent() ||
+            selectManagementStaffByLogin(login).isPresent() ||
+            selectUserTeacherByLogin(login).isPresent()) {
             return false;
         }
         password = passwordEncoder.encode(password);
