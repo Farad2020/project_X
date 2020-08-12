@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<!--
+Название универа
+Слоган(опц)
+Описание(опц)
+Телефон(опц)
+Ссылки(опц)
+-->
+<html xmlns:th="http://www.thymeleaf.org" data-theme="light">
+<head>
+    <title th:text="${title}" > </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" href="/css/style.css" />
+</head>
+<body>
+<header th:insert="blocks/header :: header"></header>
+
+<div th:insert="blocks/company-left-menu-bar :: company-left-menu-bar"></div>
+
+<div class="account-content">
+    <div class="account-info-box">
+        <div class="card" id="account-info-card">
+            <h5 class="company-name">Название: Real Company  <button type="button" class="btn btn-light">Edit</button></h5>
+            <p class="company-address">Слоган: Almost As Good As Eating Burgers When You're Hungry</p>
+            <p>Описание: This is legit description of totally real company based on Mane.</p>
+            <p class="company-phone">Номер: 8-800-555-3535(Легче позвонить чем у кого-то занимать!)</p>
+            <p>Ссылки: Here you'll put cycle of links, which can be added through edit button</p>
+
+        </div>
+    </div>
+</div>
+
+<footer th:insert="blocks/footer :: footer"></footer>
+</body>
+</html>

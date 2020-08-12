@@ -1,0 +1,64 @@
+<!DOCTYPE HTML>
+<!--
+сначала пусто
+фильтр по курсу(падающее меню)
+список дат(до сейчас)  --  статус
+
+-->
+<html xmlns:th="http://www.thymeleaf.org" data-theme="light">
+<head>
+    <title th:text="${title}" > </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" href="/css/style.css" />
+</head>
+<body>
+<header th:insert="blocks/header :: header"></header>
+<div th:insert="blocks/student-left-menu-bar :: student-left-menu-bar"></div>
+
+
+<div class="main-content">
+
+    <!-- Второй фильтр виден если первый не Равен Нулю -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light filter-navbar">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Course: None
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="#">None</a>
+                        <a class="dropdown-item" href="#">Course 1</a>
+                        <a class="dropdown-item" href="#">Course 2</a>
+                        <a class="dropdown-item" href="#">Course 3</a>
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Filter By: Date, Ascending
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="#">Date, Ascending</a>
+                        <a class="dropdown-item" href="#">Date, Descending</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+
+    <ul class="list-group course-list">
+        <li class="course-list-item">Date : Status</li>
+        <li class="course-list-item">Date : Status</li>
+        <li class="course-list-item">Date : Status</li>
+        <li class="course-list-item">Date : Status</li>
+    </ul>
+</div>
+
+<footer th:insert="blocks/footer :: footer"></footer>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<div th:fragment="student-left-menu-bar">
+<div class="info-bar">
+    <ul class="list-group">
+
+        <a class="place_box" th:href="@{/}">
+            <li class="list-group-item">
+                <h5 class="info-bar-text">Главная</h5>
+            </li>
+        </a>
+
+
+        <a class="place_box" th:href="@{student_profile}">
+            <li class="list-group-item">
+                <h5 class="info-bar-text">Мой Профиль</h5>
+            </li>
+        </a>
+
+        <a class="place_box" th:href="@{student_courses}" >
+            <li class="list-group-item">
+                <h5 class="info-bar-text">Мои Курсы</h5>
+            </li>
+        </a>
+
+        <a class="place_box" th:href="@{student_tasks}">
+            <li class="list-group-item">
+                <h5 class="info-bar-text" >Мои Задания</h5>
+            </li>
+        </a>
+
+        <a class="place_box" th:href="@{student_attendance}" >
+            <li class="list-group-item">
+                <h5 class="info-bar-text">Журнал Посещения</h5>
+            </li>
+        </a>
+
+        <a class="place_box" th:href="@{student_teachers}" >
+            <li class="list-group-item">
+                <h5 class="info-bar-text">Мои Учителя</h5>
+            </li>
+        </a>
+
+    </ul>
+</div>
+</div>

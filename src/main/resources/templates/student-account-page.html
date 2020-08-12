@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<!--
+ возьми у ВК
+ -->
+<html xmlns:th="http://www.thymeleaf.org" data-theme="light">
+<head>
+    <title th:text="${title}"></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" href="/css/style.css"/>
+</head>
+<body>
+<header th:insert="blocks/header :: header"></header>
+
+<div th:insert="blocks/student-left-menu-bar :: student-left-menu-bar"></div>
+
+<div class="account-content">
+    <div class="account-img-box">
+        <img class="account-img" src="/design-flow/avatars/avatar_cat.jpg"><br>
+        <a class="btn btn-default" id="edit-account-btn" href="#">Edit</a>
+    </div>
+
+    <div class="account-info-box">
+        <div class="card" id="account-info-card">
+            <h5 class="account-name">Mr Truthful Cat</h5>
+            <h6 class="account-status">Mr Truthful Cat's Status is probably o'right!</h6>
+            <div class="account-divider"></div>
+            <button class="btn btn-default" id="show-full-account-desc-btn" onclick="showMoreAccountInfo()">Показать
+                подробную информацию
+            </button>
+
+            <!--
+            <div class="info-card-text" id="account-info-card-text">
+            <p>So, I'm just a cat that lives on a streets. I may be dead, or I may be alive,
+                depends on how friendly streets will be during my lifeyime. May be it sucks in a way, but atleast Im not
+                smart enough to get into deep feelings and be dreadful about vicious life cycle that awaits me and everyone else.
+                Is it good? Idk, Im just a cat! :)
+
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><img class="soc-media-link-ico" src="/design-flow/soc-media icons/icons8-реддит.svg" > my reddit link</li>
+                    <li class="list-group-item"><img class="soc-media-link-ico" src="/design-flow/soc-media icons/icons8-вконтакте-480.svg" > my vk link</li>
+                    <li class="list-group-item"><img class="soc-media-link-ico" src="/design-flow/soc-media icons/icons8-instagram-480.svg" > my instagram link</li>
+                    <li class="list-group-item"><img class="soc-media-link-ico" src="/design-flow/soc-media icons/icons8-whatsapp.svg" > my whatsapp link</li>
+                    <li class="list-group-item"><img class="soc-media-link-ico" src="/design-flow/soc-media icons/icons8-facebook-480.svg" > my facebook link</li>
+                    <li class="list-group-item"><img class="soc-media-link-ico" src="/design-flow/soc-media icons/icons8-github-octocat-480.svg" > my github link</li>
+                    <li class="list-group-item"><img class="soc-media-link-ico" src="/design-flow/soc-media icons/icons8-гугл-плюс.svg" > my gmail link</li>
+                    <li class="list-group-item"><img class="soc-media-link-ico" src="/design-flow/soc-media icons/icons8-телеграмма-app.svg" > my telegram link</li>
+                    <li class="list-group-item"><img class="soc-media-link-ico" src="/design-flow/soc-media icons/icons8-тик-так.svg" > my tik tok link</li>
+                  </ul>
+
+            </p>
+        </div>
+-->
+        </div>
+    </div>
+</div>
+
+<footer th:insert="blocks/footer :: footer"></footer>
+</body>
+</html>

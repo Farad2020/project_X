@@ -7,7 +7,7 @@
   --main-colors-bleak-blue: #e0f2ff;
   --main-colors-light-blue: #8fbfff;
   --main-colors-blue: #509aff;
-  --main-colors-brown: #2e1115;
+  --main-colors-black: #000000;
 
   /* Color palletes 2 */
   --main-colors-grey: #adadad;
@@ -26,7 +26,7 @@ html{
 
   --bg: var(--main-colors-white);
   --main-color: var(--main-colors-bleak-blue);
-  --text-color: var(--main-colors-brown);
+  --text-color: var(--main-colors-black);
   --color-1: var(--main-colors-light-grey);
   --color-2: var(--main-colors-light-blue);
   --color-3: var(--main-colors-blue);
@@ -70,6 +70,8 @@ html.transition *:after {
    color: var(--text-color);
    text-decoration-line: none;
    text-align: left;
+   font-size: 1.2em;
+   font-weight: 0.2;
  }
 
 
@@ -100,9 +102,6 @@ html.transition *:after {
 /* Maybe leave border???????????????????????????????????? */
 .list-group-item{
   border: none;
-}
-
-.list-group-item{
   background-color: var(--bg);
 }
 
@@ -110,14 +109,65 @@ html.transition *:after {
   background-color: var(--main-color);
 }
 
+/* Course List */
+
+.course-list-item{
+  border-bottom: solid;
+  border-bottom-width: 0.1em;
+  border-color: var(--text-color);
+  border-radius: 0em;
+  background-color: var(--bg);
+  padding: 1em;
+  list-style: none;
+  
+}
+
+.course-list-item:hover{
+  background-color: var(--main-color);
+  
+}
+
+.list-group.course-list{
+  margin-top: 3em;
+  border-radius: 0em;
+}
+
+/* Filter Menu Bar */
+.list-filter-bar{
+  margin-top: 3em;
+  border-radius: 0em;
+}
+
+.list-filter-bar.list-filter-item{
+  display: inline;
+  list-style: none;
+}
+
+.filter-navbar{
+  margin-top: 1em;
+}
+
 .place-box{
   align-items: center;
+}
+
+/* list links*/
+.list-item-link{
+  text-decoration: none;
+  display: block;
+  color: var(--text-color);
+}
+
+.list-item-link:hover{
+  text-decoration: none;
+  display: block;
+  color: var(--text-color);
 }
 
 /* Main content part*/
 .container{
   margin: 0em;
-  margin-top: 1em;
+  margin-top: 0.3em;
 }
 
 .main-content{
@@ -128,20 +178,34 @@ html.transition *:after {
 
 .info-card-text{
   height: 4em;
-  margin: 0.3em;
+  margin: 0.7em;
 }
 
 .card{
-  background-color: var(--main-color);
+  background-color: var(--bg);
   color: var(--text-color);
 }
 
 .btn-default{
+  background-color: var(--main-color);
+  text-decoration: none;
+  color: var(--text-color);
+}
+
+.btn-default:hover{
+  text-decoration: none;
+  color: var(--text-color);
   background-color: var(--color-2);
+  
 }
 
 .alert{
   margin: 0em;
+}
+
+.course-group{
+  margin-top: 1em;
+  margin-bottom: 1em;
 }
 
 /* My Page Style */
@@ -202,6 +266,12 @@ html.transition *:after {
  margin-top: 1em; 
 }
 
+/* Task */
+
+.task-container{
+  border: solid;
+  border-width: 0.1em;
+}
 
 /* scroll-bar *//* width */
 ::-webkit-scrollbar {
