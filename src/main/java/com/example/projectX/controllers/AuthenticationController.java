@@ -1,8 +1,11 @@
 package com.example.projectX.controllers;
 
+import com.example.projectX.models.UserStudent;
 import com.example.projectX.services.CompanyService;
 import com.example.projectX.services.UserAuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,7 +55,16 @@ public class AuthenticationController {
 
 
     @GetMapping("/student_profile")
-    public String userProfile(Model model) {
+    public String userProfile(Model model,
+                              @AuthenticationPrincipal UserDetails user){
+        model.addAttribute("user", user);
+
+        /*
+        if( userAuthenticationService.getUserStudentByLogin(user.getUsername()).isPresent() ){
+            model.addAttribute("isStudent", true);
+            model.addAttribute("student", (UserStudent)user);
+        }
+        */
         return "student-account-page";
     }
 
