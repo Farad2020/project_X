@@ -124,6 +124,7 @@ public class AuthenticationController {
     public String companyStudents(Model model,
                                   @AuthenticationPrincipal ManagementStaff manager) {
         List<UserStudent> students = companyService.getAllCompanyStudents(manager.getCompanyId());
+        model.addAttribute("students", students );
         return "company-students";
     }
 
