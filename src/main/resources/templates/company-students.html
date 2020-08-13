@@ -40,10 +40,13 @@
         </div>
     </nav>
 
-
     <ul class="list-group course-list">
-        <li class="course-list-item">Frederic</li>
+        <th:block th:each="student : ${students}">
+            <li class="course-list-item" th:text="${student.getName()} + ' ' + ${student.getSurname()} + ' ' + ${student.getLogin()}"></li>
+        </th:block>
+
     </ul>
+
 </div>
 
 <footer th:insert="blocks/footer :: footer"></footer>

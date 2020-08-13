@@ -3,6 +3,7 @@ package com.example.projectX.controllers;
 import com.example.projectX.models.Admin;
 import com.example.projectX.models.Company;
 import com.example.projectX.models.ManagementStaff;
+import com.example.projectX.models.UserStudent;
 import com.example.projectX.services.CompanyService;
 import com.example.projectX.services.UserAuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +55,10 @@ public class AdminController {
         Optional<Company> company = companyService.getCompanyById(id);
         if (company.isPresent()) {
             List<ManagementStaff> managementStaffList = userAuthenticationService.getAllCompanyManagers(company.get());
+            List<UserStudent> students = companyService.getAllCompanyStudents(company.get().getId());
+
             model.addAttribute("managers", managementStaffList);
+            model.addAttribute("students", students);
         }
         model.addAttribute("company_id", id);
         return "admin-company-page";
@@ -78,6 +82,17 @@ public class AdminController {
         company.ifPresent(value -> model.addAttribute("company", value));
         manager.ifPresent(managementStaff -> model.addAttribute("manager", managementStaff));
         return "admin-company-manager-edit";
+    }
+
+    @PostMapping("add_student")
+    public String addStudent(@RequestParam(name = "login") String studentLogin,
+                             @RequestParam(name = "name") String studentName,
+                             @RequestParam(name = "password") String studentPassword,
+                             @RequestParam(name = "company_id") UUID companyId) {
+        //302f196a-80cd-49b5-b202-df480670eb51
+        System.out.println(companyId);
+        boolean result = userAuthenticationService.saveUserStudent(studentLogin, studentName, studentPassword, companyId);
+        return "redirect:/$2a$10$HZR3IGneje95jJVEomN.vuEKlxwRt6Tn5oeLEXySZXh7L/WLiX6fm/company/" + companyId.toString();
     }
 
 //    @PostMapping("edit_manager")
