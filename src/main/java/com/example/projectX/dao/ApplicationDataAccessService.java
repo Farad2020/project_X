@@ -123,6 +123,30 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
     }
 
     @Override
+    public List<UserStudent> getAllCompanyStudents(UUID companyId) {
+        final String sql = String.format("SELECT * FROM User_Students WHERE company_id = '%s'", companyId);
+        return jdbcTemplate.query(sql, ((resultSet, i) -> {
+            UUID id = UUID.fromString(resultSet.getString("user_student_id"));
+            String name = resultSet.getString("user_student_name");
+            String surname = resultSet.getString("user_student_surname");
+            String lastname = resultSet.getString("user_student_lastname");
+            String login_ = resultSet.getString("user_student_login");
+            String password = resultSet.getString("user_student_password");
+            String email = resultSet.getString("user_student_email");
+            String telephone = resultSet.getString("user_student_telephone");
+            UUID companyId_ = null;
+            if (resultSet.getString("company_id") != null) {
+                companyId_ = UUID.fromString(resultSet.getString("company_id"));
+            }
+            boolean isAccountNonExpired = resultSet.getBoolean("is_account_non_expired");
+            boolean isAccountNonLocked = resultSet.getBoolean("is_account_non_locked");
+            boolean isCredentialsNonExpired = resultSet.getBoolean("is_credentials_non_expired");
+            boolean isEnabled = resultSet.getBoolean("is_enabled");
+            return new UserStudent(id, name, surname, lastname, login_, password, email, telephone, companyId_, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
+        }));
+    }
+
+    @Override
     public Optional<? extends UserDetails> selectUserByUsername(String username) {
         Optional<UserStudent> student = selectUserStudentByLogin(username);
         if (student.isPresent()) {

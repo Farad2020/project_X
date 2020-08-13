@@ -87,7 +87,8 @@ public class AdminController {
 //                              @RequestParam(name = "login") String login,
 //                              @RequestParam(name = "password") String password,
 //                              @RequestParam(name = "email") String email,
-//                              @RequestParam(name = "telephone") String telephone) {
+//                              @RequestParam(name = "telephone") String telephone,
+//                              @RequestParam(name = "")) {
 //        return "";
 //    }
 }

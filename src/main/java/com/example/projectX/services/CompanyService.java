@@ -3,6 +3,7 @@ package com.example.projectX.services;
 import com.example.projectX.dao.CompanyDao;
 import com.example.projectX.models.Company;
 import com.example.projectX.models.ManagementStaff;
+import com.example.projectX.models.UserStudent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -39,6 +40,10 @@ public class CompanyService {
 
     public Optional<ManagementStaff> getManagerById(UUID managerId) {
         return companyDao.getManagerById(managerId);
+    }
+
+    public List<UserStudent> getAllCompanyStudents(UUID companyId) {
+        return companyDao.getAllCompanyStudents(companyId);
     }
 
 }
