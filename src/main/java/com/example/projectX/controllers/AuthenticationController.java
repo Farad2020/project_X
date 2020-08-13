@@ -1,5 +1,6 @@
 package com.example.projectX.controllers;
 
+
 import com.example.projectX.models.Company;
 import com.example.projectX.models.ManagementStaff;
 import com.example.projectX.models.UserStudent;
@@ -59,7 +60,15 @@ public class AuthenticationController {
 
     @GetMapping("/student_profile")
     public String userProfile(Model model,
-                              @AuthenticationPrincipal UserDetails user) {
+                              @AuthenticationPrincipal UserDetails user){
+        model.addAttribute("user", user);
+
+        /*
+        if( userAuthenticationService.getUserStudentByLogin(user.getUsername()).isPresent() ){
+            model.addAttribute("isStudent", true);
+            model.addAttribute("student", (UserStudent)user);
+        }
+        */
         return "student-account-page";
     }
 
