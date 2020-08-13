@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="/$2a$10$HZR3IGneje95jJVEomN.vuEKlxwRt6Tn5oeLEXySZXh7L/WLiX6fm/edit_student" method="post">
+    <div><input type="text" name="name" placeholder="name" th:value="${student.getName()}"></div>
+    <div><input type="text" name="surname" placeholder="surname" th:value="${student.getSurname()}"></div>
+    <div><input type="text" name="lastname" placeholder="lastname" th:value="${student.getLastname()}"></div>
+    <div><input type="text" name="login" placeholder="login" th:value="${student.getLogin()}"></div>
+    <div><input type="text" name="password" placeholder="password" th:value="${student.getPassword()}"></div>
+    <div><input type="text" name="email" placeholder="email" th:value="${student.getEmail()}"></div>
+    <div><input type="text" name="telephone" placeholder="telephone" th:value="${student.getTelephone()}"></div>
+    <div>
+        <p>Is account non expired</p>
+        <select name="is_account_non_expired">
+            <option value="1" th:selected="${student.isAccountNonExpired()}">True</option>
+            <option value="0" th:selected="${!student.isAccountNonExpired()}">False</option>
+        </select>
+    </div>
+    <div>
+        <p>Is account non locked</p>
+        <select name="is_account_non_locked">
+            <option value="1" th:selected="${student.isAccountNonLocked()}">True</option>
+            <option value="0" th:selected="${!student.isAccountNonLocked()}">False</option>
+        </select>
+    </div>
+    <div>
+        <p>Is credentials non expired</p>
+        <select name="is_credentials_non_expired">
+            <option value="1" th:selected="${student.isCredentialsNonExpired()}">True</option>
+            <option value="0" th:selected="${!student.isCredentialsNonExpired()}">False</option>
+        </select>
+    </div>
+    <div>
+        <p>Is enabled</p>
+        <select name="is_enabled">
+            <option value="1" th:selected="${student.isEnabled()}">True</option>
+            <option value="0" th:selected="${!student.isEnabled()}">False</option>
+        </select>
+    </div>
+    <div>
+        <input type="text" name="company_id" placeholder="company id" th:value="${student.getCompanyId()}">
+    </div>
+    <div>
+        <input type="hidden" th:value="${student.getId()}" name="student_id">
+    </div>
+    <div>
+        <input type="submit">
+    </div>
+</form>
+</body>
+</html>
