@@ -13,7 +13,7 @@
     </div>
     <form action="/$2a$10$HZR3IGneje95jJVEomN.vuEKlxwRt6Tn5oeLEXySZXh7L/WLiX6fm/add_manager" method="post">
         <input type="text" name="login" placeholder="Login" required="">
-        <select name="role">
+        <select name="role" required="">
             <option value="0">Ordinary manager</option>
             <option value="1">The BOSS</option>
         </select>
@@ -22,13 +22,52 @@
     </form>
 
     <h2>Teachers:</h2>
-    <div>
-
+    <div th:each="teacher : ${teachers}" style="background-color: aqua;">
+        <p th:text="${teacher.getName()} + ' ' + ${teacher.getSurname()} + ' ' + ${teacher.getLogin()}"></p>
+        <a th:href="@{${company_id}} + '/teacher/' + ${teacher.getId()} + '/edit'"> Edit </a>
+        <a> Delete </a>
     </div>
+    <form action="/$2a$10$HZR3IGneje95jJVEomN.vuEKlxwRt6Tn5oeLEXySZXh7L/WLiX6fm/add_teacher" method="post">
+        <input type="text" name="login" placeholder="Login" required="">
+        <input type="text" name="name" placeholder="Name" required="">
+        <input type="hidden" name="company_id" th:value="${company_id}">
+        <input type="submit">
+    </form>
 
     <h2>Students:</h2>
-    <div>
-
+    <div th:each="student : ${students}" style="background-color: aqua;">
+        <p th:text="${student.getName()} + ' ' + ${student.getSurname()} + ' ' + ${student.getLogin()}"></p>
+        <a th:href="@{${company_id}} + '/student/' + ${student.getId()} + '/edit'"> Edit </a>
+        <a> Delete </a>
     </div>
+    <form action="/$2a$10$HZR3IGneje95jJVEomN.vuEKlxwRt6Tn5oeLEXySZXh7L/WLiX6fm/add_student" method="post">
+        <input type="text" name="login" placeholder="Login" required="">
+        <input type="text" name="name" placeholder="Name" required="">
+        <input type="hidden" name="company_id" th:value="${company_id}">
+        <input type="submit">
+    </form>
+
+    <h2>Courses</h2>
+    <div th:each="course : ${courses}" style="background-color: aqua;">
+        <p th:text="${course.getName()}"></p>
+        <a th:href="@{${company_id}} + '/course/' + ${course.getId()} + '/edit'"> Edit </a>
+        <a> Delete </a>
+    </div>
+    <form action="/$2a$10$HZR3IGneje95jJVEomN.vuEKlxwRt6Tn5oeLEXySZXh7L/WLiX6fm/add_course" method="post">
+        <input type="text" name="name" placeholder="name" required="">
+        <input type="text" name="description" placeholder="description" required="">
+        <select name="is_active" required="">
+            <option value="0">False</option>
+            <option value="1">True</option>
+        </select>
+        <input type="date" name="start_date" required="">
+        <input type="number" name="price" placeholder="price" required="">
+        <input type="number" name="payout_num" placeholder="payout_num" required="">
+        <select name="teacher_id" required="">
+            <option th:each="teacher : ${teachers}" th:value="${teacher.getId()}" th:text="${teacher.getName()} + ' ' + ${teacher.getSurname()}"></option>
+        </select>
+        <input type="hidden" name="company_id" th:value="${company_id}" required="">
+        <input type="submit" required="">
+    </form>
 </body>
 </html>

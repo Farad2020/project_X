@@ -7,23 +7,25 @@ public class Course {
 
     private final UUID id;
     private final String name;
+    private final String description;
     private final boolean active;
-    private final Date starDate;
-    private final Date endDate;
+    private final String startDate;
+    private final String endDate;
     private final double price;
     private final int payoutNum;
-    private final UserTeacher teacher;
+    private final UUID teacherId;
     private final UUID companyId;
 
-    public Course(UUID id, String name, boolean active, Date starDate, Date endDate, double price, int payoutNum, UserTeacher teacher, UUID companyId) {
+    public Course(UUID id, String name, String description, boolean active, String startDate, String endDate, double price, int payoutNum, UUID teacherId, UUID companyId) {
         this.id = id;
         this.name = name;
+        this.description = description;
         this.active = active;
-        this.starDate = starDate;
+        this.startDate = startDate;
         this.endDate = endDate;
         this.price = price;
         this.payoutNum = payoutNum;
-        this.teacher = teacher;
+        this.teacherId = teacherId;
         this.companyId = companyId;
     }
 
@@ -35,15 +37,19 @@ public class Course {
         return name;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
     public boolean isActive() {
         return active;
     }
 
-    public Date getStarDate() {
-        return starDate;
+    public String getStarDate() {
+        return startDate;
     }
 
-    public Date getEndDate() {
+    public String getEndDate() {
         return endDate;
     }
 
@@ -55,8 +61,8 @@ public class Course {
         return payoutNum;
     }
 
-    public UserTeacher getTeacher() {
-        return teacher;
+    public UUID getTeacherId() {
+        return teacherId;
     }
 
     public UUID getCompanyId() {
