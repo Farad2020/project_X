@@ -19,8 +19,6 @@ public interface UserDao {
 
     boolean saveUserStudent(String login, String name, String password, UUID companyId);
 
-    List<ManagementStaff> selectAllCompanyManagers(Company company);
-
     boolean updateManagementStaffById(UUID managerId, ManagementStaff managementStaff);
 
     boolean updateUserTeacherById(UUID teacherId, UserTeacher userTeacher);

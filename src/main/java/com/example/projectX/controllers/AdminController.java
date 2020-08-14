@@ -50,7 +50,7 @@ public class AdminController {
     public String getCompanyUsersView(@PathVariable("company_id") UUID id, Model model) {
         Optional<Company> company = companyService.getCompanyById(id);
         if (company.isPresent()) {
-            List<ManagementStaff> managementStaffList = userAuthenticationService.getAllCompanyManagers(company.get());
+            List<ManagementStaff> managementStaffList = companyService.selectAllCompanyManagers(company.get());
             List<UserStudent> students = companyService.getAllCompanyStudents(id);
             List<UserTeacher> teachers = companyService.getAllCompanyTeachers(id);
             List<Course> courses = companyService.getAllCompanyCourses(id);
@@ -84,7 +84,7 @@ public class AdminController {
     public String addStudent(@RequestParam(name = "name") String studentName,
                              @RequestParam(name = "login") String studentLogin,
                              @RequestParam(name = "company_id") UUID companyId) {
-        boolean result = userAuthenticationService.saveUserStudent(studentLogin, studentName, "12345678", companyId);
+        boolean result = userAuthenticationService.saveUserStudent(studentLogin, studentName, "123", companyId);
         System.out.println(result);
         return "redirect:/$2a$10$HZR3IGneje95jJVEomN.vuEKlxwRt6Tn5oeLEXySZXh7L/WLiX6fm/company/" + companyId;
     }
@@ -256,5 +256,4 @@ public class AdminController {
         System.out.println(result);
         return "redirect:/$2a$10$HZR3IGneje95jJVEomN.vuEKlxwRt6Tn5oeLEXySZXh7L/WLiX6fm/company/" + companyId + "/course/" + courseId + "/edit";
     }
-
 }

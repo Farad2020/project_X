@@ -147,6 +147,7 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
         return managers.stream().findFirst();
     }
 
+
     @Override
     public Optional<UserTeacher> getTeacherById(UUID teacherId) {
         final String sql = String.format("SELECT * FROM User_Teachers WHERE user_teacher_id = '%s';", teacherId);
@@ -476,7 +477,8 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
         }
         password = passwordEncoder.encode(password);
         final String sql = String.format("INSERT INTO User_Students " +
-                "(user_student_id, user_student_name, user_student_login, user_student_password, is_account_non_expired, is_account_non_locked, is_credentials_non_expired, is_enabled, company_id) " +
+                "(user_student_id, user_student_name, user_student_login, user_student_password, is_account_non_expired," +
+                " is_account_non_locked, is_credentials_non_expired, is_enabled, company_id) " +
                 "VALUES (uuid_generate_v4(), '%s', '%s', '%s', True, True, True, True, '%s');", name, login, password, companyId);
         jdbcTemplate.execute(sql);
         return true;

@@ -39,13 +39,44 @@
     </nav>
 
 
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Starting Date</th>
+            <th scope="col">Currently Active</th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="i :  ${#numbers.sequence(0, courses.size() -1 )}" th:if="${courses.size() > 0}" >
+            <tr class="course-list-item table-item">
+                <th scope="row"  th:text="${i+1}"></th>
+                <td>
+                    <a class="table-row-link" th:href="@{'teacher_courses/'} + ${courses.get(i).getId()}"
+                       th:text="${courses.get(i).getName()}"/>
+                </td>
+                <td >
+                    <a class="table-row-link" th:href="@{'teacher_courses/'} + ${courses.get(i).getId()}"
+                       th:text="${courses.get(i).getStarDate()}"/>
+                </td>
+                <td>
+                    <a class="table-row-link" th:href="@{'teacher_courses/'} + ${courses.get(i).getId()}"
+                       th:text="${courses.get(i).isActive()}"/>
+                </td>
+            </tr>
+        </th:block>
+        </tbody>
+    </table>
+
+    <!--
     <ul class="list-group course-list">
         <li class="course-list-item">DIO! (Э, ДЫО!)</li>
         <li class="course-list-item">Hō… mukatte kuru no ka…… (Хыо... Ты ка мне приближаешься...)</li>
         <li class="course-list-item">Something on japanese (I can’t beat the shit out of you without getting closer)
         </li>
         <li class="course-list-item">HO HO ! (О Хо Хо...)</li>
-    </ul>
+    </ul> -->
 </div>
 
 <footer th:insert="blocks/footer :: footer"></footer>

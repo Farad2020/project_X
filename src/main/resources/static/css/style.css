@@ -127,6 +127,10 @@ html.transition *:after {
   
 }
 
+.course-list-item.table-item{
+  border-bottom: none;
+}
+
 .list-group.course-list{
   margin-top: 3em;
   border-radius: 0em;
@@ -206,6 +210,30 @@ html.transition *:after {
 .course-group{
   margin-top: 1em;
   margin-bottom: 1em;
+}
+
+a.table-row-link{
+  text-decoration: none;
+  color: var(--text-color);
+  cursor: pointer;
+}
+
+a.table-row-link:hover{
+  text-decoration: none;
+  color: var(--text-color);
+  cursor: pointer;
+}
+
+a.info-link{
+  text-decoration: none;
+  color: var(--text-color);
+  cursor: pointer;
+}
+
+a.info-link:hover{
+  text-decoration: none;
+  color: var(--text-color);
+  cursor: pointer;
 }
 
 /* My Page Style */

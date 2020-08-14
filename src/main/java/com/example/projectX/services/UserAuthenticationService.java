@@ -35,10 +35,6 @@ public class UserAuthenticationService implements UserDetailsService {
         return userDao.saveUserStudent(login, name, password, company_id);
     }
 
-    public List<ManagementStaff> getAllCompanyManagers(Company company) {
-        return userDao.selectAllCompanyManagers(company);
-    }
-
     public Optional<ManagementStaff> getManagerStaffByLogin(String login) {
         return userDao.selectManagementStaffByLogin(login);
     }

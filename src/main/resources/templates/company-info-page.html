@@ -23,10 +23,12 @@
 <div class="account-content">
     <div class="account-info-box">
         <div class="card" id="account-info-card">
-            <h5 class="company-name">Название: Real Company  <button type="button" class="btn btn-light">Edit</button></h5>
-            <p class="company-address">Слоган: Almost As Good As Eating Burgers When You're Hungry</p>
-            <p>Описание: This is legit description of totally real company based on Mane.</p>
-            <p class="company-phone">Номер: 8-800-555-3535(Легче позвонить чем у кого-то занимать!)</p>
+            <h5 class="company-name" th:text="'Название: ' + ${company.getName()}"><button type="button" class="btn btn-light">Edit</button></h5>
+            <p class="company-address" th:text="'Слоган: ' ">: + ${company.getSlogan()} Almost As Good As Eating Burgers When You're Hungry</p>
+            <p th:text="'Описание: ' "> This is legit description of totally real company based on Mane.</p>
+            <p class="company-phone" th:text="'Номер: ' + ${company.getTelephone()}">Номер: 8-800-555-3535(Легче позвонить чем у кого-то занимать!)</p>
+            <p th:text="'Почта: ' + ${company.getEmail()}">Ссылки: Here you'll put cycle of links, which can be added through edit button</p>
+
             <p>Ссылки: Here you'll put cycle of links, which can be added through edit button</p>
 
         </div>

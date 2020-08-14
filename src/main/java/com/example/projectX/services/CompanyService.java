@@ -90,6 +90,10 @@ public class CompanyService {
 
     public boolean deleteStudentFromCourse(UUID studentId, UUID courseId) {
         return companyDao.deleteStudentFromCourse(studentId, courseId);
+
+    }
+    public List<ManagementStaff> selectAllCompanyManagers(Company company){
+        return companyDao.selectAllCompanyManagers(company);
     }
 
 }

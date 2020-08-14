@@ -30,14 +30,16 @@
 
     <div class="account-info-box">
         <div class="card" id="account-info-card">
-            <h5 class="account-name">Mr Truthful Cat</h5>
-            <h6 class="account-status">Mr Truthful Cat's Status is probably o'right!</h6>
+            <h5 th:text="${teacher.getUsername()}"></h5>
+            <h6 class="account-status" th:text="${teacher.getName()} + ' ' + ${teacher.getSurname()} + ' ' + ${teacher.getLastname()"></h6>
             <div class="account-divider"></div>
+            <p th:text="'Почта: ' + ${teacher.getEmail()}"></p>
+
+            <!--
             <button class="btn btn-default" id="show-full-account-desc-btn" onclick="showMoreAccountInfo()">Показать
                 подробную информацию
             </button>
 
-            <!--
             <div class="info-card-text" id="account-info-card-text">
             <p>So, I'm just a cat that lives on a streets. I may be dead, or I may be alive,
                 depends on how friendly streets will be during my lifeyime. May be it sucks in a way, but atleast Im not

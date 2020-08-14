@@ -51,4 +51,6 @@ public interface CompanyDao {
     boolean addStudentToCourse(UUID studentId, UUID courseId);
 
     boolean deleteStudentFromCourse(UUID studentId, UUID courseId);
+    List<ManagementStaff> selectAllCompanyManagers(Company company);
+
 }

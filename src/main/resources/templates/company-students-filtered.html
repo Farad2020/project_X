@@ -34,34 +34,29 @@
                     </div>
                 </li>
             </ul>
-            <form class="form-inline my-2 my-lg-0" th:action="@{/search_student}" method="get">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"
-                       name="searchKey">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>
+
+            <input class="form-control mr-sm-2" id="company-students-search-bar" type="search" placeholder="Search"
+                   aria-label="Search" name="searchKey">
         </div>
     </nav>
 
 
-    <table class="table">
+    <table class="table" id="company-students-table">
         <thead>
         <tr>
             <th scope="col">#</th>
             <th scope="col">Name</th>
             <th scope="col">Surname</th>
-            <th scope="col">Lastname</th>
+            <th scope="col">Login</th>
         </tr>
         </thead>
         <tbody>
-        <th:block th:each="i :  ${#numbers.sequence(0, students.size() -1 )}" th:if="${students.size() > 0}"> <!-- style="cursor: pointer" -->
+        <th:block th:each="i :  ${#numbers.sequence(0, students.size() -1 )}">
             <tr class="course-list-item table-item">
                 <th scope="row" th:text="${i+1}"></th>
-                <td><a class="table-row-link" th:href="@{'students_profile/'} + ${students.get(i).getId()}"
-                       th:text="${students.get(i).getName()}"/></td>
-                <td><a class="table-row-link" th:href="@{'students_profile/'} + ${students.get(i).getId()}"
-                       th:text="${students.get(i).getSurname()}"/></td>
-                <td><a class="table-row-link" th:href="@{'students_profile/'} + ${students.get(i).getId()}"
-                       th:text="${students.get(i).getLastname()}"/></td>
+                <td th:text="${students.get(i).getName()}"></td>
+                <td th:text="${students.get(i).getSurname()}"></td>
+                <td th:text="${students.get(i).getLogin()}"></td>
             </tr>
         </th:block>
         </tbody>
@@ -72,8 +67,61 @@
 
     </ul>
 
-
 </div>
+
 <footer th:insert="blocks/footer :: footer"></footer>
+
 </body>
+<script th:inline="javascript">
+
+    /*<![CDATA[*/
+    var students = /*[[${students}]]*/ [];
+    /*]]>*/
+
+    $('#company-students-search-bar').on('keyup', function(){
+        var value = $(this).val();
+        console.log('Value = ' + value);
+        console.log('Value = ' + students.values);
+
+        // Get Filtered Employee
+
+        var data = FilterFunction(value, students);
+
+        //Clear Table, and rebuild it
+        rebuildTable(data)
+
+    });
+
+    function FilterFunction(value, data){
+        var filterData = [];
+        for(var i = 0; i < data.length; i++){
+            value = value.toLowerCase();
+            var fname = data[i].surname.toLowerCase();
+            var name = data[i].name.toLowerCase();
+
+            if( fname.includes(value) || name.includes(value)){
+                filterData.push(data[i])
+            }
+        }
+        return filterData;
+    }
+
+
+    function rebuildTable(data){
+        var table = document.getElementById('company-students-table')
+        table.innerHTML='';
+        for(var i = 0; i < data.length; i++){
+            var row = `<tr class="course-list-item table-item">
+                <th scope="row">i+1</th>
+                <td>${data[i].name}</td>
+                <td>${data[i].surname}</td>
+                <td>${data[i].login}</td>
+            </tr>`
+
+            table.innerHTML += row
+            }
+        }
+
+
+</script>
 </html>

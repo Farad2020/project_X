@@ -40,12 +40,35 @@
         </div>
     </nav>
 
-
-    <ul class="list-group course-list">
-        <li class="course-list-item">Frederic</li>
-        <li class="course-list-item">Alucard</li>
-        <li class="course-list-item">DIO!</li>
-    </ul>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Surname</th>
+            <th scope="col">Lastname</th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="i :  ${#numbers.sequence(0, managementStaffs.size() -1 )}" th:if="${managementStaffs.size() > 0}">
+            <tr class="course-list-item table-item">
+                <th scope="row"  th:text="${i+1}"></th>
+                <td>
+                    <a class="table-row-link" th:href="@{'students_profile/'} + ${teachers.get(i).getId()}"
+                       th:text="${managementStaffs.get(i).getName()}"/>
+                </td>
+                <td>
+                    <a class="table-row-link" th:href="@{'students_profile/'} + ${teachers.get(i).getId()}"
+                       th:text="${managementStaffs.get(i).getSurname()}"/>
+                </td>
+                <td>
+                    <a class="table-row-link" th:href="@{'students_profile/'} + ${teachers.get(i).getId()}"
+                       th:text="${managementStaffs.get(i).getLastname()}"/>
+                </td>
+            </tr>
+        </th:block>
+        </tbody>
+    </table>
 </div>
 
 <footer th:insert="blocks/footer :: footer"></footer>
