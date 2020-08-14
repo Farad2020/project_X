@@ -23,27 +23,46 @@
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Filter By: Date, Ascending
+                        Filter By: None
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="#">Date, Ascending</a>
-                        <a class="dropdown-item" href="#">Date, Descending</a>
-                        <a class="dropdown-item" href="#">Alphabet, Ascending</a>
-                        <a class="dropdown-item" href="#">Alphabet, Descending</a>
+                        <a class="dropdown-item" th:href="alp_asc" >Name, Alphabet, Ascending</a>
+                        <a class="dropdown-item" th:href="alp_desc" >Name, Alphabet, Descending</a>
+                        <a class="dropdown-item" th:href="none" >None</a>
                     </div>
                 </li>
             </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <form class="form-inline my-2 my-lg-0" th:action="@{/search_student}" method="get">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="searchKey">
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
             </form>
         </div>
     </nav>
 
-    <ul class="list-group course-list">
-        <th:block th:each="student : ${students}">
-            <li class="course-list-item" th:text="${student.getName()} + ' ' + ${student.getSurname()} + ' ' + ${student.getLogin()}"></li>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Surname</th>
+            <th scope="col">Login</th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="i :  ${#numbers.sequence(0, students.size() -1 )}" >
+        <tr class="course-list-item table-item">
+                <th scope="row"  th:text="${i+1}"></th>
+                <td th:text="${students.get(i).getName()}"></td>
+                <td th:text="${students.get(i).getSurname()}"></td>
+                <td th:text="${students.get(i).getLogin()}"></td>
+        </tr>
         </th:block>
+        </tbody>
+    </table>
+
+    <ul class="list-group course-list">
+
 
     </ul>
 

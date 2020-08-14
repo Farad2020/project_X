@@ -127,6 +127,10 @@ html.transition *:after {
   
 }
 
+.course-list-item.table-item{
+  border-bottom: none;
+}
+
 .list-group.course-list{
   margin-top: 3em;
   border-radius: 0em;

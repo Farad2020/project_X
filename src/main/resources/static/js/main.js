@@ -1,3 +1,33 @@
+/*
+var successHandler = function( data, textStatus, jqXHR ) {
+  // After success reload table with JavaScript
+  // based on data...
+};
+
+var errorHandler = function( jqXHR, textStatus, errorThrown ) {
+  // Error handler. AJAX request failed.
+  // 404 or KO from server...
+  alert('Something bad happened while reloading the table.');
+};
+
+var reloadData = function() {
+  // Process your request
+  var request = new Object();
+  request.id = 'some id'; // some data
+
+  // Make the AJAX call
+  jQuery.ajax({
+    type       : 'POST',
+    url        : 'http://domain/context/reload-data-url',
+    contentType: 'application/json',
+    data       : JSON.stringify(request)
+    success    : successHandler,
+    error      : errorHandler
+  });
+};
+
+*/
+
 document.getElementById('change-theme-btn').addEventListener('click', function(){
     if(document.documentElement.getAttribute('data-theme') == 'light' ){
         trans()

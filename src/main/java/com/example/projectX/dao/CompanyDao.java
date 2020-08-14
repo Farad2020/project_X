@@ -1,8 +1,6 @@
 package com.example.projectX.dao;
 
-import com.example.projectX.models.Company;
-import com.example.projectX.models.ManagementStaff;
-import com.example.projectX.models.UserStudent;
+import com.example.projectX.models.*;
 import org.checkerframework.checker.nullness.Opt;
 
 import java.util.List;
@@ -29,4 +27,8 @@ public interface CompanyDao {
     Optional<ManagementStaff> getManagerById(UUID id);
 
     List<UserStudent> getAllCompanyStudents(UUID companyId);
+
+    List<UserTeacher> getAllCompanyTeachers(UUID companyId);
+
+    List<Course> getAllCompanyCourses(UUID companyId);
 }
