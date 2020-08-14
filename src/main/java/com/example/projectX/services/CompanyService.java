@@ -1,9 +1,7 @@
 package com.example.projectX.services;
 
 import com.example.projectX.dao.CompanyDao;
-import com.example.projectX.models.Company;
-import com.example.projectX.models.ManagementStaff;
-import com.example.projectX.models.UserStudent;
+import com.example.projectX.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -38,12 +36,36 @@ public class CompanyService {
         return companyDao.insertManager(managerLogin, managerRole, companyId);
     }
 
+    public boolean addTeacherToCompany(String teacherName, String teacherLogin, UUID companyId) {
+        return companyDao.insertTeacher(teacherName, teacherLogin, companyId);
+    }
+
+    public boolean addCourseToCompany(UUID companyId, Course course) {
+        return companyDao.insertCourse(companyId, course);
+    }
+
     public Optional<ManagementStaff> getManagerById(UUID managerId) {
         return companyDao.getManagerById(managerId);
     }
 
+    public Optional<UserTeacher> getTeacherById(UUID teacherId) {
+        return companyDao.getTeacherById(teacherId);
+    }
+
+    public Optional<UserStudent> getStudentById(UUID studentId) {
+        return companyDao.getStudentById(studentId);
+    }
+
     public List<UserStudent> getAllCompanyStudents(UUID companyId) {
         return companyDao.getAllCompanyStudents(companyId);
+    }
+
+    public List<UserTeacher> getAllCompanyTeachers(UUID companyId) {
+        return companyDao.getAllCompanyTeachers(companyId);
+    }
+
+    public List<Course> getAllCompanyCourses(UUID companyId) {
+        return companyDao.getAllCompanyCourses(companyId);
     }
 
 }
