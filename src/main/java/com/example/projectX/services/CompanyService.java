@@ -56,6 +56,10 @@ public class CompanyService {
         return companyDao.getStudentById(studentId);
     }
 
+    public Optional<Course> getCourseById(UUID courseId) {
+        return companyDao.getCourseById(courseId);
+    }
+
     public List<UserStudent> getAllCompanyStudents(UUID companyId) {
         return companyDao.getAllCompanyStudents(companyId);
     }
@@ -66,6 +70,10 @@ public class CompanyService {
 
     public List<Course> getAllCompanyCourses(UUID companyId) {
         return companyDao.getAllCompanyCourses(companyId);
+    }
+
+    public List<ManagementStaff> selectAllCompanyManagers(Company company){
+        return companyDao.selectAllCompanyManagers(company);
     }
 
 }

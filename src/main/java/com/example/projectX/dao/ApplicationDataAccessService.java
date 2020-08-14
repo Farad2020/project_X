@@ -197,6 +197,25 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
     }
 
     @Override
+    public Optional<Course> getCourseById(UUID courseId) {
+        final String sql = String.format("SELECT * FROM User_Students WHERE user_student_id = '%s';", courseId);
+        List<Course> courses = jdbcTemplate.query(sql, ((resultSet, i) -> {
+            UUID id = UUID.fromString(resultSet.getString("course_id"));
+            String name = resultSet.getString("course_name");
+            String description = resultSet.getString("course_description");
+            boolean isActive = resultSet.getBoolean("course_is_active");
+            String start_date = resultSet.getString("course_start_date");
+            String end_date = resultSet.getString("course_end_date");
+            Double price = resultSet.getDouble("course_price");
+            Integer payoutNum = resultSet.getInt("course_payout_num");
+            UUID teacherId = UUID.fromString(resultSet.getString("user_teacher_id"));
+            UUID companyId = UUID.fromString(resultSet.getString("company_id"));
+            return new Course(id, name, description, isActive, start_date, end_date, price, payoutNum, teacherId, companyId);
+        }));
+        return courses.stream().findFirst();
+    }
+
+    @Override
     public List<UserStudent> getAllCompanyStudents(UUID companyId) {
         final String sql = String.format("SELECT * FROM User_Students WHERE company_id = '%s'", companyId);
         return jdbcTemplate.query(sql, ((resultSet, i) -> {

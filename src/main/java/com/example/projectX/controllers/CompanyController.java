@@ -5,6 +5,7 @@ import com.example.projectX.services.CompanyService;
 import com.example.projectX.services.UserAuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,9 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping("/")
@@ -38,16 +37,22 @@ public class CompanyController {
 
     @GetMapping("company_info")
     public String companyInfo(Model model,
-                              @AuthenticationPrincipal ManagementStaff manage) {
-        List<UserTeacher> teachers = companyService.getAllCompanyTeachers(manager.getCompanyId());
+                              @AuthenticationPrincipal ManagementStaff manager) {
+        Company company = companyService.getCompanyById(manager.getCompanyId()).get();
         //Posts
-        model.addAttribute("teachers", teachers );
+        model.addAttribute("company", company );
         return "company-info-page";
     }
 
     @GetMapping("company_management_stuff")
-    public String companyManagementStuff(Model model) {
-        return "company-management-stuff";
+    public String companyManagementStuff(Model model,
+                                         @PathVariable (name = "sort_type") String sortType,
+                                         @AuthenticationPrincipal ManagementStaff manager) {
+        List<ManagementStaff> managementStaffs = companyService.selectAllCompanyManagers( companyService.getCompanyById(manager.getCompanyId()).get() );
+
+        model.addAttribute("managementStaffs", managementStaffs );
+
+        return "company-management-staff";
     }
 
     @GetMapping("company_posts")
@@ -114,5 +119,22 @@ public class CompanyController {
         return "company-courses";
     }
 
+    @GetMapping("/students_profile/{student_id}")
+    public String getUserProfile(Model model,
+                              @PathVariable (name = "student_id") UUID student_id,
+                              @AuthenticationPrincipal UserDetails user){
+        UserStudent student = companyService.getStudentById(student_id).get();
+        model.addAttribute("student", student );
+        return "student-account-page";
+    }
+
+    @GetMapping("/teachers_profile/{teacher_id}")
+    public String getTeacherProfile(Model model,
+                              @PathVariable (name = "teacher_id") UUID teacher_id,
+                              @AuthenticationPrincipal UserDetails user){
+        UserTeacher teacher = companyService.getTeacherById(teacher_id).get();
+        model.addAttribute("teacher", teacher );
+        return "teacher-account-page";
+    }
 
 }

@@ -34,9 +34,14 @@ public interface CompanyDao {
 
     Optional<UserStudent> getStudentById(UUID studentId);
 
+    Optional<Course> getCourseById(UUID courseId);
+
     List<UserStudent> getAllCompanyStudents(UUID companyId);
 
     List<UserTeacher> getAllCompanyTeachers(UUID companyId);
 
     List<Course> getAllCompanyCourses(UUID companyId);
+
+    List<ManagementStaff> selectAllCompanyManagers(Company company);
+
 }

@@ -1,5 +1,6 @@
 package com.example.projectX.controllers;
 
+import com.example.projectX.models.*;
 import com.example.projectX.services.CompanyService;
 import com.example.projectX.services.UserAuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/")
@@ -50,7 +53,12 @@ public class StudentController {
     }
 
     @GetMapping("student_courses")
-    public String userCourses(Model model) {
+    public String userCourses(Model model,
+                              @AuthenticationPrincipal UserStudent student) {
+
+        List<Course> courses = companyService.getAllCompanyCourses(student.getCompanyId());
+
+        model.addAttribute("courses", courses );
         return "student-courses-page";
     }
 
@@ -60,10 +68,16 @@ public class StudentController {
     }
 
     @GetMapping("student_teachers")
-    public String userTeachers(Model model) {
+    public String userTeachers(Model model,
+                               @AuthenticationPrincipal UserStudent student) {
+
+        List<UserTeacher> teachers = companyService.getAllCompanyTeachers(student.getCompanyId());
+
+        model.addAttribute("teachers", teachers );
         return "student-teachers-page";
     }
 
+    /* Filter By Teacher? By Course? Try it! */
     @GetMapping("student_home")
     public String home2(Model model) {
         return "student-home";
