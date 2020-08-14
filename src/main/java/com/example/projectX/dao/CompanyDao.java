@@ -1,9 +1,6 @@
 package com.example.projectX.dao;
 
-import com.example.projectX.models.Company;
-import com.example.projectX.models.ManagementStaff;
-import com.example.projectX.models.UserStudent;
-import com.example.projectX.models.UserTeacher;
+import com.example.projectX.models.*;
 import org.checkerframework.checker.nullness.Opt;
 
 import java.util.List;
@@ -29,6 +26,8 @@ public interface CompanyDao {
 
     boolean insertTeacher(String teacherName, String teacherLogin, UUID companyId);
 
+    boolean insertCourse(UUID companyId, Course course);
+
     Optional<ManagementStaff> getManagerById(UUID id);
 
     Optional<UserTeacher> getTeacherById(UUID teacherId);
@@ -38,4 +37,6 @@ public interface CompanyDao {
     List<UserStudent> getAllCompanyStudents(UUID companyId);
 
     List<UserTeacher> getAllCompanyTeachers(UUID companyId);
+
+    List<Course> getAllCompanyCourses(UUID companyId);
 }

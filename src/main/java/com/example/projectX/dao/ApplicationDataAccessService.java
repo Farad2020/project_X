@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
+import java.text.DateFormat;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -102,6 +103,16 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
                 "(user_teacher_id, user_teacher_name, user_teacher_login, user_teacher_password, is_account_non_expired, is_account_non_locked, is_credentials_non_expired, is_enabled, company_id) " +
                 "VALUES (uuid_generate_v4(), '%s', '%s', '%s', TRUE, TRUE, TRUE, TRUE, '%s');",
                 teacherName, teacherLogin, passwordEncoder.encode("12345678"), companyId);
+        jdbcTemplate.execute(sql);
+        return true;
+    }
+
+    @Override
+    public boolean insertCourse(UUID companyId, Course course) {
+        final String sql = String.format("INSERT INTO Courses " +
+                "(course_id, course_name, course_description, course_is_active, course_start_date, course_price, course_payout_num, user_teacher_id, company_id) " +
+                "VALUES ('%s', '%s', '%s', '%s', '%s', %f, %d, '%s', '%s');",
+                course.getId(), course.getName(), course.getDescription(), course.isActive(), course.getStarDate(), course.getPrice(), course.getPayoutNum(), course.getTeacherId(), companyId);
         jdbcTemplate.execute(sql);
         return true;
     }
@@ -227,6 +238,24 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
             UUID companyId_ = UUID.fromString(resultSet.getString("company_id"));
             return new UserTeacher(id, name, surname, lastname, login_, password, email, telephone, companyId_, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
 
+        }));
+    }
+
+    @Override
+    public List<Course> getAllCompanyCourses(UUID companyId) {
+        final String sql = String.format("SELECT * FROM Courses WHERE company_id = '%s';", companyId);
+        return jdbcTemplate.query(sql, ((resultSet, i) -> {
+            UUID id = UUID.fromString(resultSet.getString("course_id"));
+            String name = resultSet.getString("course_name");
+            String description = resultSet.getString("course_description");
+            boolean isActive = resultSet.getBoolean("course_is_active");
+            String startDate = resultSet.getString("course_start_date");
+            String endDate = resultSet.getString("course_end_date");
+            double price = resultSet.getDouble("course_price");
+            int payoutNum = resultSet.getInt("course_payout_num");
+            UUID teacherId = UUID.fromString(resultSet.getString("user_teacher_id"));
+            UUID companyId_ = UUID.fromString(resultSet.getString("company_id"));
+            return new Course(id, name, description, isActive, startDate, endDate, price, payoutNum, teacherId, companyId_);
         }));
     }
 

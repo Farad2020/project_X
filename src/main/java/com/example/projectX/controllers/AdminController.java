@@ -1,9 +1,6 @@
 package com.example.projectX.controllers;
 
-import com.example.projectX.models.Company;
-import com.example.projectX.models.ManagementStaff;
-import com.example.projectX.models.UserStudent;
-import com.example.projectX.models.UserTeacher;
+import com.example.projectX.models.*;
 import com.example.projectX.services.CompanyService;
 import com.example.projectX.services.UserAuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -55,9 +53,11 @@ public class AdminController {
             List<ManagementStaff> managementStaffList = userAuthenticationService.getAllCompanyManagers(company.get());
             List<UserStudent> students = companyService.getAllCompanyStudents(id);
             List<UserTeacher> teachers = companyService.getAllCompanyTeachers(id);
+            List<Course> courses = companyService.getAllCompanyCourses(id);
             model.addAttribute("managers", managementStaffList);
             model.addAttribute("students", students);
             model.addAttribute("teachers", teachers);
+            model.addAttribute("courses", courses);
         }
         model.addAttribute("company_id", id);
         return "admin-company-page";
@@ -86,6 +86,21 @@ public class AdminController {
                              @RequestParam(name = "company_id") UUID companyId) {
         boolean result = userAuthenticationService.saveUserStudent(studentLogin, studentName, "12345678", companyId);
         System.out.println(result);
+        return "redirect:/$2a$10$HZR3IGneje95jJVEomN.vuEKlxwRt6Tn5oeLEXySZXh7L/WLiX6fm/company/" + companyId;
+    }
+
+    @PostMapping("add_course")
+    public String addCourse(@RequestParam(name = "name") String courseName,
+                            @RequestParam(name = "description") String description,
+                            @RequestParam(name = "is_active") boolean isActive,
+                            @RequestParam(name = "start_date") String startDate,
+                            @RequestParam(name = "price") double price,
+                            @RequestParam(name = "payout_num") int payoutNum,
+                            @RequestParam(name = "teacher_id") UUID teacherId,
+                            @RequestParam(name = "company_id") UUID companyId) {
+        System.out.println(startDate);
+        Course course = new Course(UUID.randomUUID(), courseName, description, isActive, startDate, null, price, payoutNum, teacherId, companyId);
+        boolean result = companyService.addCourseToCompany(companyId, course);
         return "redirect:/$2a$10$HZR3IGneje95jJVEomN.vuEKlxwRt6Tn5oeLEXySZXh7L/WLiX6fm/company/" + companyId;
     }
 
