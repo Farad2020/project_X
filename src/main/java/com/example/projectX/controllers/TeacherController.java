@@ -50,9 +50,22 @@ public class TeacherController {
 
         List<Course> courses = companyService.getAllCompanyCourses(teacher.getCompanyId());
 
+        /*Better List Required*/
         model.addAttribute("courses", courses );
 
         return "teacher-courses-page";
+    }
+
+    @GetMapping("teacher_courses/{course_id}")
+    public String getTeacherCourseById(Model model,
+                                       @PathVariable(name = "course_id") UUID course_id,
+                                       @AuthenticationPrincipal UserTeacher teacher) {
+
+        Course course = companyService.getCourseById(teacher.getCompanyId()).get();
+
+        model.addAttribute("course", course );
+        model.addAttribute("teacher", teacher );
+        return "company-course_page";
     }
 
     @GetMapping("teacher_posts")
@@ -74,6 +87,18 @@ public class TeacherController {
         model.addAttribute("students", students );
 
         return "teacher-students-page";
+    }
+
+    @GetMapping("teacher_students/{student_id}")
+    public String getTeacherStudentById(Model model,
+                                       @PathVariable(name = "student_id") UUID student_id,
+                                       @AuthenticationPrincipal UserTeacher teacher) {
+
+        UserStudent student = companyService.getStudentById(student_id).get();
+
+        model.addAttribute("student", student );
+        model.addAttribute("teacher", teacher );
+        return "company-course_page";
     }
 
     @GetMapping("teacher_tasks")

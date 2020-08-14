@@ -9,9 +9,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/")
@@ -35,8 +37,8 @@ public class StudentController {
 
     @GetMapping("/student_profile")
     public String userProfile(Model model,
-                              @AuthenticationPrincipal UserDetails user){
-        model.addAttribute("user", user);
+                              @AuthenticationPrincipal UserStudent student){
+        model.addAttribute("student", student);
 
         /*
         if( userAuthenticationService.getUserStudentByLogin(user.getUsername()).isPresent() ){
@@ -55,12 +57,26 @@ public class StudentController {
     @GetMapping("student_courses")
     public String userCourses(Model model,
                               @AuthenticationPrincipal UserStudent student) {
-
+/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ЗАПРОС НУЖЕН БОЛЕЕ ЛУЧШИЙ   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
         List<Course> courses = companyService.getAllCompanyCourses(student.getCompanyId());
 
         model.addAttribute("courses", courses );
         return "student-courses-page";
     }
+
+    @GetMapping("student_courses/{course_id}")
+    public String getStudentCourseById(Model model,
+                                       @PathVariable(name = "course_id") UUID course_id,
+                                       @AuthenticationPrincipal UserStudent student) {
+
+        Course course = companyService.getCourseById(student.getCompanyId()).get();
+        UserTeacher teacher = companyService.getTeacherById(course.getTeacherId()).get();
+
+        model.addAttribute("course", course );
+        model.addAttribute("teacher", teacher );
+        return "company-course_page";
+    }
+
 
     @GetMapping("student_tasks")
     public String userTasks(Model model) {
@@ -72,12 +88,14 @@ public class StudentController {
                                @AuthenticationPrincipal UserStudent student) {
 
         List<UserTeacher> teachers = companyService.getAllCompanyTeachers(student.getCompanyId());
+        /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ЗАПРОС НУЖЕН БОЛЕЕ ЛУЧШИЙ   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 
         model.addAttribute("teachers", teachers );
         return "student-teachers-page";
     }
 
     /* Filter By Teacher? By Course? Try it! */
+    /* Note to reader. I dont rememvber why I used this method*/
     @GetMapping("student_home")
     public String home2(Model model) {
         return "student-home";

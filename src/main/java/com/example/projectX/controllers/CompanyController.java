@@ -46,7 +46,6 @@ public class CompanyController {
 
     @GetMapping("company_management_stuff")
     public String companyManagementStuff(Model model,
-                                         @PathVariable (name = "sort_type") String sortType,
                                          @AuthenticationPrincipal ManagementStaff manager) {
         List<ManagementStaff> managementStaffs = companyService.selectAllCompanyManagers( companyService.getCompanyById(manager.getCompanyId()).get() );
 
@@ -61,7 +60,20 @@ public class CompanyController {
     }
 
 
-    @GetMapping("company_students/{sort_type}")
+    @GetMapping("company_students")
+    public String companyStudents(Model model,
+                                  @AuthenticationPrincipal ManagementStaff manager) {
+        List<UserStudent> students = companyService.getAllCompanyStudents(manager.getCompanyId());
+        //Sorting by name currently; Later variations should be added!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        Comparator<UserStudent> compareByName = Comparator.comparing(UserStudent::getName);
+        Collections.sort(students, compareByName);
+
+        model.addAttribute("students", students );
+        return "company-students";
+    }
+
+    /*
+        @GetMapping("company_students/{sort_type}")
     public String companyStudents(Model model,
                                   @PathVariable (name = "sort_type") String sortType,
                                   @AuthenticationPrincipal ManagementStaff manager) {
@@ -81,6 +93,7 @@ public class CompanyController {
         model.addAttribute("students", students );
         return "company-students";
     }
+    */
 
     @GetMapping("company_students_filtered")
     public String companyStudentsFiltered(Model model,
@@ -119,12 +132,27 @@ public class CompanyController {
         return "company-courses";
     }
 
+    @GetMapping("company_courses/{course_id}")
+    public String getCompanyCourseById(Model model,
+                                 @PathVariable (name = "course_id") UUID course_id,
+                                 @AuthenticationPrincipal ManagementStaff manager) {
+
+        Course course = companyService.getCourseById(manager.getCompanyId()).get();
+        UserTeacher teacher = companyService.getTeacherById(course.getTeacherId()).get();
+
+        model.addAttribute("course", course );
+        model.addAttribute("teacher", teacher );
+        return "company-course_page";
+    }
+
     @GetMapping("/students_profile/{student_id}")
     public String getUserProfile(Model model,
                               @PathVariable (name = "student_id") UUID student_id,
-                              @AuthenticationPrincipal UserDetails user){
+                              @AuthenticationPrincipal User user){
         UserStudent student = companyService.getStudentById(student_id).get();
         model.addAttribute("student", student );
+
+        /* if student is not the current user validation!!! And user is manager */
         return "student-account-page";
     }
 

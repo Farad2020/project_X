@@ -212,6 +212,30 @@ html.transition *:after {
   margin-bottom: 1em;
 }
 
+a.table-row-link{
+  text-decoration: none;
+  color: var(--text-color);
+  cursor: pointer;
+}
+
+a.table-row-link:hover{
+  text-decoration: none;
+  color: var(--text-color);
+  cursor: pointer;
+}
+
+a.info-link{
+  text-decoration: none;
+  color: var(--text-color);
+  cursor: pointer;
+}
+
+a.info-link:hover{
+  text-decoration: none;
+  color: var(--text-color);
+  cursor: pointer;
+}
+
 /* My Page Style */
 
 #account-info-card{

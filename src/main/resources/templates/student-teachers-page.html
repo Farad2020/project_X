@@ -40,12 +40,29 @@
     </nav>
 
 
-    <ul class="list-group course-list">
-        <li class="course-list-item">Teach 1</li>
-        <li class="course-list-item">Teach 2</li>
-        <li class="course-list-item">Teach 3</li>
-        <li class="course-list-item">Teach 4</li>
-    </ul>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Surname</th>
+            <th scope="col">Lastname</th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="i :  ${#numbers.sequence(0, students.size() -1 )}" th:if="${teachers.size() > 0}"> <!-- style="cursor: pointer" -->
+            <tr class="course-list-item table-item">
+                <th scope="row" th:text="${i+1}"></th>
+                <td><a class="table-row-link" th:href="@{'teachers_profile/'} + ${teachers.get(i).getId()}"
+                       th:text="${students.get(i).getName()}"/></td>
+                <td><a class="table-row-link" th:href="@{'teachers_profile/'} + ${teachers.get(i).getId()}"
+                       th:text="${teachers.get(i).getSurname()}"/></td>
+                <td><a class="table-row-link" th:href="@{'teachers_profile/'} + ${teachers.get(i).getId()}"
+                       th:text="${teachers.get(i).getLastname()}"/></td>
+            </tr>
+        </th:block>
+        </tbody>
+    </table>
 </div>
 <footer th:insert="blocks/footer :: footer"></footer>
 </body>

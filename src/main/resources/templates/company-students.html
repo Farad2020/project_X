@@ -4,12 +4,13 @@
 -->
 <html xmlns:th="http://www.thymeleaf.org" data-theme="light">
 <head>
-    <title th:text="${title}" > </title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title th:text="${title}"></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-    <link rel="stylesheet" type="text/css" href="/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="/css/style.css"/>
 </head>
 <body>
 <header th:insert="blocks/header :: header"></header>
@@ -22,18 +23,20 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Filter By: None
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" th:href="alp_asc" >Name, Alphabet, Ascending</a>
-                        <a class="dropdown-item" th:href="alp_desc" >Name, Alphabet, Descending</a>
-                        <a class="dropdown-item" th:href="none" >None</a>
+                        <a class="dropdown-item" th:href="alp_asc">Name, Alphabet, Ascending</a>
+                        <a class="dropdown-item" th:href="alp_desc">Name, Alphabet, Descending</a>
+                        <a class="dropdown-item" th:href="none">None</a>
                     </div>
                 </li>
             </ul>
             <form class="form-inline my-2 my-lg-0" th:action="@{/search_student}" method="get">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="searchKey">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"
+                       name="searchKey">
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
             </form>
         </div>
@@ -46,17 +49,20 @@
             <th scope="col">#</th>
             <th scope="col">Name</th>
             <th scope="col">Surname</th>
-            <th scope="col">Login</th>
+            <th scope="col">Lastname</th>
         </tr>
         </thead>
         <tbody>
-        <th:block th:each="i :  ${#numbers.sequence(0, students.size() -1 )}" >
-        <tr class="course-list-item table-item">
-                <th scope="row"  th:text="${i+1}"></th>
-                <td th:text="${students.get(i).getName()}"></td>
-                <td th:text="${students.get(i).getSurname()}"></td>
-                <td th:text="${students.get(i).getLogin()}"></td>
-        </tr>
+        <th:block th:each="i :  ${#numbers.sequence(0, students.size() -1 )}" th:if="${students.size() > 0}"> <!-- style="cursor: pointer" -->
+            <tr class="course-list-item table-item">
+                <th scope="row" th:text="${i+1}"></th>
+                <td><a class="table-row-link" th:href="@{'students_profile/'} + ${students.get(i).getId()}"
+                       th:text="${students.get(i).getName()}"/></td>
+                <td><a class="table-row-link" th:href="@{'students_profile/'} + ${students.get(i).getId()}"
+                       th:text="${students.get(i).getSurname()}"/></td>
+                <td><a class="table-row-link" th:href="@{'students_profile/'} + ${students.get(i).getId()}"
+                       th:text="${students.get(i).getLastname()}"/></td>
+            </tr>
         </th:block>
         </tbody>
     </table>
@@ -66,8 +72,8 @@
 
     </ul>
 
-</div>
 
+</div>
 <footer th:insert="blocks/footer :: footer"></footer>
 </body>
 </html>
