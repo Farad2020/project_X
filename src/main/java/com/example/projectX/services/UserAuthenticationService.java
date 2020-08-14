@@ -50,4 +50,16 @@ public class UserAuthenticationService implements UserDetailsService {
     public Optional<UserTeacher> getUserTeacherByLogin(String login) {
         return userDao.selectUserTeacherByLogin(login);
     }
+
+    public boolean updateManagementStaffById(UUID managerId, ManagementStaff managementStaff) {
+        return userDao.updateManagementStaffById(managerId, managementStaff);
+    }
+
+    public boolean updateUserTeacherById(UUID teacherId, UserTeacher userTeacher) {
+        return userDao.updateUserTeacherById(teacherId, userTeacher);
+    }
+
+    public boolean updateUserStudentById(UUID studentId, UserStudent userStudent) {
+        return userDao.updateUserStudentById(studentId, userStudent);
+    }
 }

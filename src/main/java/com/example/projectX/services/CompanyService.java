@@ -36,8 +36,24 @@ public class CompanyService {
         return companyDao.insertManager(managerLogin, managerRole, companyId);
     }
 
+    public boolean addTeacherToCompany(String teacherName, String teacherLogin, UUID companyId) {
+        return companyDao.insertTeacher(teacherName, teacherLogin, companyId);
+    }
+
+    public boolean addCourseToCompany(UUID companyId, Course course) {
+        return companyDao.insertCourse(companyId, course);
+    }
+
     public Optional<ManagementStaff> getManagerById(UUID managerId) {
         return companyDao.getManagerById(managerId);
+    }
+
+    public Optional<UserTeacher> getTeacherById(UUID teacherId) {
+        return companyDao.getTeacherById(teacherId);
+    }
+
+    public Optional<UserStudent> getStudentById(UUID studentId) {
+        return companyDao.getStudentById(studentId);
     }
 
     public List<UserStudent> getAllCompanyStudents(UUID companyId) {

@@ -1,0 +1,1 @@
+ALTER TABLE User_Students ALTER COLUMN company_id SET NOT NULL;

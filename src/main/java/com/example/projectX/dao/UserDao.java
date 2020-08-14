@@ -21,4 +21,10 @@ public interface UserDao {
 
     List<ManagementStaff> selectAllCompanyManagers(Company company);
 
+    boolean updateManagementStaffById(UUID managerId, ManagementStaff managementStaff);
+
+    boolean updateUserTeacherById(UUID teacherId, UserTeacher userTeacher);
+
+    boolean updateUserStudentById(UUID studentId, UserStudent userStudent);
+
 }

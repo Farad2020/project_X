@@ -24,7 +24,15 @@ public interface CompanyDao {
 
     boolean insertManager(String managerLogin, int role, UUID companyId);
 
+    boolean insertTeacher(String teacherName, String teacherLogin, UUID companyId);
+
+    boolean insertCourse(UUID companyId, Course course);
+
     Optional<ManagementStaff> getManagerById(UUID id);
+
+    Optional<UserTeacher> getTeacherById(UUID teacherId);
+
+    Optional<UserStudent> getStudentById(UUID studentId);
 
     List<UserStudent> getAllCompanyStudents(UUID companyId);
 
