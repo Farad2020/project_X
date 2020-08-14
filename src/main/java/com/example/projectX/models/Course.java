@@ -9,19 +9,19 @@ public class Course {
     private final String name;
     private final String description;
     private final boolean active;
-    private final String starDate;
+    private final String startDate;
     private final String endDate;
     private final double price;
     private final int payoutNum;
     private final UUID teacherId;
     private final UUID companyId;
 
-    public Course(UUID id, String name, String description, boolean active, String starDate, String endDate, double price, int payoutNum, UUID teacherId, UUID companyId) {
+    public Course(UUID id, String name, String description, boolean active, String startDate, String endDate, double price, int payoutNum, UUID teacherId, UUID companyId) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.active = active;
-        this.starDate = starDate;
+        this.startDate = startDate;
         this.endDate = endDate;
         this.price = price;
         this.payoutNum = payoutNum;
@@ -46,7 +46,7 @@ public class Course {
     }
 
     public String getStarDate() {
-        return starDate;
+        return startDate;
     }
 
     public String getEndDate() {

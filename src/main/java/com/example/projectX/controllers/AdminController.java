@@ -137,6 +137,22 @@ public class AdminController {
         return "admin-company-student-edit";
     }
 
+    @GetMapping(path = "company/{company_id}/course/{course_id}/edit")
+    public String editCourse(@PathVariable("company_id") UUID companyId,
+                             @PathVariable("course_id") UUID courseId,
+                             Model model) {
+        Optional<Course> course = companyService.getCourseById(courseId);
+        List<UserStudent> participatingStudents = companyService.getAllStudentsOfCourse(courseId);
+        List<UserStudent> notParticipatingStudents = companyService.getAllCompanyStudentsThatNotInCourse(companyId, courseId);
+        List<UserTeacher> teachers = companyService.getAllCompanyTeachers(companyId);
+        course.ifPresent(value -> model.addAttribute("course", value));
+        model.addAttribute("participating_students", participatingStudents);
+        model.addAttribute("not_participating_students", notParticipatingStudents);
+        model.addAttribute("teachers", teachers);
+        model.addAttribute("company_id", companyId);
+        return "admin-company-course-edit";
+    }
+
     @PostMapping("edit_manager")
     public String editManager(@RequestParam(name = "name") String name,
                               @RequestParam(name = "surname") String surname,
@@ -185,6 +201,7 @@ public class AdminController {
         System.out.println(result);
         return "redirect:/$2a$10$HZR3IGneje95jJVEomN.vuEKlxwRt6Tn5oeLEXySZXh7L/WLiX6fm/company/" + companyId;
     }
+
     @PostMapping("edit_student")
     public String editStudent(@RequestParam(name = "name") String name,
                               @RequestParam(name = "surname") String surname,
@@ -203,6 +220,41 @@ public class AdminController {
         boolean result = userAuthenticationService.updateUserStudentById(studentId, userStudent);
         System.out.println(result);
         return "redirect:/$2a$10$HZR3IGneje95jJVEomN.vuEKlxwRt6Tn5oeLEXySZXh7L/WLiX6fm/company/" + companyId;
+    }
+
+    @PostMapping("edit_course")
+    public String editCourse(@RequestParam(name = "name") String name,
+                             @RequestParam(name = "description") String description,
+                             @RequestParam(name = "is_active") boolean isActive,
+                             @RequestParam(name = "start_date") String startDate,
+                             @RequestParam(name = "end_date") String endDate,
+                             @RequestParam(name = "price") double price,
+                             @RequestParam(name = "payout_num") int payoutNum,
+                             @RequestParam(name = "teacher_id") UUID teacherId,
+                             @RequestParam(name = "company_id") UUID companyId,
+                             @RequestParam(name = "course_id") UUID courseId) {
+        Course course = new Course(courseId, name, description, isActive, startDate, endDate, price, payoutNum, teacherId, companyId);
+        boolean result = companyService.updateCourseById(courseId, course);
+        System.out.println(result);
+        return "redirect:/$2a$10$HZR3IGneje95jJVEomN.vuEKlxwRt6Tn5oeLEXySZXh7L/WLiX6fm/company/" + companyId;
+    }
+
+    @GetMapping(path = "company/{company_id}/course/{course_id}/add_student/{student_id}")
+    public String addStudentToCourse(@PathVariable(name = "company_id") UUID companyId,
+                                     @PathVariable(name = "course_id") UUID courseId,
+                                     @PathVariable(name = "student_id") UUID studentId) {
+        boolean result = companyService.addStudentToCourse(studentId, courseId);
+        System.out.println(result);
+        return "redirect:/$2a$10$HZR3IGneje95jJVEomN.vuEKlxwRt6Tn5oeLEXySZXh7L/WLiX6fm/company/" + companyId + "/course/" + courseId + "/edit";
+    }
+
+    @GetMapping(path = "company/{company_id}/course/{course_id}/delete_student/{student_id}")
+    public String deleteStudentFromCourse(@PathVariable(name = "company_id") UUID companyId,
+                                     @PathVariable(name = "course_id") UUID courseId,
+                                     @PathVariable(name = "student_id") UUID studentId) {
+        boolean result = companyService.deleteStudentFromCourse(studentId, courseId);
+        System.out.println(result);
+        return "redirect:/$2a$10$HZR3IGneje95jJVEomN.vuEKlxwRt6Tn5oeLEXySZXh7L/WLiX6fm/company/" + companyId + "/course/" + courseId + "/edit";
     }
 
 }

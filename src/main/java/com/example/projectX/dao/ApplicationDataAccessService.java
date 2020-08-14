@@ -7,7 +7,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
-import java.text.DateFormat;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -196,6 +195,24 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
     }
 
     @Override
+    public Optional<Course> getCourseById(UUID courseId) {
+        final String sql = String.format("SELECT * FROM Courses WHERE course_id = '%s';", courseId);
+        return jdbcTemplate.query(sql, ((resultSet, i) -> {
+            UUID id = UUID.fromString(resultSet.getString("course_id"));
+            String name = resultSet.getString("course_name");
+            String description = resultSet.getString("course_description");
+            boolean isActive = resultSet.getBoolean("course_is_active");
+            String startDate = resultSet.getString("course_start_date");
+            String endDate = resultSet.getString("course_end_date");
+            double price = resultSet.getDouble("course_price");
+            int payoutNum = resultSet.getInt("course_payout_num");
+            UUID teacherId = UUID.fromString(resultSet.getString("user_teacher_id"));
+            UUID companyId_ = UUID.fromString(resultSet.getString("company_id"));
+            return new Course(id, name, description, isActive, startDate, endDate, price, payoutNum, teacherId, companyId_);
+        })).stream().findFirst();
+    }
+
+    @Override
     public List<UserStudent> getAllCompanyStudents(UUID companyId) {
         final String sql = String.format("SELECT * FROM User_Students WHERE company_id = '%s'", companyId);
         return jdbcTemplate.query(sql, ((resultSet, i) -> {
@@ -257,6 +274,107 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
             UUID companyId_ = UUID.fromString(resultSet.getString("company_id"));
             return new Course(id, name, description, isActive, startDate, endDate, price, payoutNum, teacherId, companyId_);
         }));
+    }
+
+    @Override
+    public List<UserStudent> getAllStudentsOfCourse(UUID courseId) {
+        final String sql = String.format("SELECT * FROM User_Students " +
+                "WHERE user_student_id = ANY (" +
+                "SELECT student_id FROM Students_Courses " +
+                "WHERE course_id = '%s');", courseId);
+        return jdbcTemplate.query(sql, ((resultSet, i) -> {
+            UUID id = UUID.fromString(resultSet.getString("user_student_id"));
+            String name = resultSet.getString("user_student_name");
+            String surname = resultSet.getString("user_student_surname");
+            String lastname = resultSet.getString("user_student_lastname");
+            String login_ = resultSet.getString("user_student_login");
+            String password = resultSet.getString("user_student_password");
+            String email = resultSet.getString("user_student_email");
+            String telephone = resultSet.getString("user_student_telephone");
+            UUID companyId_ = null;
+            if (resultSet.getString("company_id") != null) {
+                companyId_ = UUID.fromString(resultSet.getString("company_id"));
+            }
+            boolean isAccountNonExpired = resultSet.getBoolean("is_account_non_expired");
+            boolean isAccountNonLocked = resultSet.getBoolean("is_account_non_locked");
+            boolean isCredentialsNonExpired = resultSet.getBoolean("is_credentials_non_expired");
+            boolean isEnabled = resultSet.getBoolean("is_enabled");
+            return new UserStudent(id, name, surname, lastname, login_, password, email, telephone, companyId_, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
+        }));
+    }
+
+    @Override
+    public List<UserStudent> getAllCompanyStudentsThatNotInCourse(UUID companyId, UUID courseId) {
+        final String sql = String.format("SELECT * FROM User_Students " +
+                "WHERE company_id = '%s' " +
+                "AND user_student_id != ALL (" +
+                "SELECT student_id FROM Students_Courses " +
+                "WHERE course_id = '%s');", companyId, courseId);
+        return jdbcTemplate.query(sql, ((resultSet, i) -> {
+            UUID id = UUID.fromString(resultSet.getString("user_student_id"));
+            String name = resultSet.getString("user_student_name");
+            String surname = resultSet.getString("user_student_surname");
+            String lastname = resultSet.getString("user_student_lastname");
+            String login_ = resultSet.getString("user_student_login");
+            String password = resultSet.getString("user_student_password");
+            String email = resultSet.getString("user_student_email");
+            String telephone = resultSet.getString("user_student_telephone");
+            UUID companyId_ = null;
+            if (resultSet.getString("company_id") != null) {
+                companyId_ = UUID.fromString(resultSet.getString("company_id"));
+            }
+            boolean isAccountNonExpired = resultSet.getBoolean("is_account_non_expired");
+            boolean isAccountNonLocked = resultSet.getBoolean("is_account_non_locked");
+            boolean isCredentialsNonExpired = resultSet.getBoolean("is_credentials_non_expired");
+            boolean isEnabled = resultSet.getBoolean("is_enabled");
+            return new UserStudent(id, name, surname, lastname, login_, password, email, telephone, companyId_, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
+        }));
+    }
+
+    @Override
+    public boolean updateCourseById(UUID courseId, Course course) {
+
+        final String sql = String.format("UPDATE Courses SET " +
+                "course_name = '%s', " +
+                "course_description = '%s', " +
+                "course_is_active = %s, " +
+                "course_start_date = '%s', " +
+                "course_end_date = %s, " +
+                "course_price = '%f', " +
+                "course_payout_num = '%d', " +
+                "user_teacher_id = '%s', " +
+                "company_id = '%s' " +
+                "WHERE course_id = '%s';",
+                course.getName(),
+                course.getDescription(),
+                course.isActive(),
+                course.getStarDate(),
+                course.getEndDate().isEmpty() ? null : "'" + course.getEndDate() + "'",
+                course.getPrice(),
+                course.getPayoutNum(),
+                course.getTeacherId(),
+                course.getCompanyId(),
+                course.getId());
+        jdbcTemplate.execute(sql);
+        return true;
+    }
+
+    @Override
+    public boolean addStudentToCourse(UUID studentId, UUID courseId) {
+        final String sql = String.format("INSERT INTO Students_Courses " +
+                "(student_course_id, student_id, course_id) " +
+                "VALUES (uuid_generate_v4(), '%s', '%s');",
+                studentId, courseId);
+        jdbcTemplate.execute(sql);
+        return true;
+    }
+
+    @Override
+    public boolean deleteStudentFromCourse(UUID studentId, UUID courseId) {
+        final String sql = String.format("DELETE FROM Students_Courses " +
+                "WHERE student_id = '%s' AND course_id = '%s';", studentId, courseId);
+        jdbcTemplate.execute(sql);
+        return true;
     }
 
     @Override

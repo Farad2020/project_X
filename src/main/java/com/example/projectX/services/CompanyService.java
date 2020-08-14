@@ -56,6 +56,10 @@ public class CompanyService {
         return companyDao.getStudentById(studentId);
     }
 
+    public Optional<Course> getCourseById(UUID courseId) {
+        return companyDao.getCourseById(courseId);
+    }
+
     public List<UserStudent> getAllCompanyStudents(UUID companyId) {
         return companyDao.getAllCompanyStudents(companyId);
     }
@@ -66,6 +70,26 @@ public class CompanyService {
 
     public List<Course> getAllCompanyCourses(UUID companyId) {
         return companyDao.getAllCompanyCourses(companyId);
+    }
+
+    public List<UserStudent> getAllStudentsOfCourse(UUID courseId) {
+        return companyDao.getAllStudentsOfCourse(courseId);
+    }
+
+    public List<UserStudent> getAllCompanyStudentsThatNotInCourse(UUID companyId, UUID courseId) {
+        return companyDao.getAllCompanyStudentsThatNotInCourse(companyId, courseId);
+    }
+
+    public boolean updateCourseById(UUID courseId, Course course) {
+        return companyDao.updateCourseById(courseId, course);
+    }
+
+    public boolean addStudentToCourse(UUID studentId, UUID courseId) {
+        return companyDao.addStudentToCourse(studentId, courseId);
+    }
+
+    public boolean deleteStudentFromCourse(UUID studentId, UUID courseId) {
+        return companyDao.deleteStudentFromCourse(studentId, courseId);
     }
 
 }

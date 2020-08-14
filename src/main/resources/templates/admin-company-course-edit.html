@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form action="/$2a$10$HZR3IGneje95jJVEomN.vuEKlxwRt6Tn5oeLEXySZXh7L/WLiX6fm/edit_course" method="post">
+        <div><input type="text" name="name" placeholder="name" th:value="${course.getName()}"></div>
+        <div><input type="text" name="description" placeholder="description" th:value="${course.getDescription()}"></div>
+        <div>
+            <p>Is active</p>
+            <select name="is_active">
+                <option value="1" th:selected="${course.isActive()}">True</option>
+                <option value="0" th:selected="${!course.isActive()}">False</option>
+            </select>
+        </div>
+        <div><input type="date" name="start_date" th:value="${course.getStarDate()}"></div>
+        <div><input type="date" name="end_date" th:value="${course.getEndDate()}"></div>
+        <div><input type="number" name="price" th:value="${course.getPrice()}"></div>
+        <div><input type="number" name="payout_num" th:value="${course.getPayoutNum()}"></div>
+        <div>
+            <select name="teacher_id" required="">
+                <option th:each="teacher : ${teachers}" th:value="${teacher.getId()}" th:text="${teacher.getName()} + ' ' + ${teacher.getSurname()}" th:selected="${course.getTeacherId()} == ${teacher.getId()}"></option>
+            </select>
+        </div>
+        <div><input type="hidden" name="company_id" th:value="${company_id}"></div>
+        <div><input type="hidden" name="course_id" th:value="${course.getId()}"></div>
+        <div>
+            <input type="submit">
+        </div>
+    </form>
+    <h2>Students who participates in this course: </h2>
+    <div th:each="student : ${participating_students}">
+        <p th:text="${student.getName()} + ' ' + ${student.getSurname()}"></p>
+        <a th:href="@{delete_student/} + ${student.getId()}">DELETE FROM COURSE</a>
+    </div>
+    <h2>Students who does not participate in this course: </h2>
+    <div th:each="student : ${not_participating_students}">
+        <p th:text="${student.getName()} + ' ' + ${student.getSurname()}"></p>
+        <a th:href="@{add_student/} + ${student.getId()}">ADD TO COURSE</a>
+    </div>
+</body>
+</html>
