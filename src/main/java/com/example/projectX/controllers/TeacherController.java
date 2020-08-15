@@ -1,5 +1,6 @@
 package com.example.projectX.controllers;
 
+import com.example.projectX.helper.UserIdentifier;
 import com.example.projectX.models.Course;
 import com.example.projectX.models.UserStudent;
 import com.example.projectX.models.UserTeacher;
@@ -22,11 +23,13 @@ public class TeacherController {
 
     private final CompanyService companyService;
     private final UserAuthenticationService userAuthenticationService;
+    private final UserIdentifier userIdentifier;
 
     @Autowired
-    public TeacherController(CompanyService companyService, UserAuthenticationService userAuthenticationService) {
+    public TeacherController(CompanyService companyService, UserAuthenticationService userAuthenticationService, UserIdentifier userIdentifier) {
         this.companyService = companyService;
         this.userAuthenticationService = userAuthenticationService;
+        this.userIdentifier = userIdentifier;
     }
 
     //Учителя

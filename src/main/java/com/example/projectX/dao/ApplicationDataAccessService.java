@@ -109,9 +109,9 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
     @Override
     public boolean insertCourse(UUID companyId, Course course) {
         final String sql = String.format("INSERT INTO Courses " +
-                "(course_id, course_name, course_description, course_is_active, course_start_date, course_price, course_payout_num, user_teacher_id, company_id) " +
-                "VALUES ('%s', '%s', '%s', '%s', '%s', %f, %d, '%s', '%s');",
-                course.getId(), course.getName(), course.getDescription(), course.isActive(), course.getStarDate(), course.getPrice(), course.getPayoutNum(), course.getTeacherId(), companyId);
+                        "(course_id, course_name, course_description, course_is_active, course_start_date, course_price, course_payout_num, user_teacher_id, company_id) " +
+                        "VALUES ('%s', '%s', '%s', '%s', '%s', %s, %d, '%s', '%s');",
+                course.getId(), course.getName(), course.getDescription(), course.isActive(), course.getStarDate(), course.getPriceString(), course.getPayoutNum(), course.getTeacherId(), companyId);
         jdbcTemplate.execute(sql);
         return true;
     }
@@ -340,7 +340,7 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
                 "course_is_active = %s, " +
                 "course_start_date = '%s', " +
                 "course_end_date = %s, " +
-                "course_price = '%f', " +
+                "course_price = '%s', " +
                 "course_payout_num = '%d', " +
                 "user_teacher_id = '%s', " +
                 "company_id = '%s' " +
@@ -350,7 +350,7 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
                 course.isActive(),
                 course.getStarDate(),
                 course.getEndDate().isEmpty() ? null : "'" + course.getEndDate() + "'",
-                course.getPrice(),
+                course.getPriceString(),
                 course.getPayoutNum(),
                 course.getTeacherId(),
                 course.getCompanyId(),
