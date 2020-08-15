@@ -92,8 +92,21 @@ public class CompanyService {
         return companyDao.deleteStudentFromCourse(studentId, courseId);
 
     }
+
     public List<ManagementStaff> selectAllCompanyManagers(Company company){
         return companyDao.selectAllCompanyManagers(company);
+    }
+
+    public List<Schedule> getAllCourseSchedule(UUID courseId) {
+        return companyDao.getAllCourseSchedule(courseId);
+    }
+
+    public boolean addScheduleToCourse(Schedule schedule, UUID courseId) {
+        return companyDao.addScheduleToCourse(schedule, courseId);
+    }
+
+    public boolean deleteScheduleFromCourse(UUID scheduleId) {
+        return companyDao.deleteScheduleFromCourse(scheduleId);
     }
 
 }

@@ -145,10 +145,12 @@ public class AdminController {
         List<UserStudent> participatingStudents = companyService.getAllStudentsOfCourse(courseId);
         List<UserStudent> notParticipatingStudents = companyService.getAllCompanyStudentsThatNotInCourse(companyId, courseId);
         List<UserTeacher> teachers = companyService.getAllCompanyTeachers(companyId);
+        List<Schedule> scheduleList = companyService.getAllCourseSchedule(courseId);
         course.ifPresent(value -> model.addAttribute("course", value));
         model.addAttribute("participating_students", participatingStudents);
         model.addAttribute("not_participating_students", notParticipatingStudents);
         model.addAttribute("teachers", teachers);
+        model.addAttribute("scheduleList", scheduleList);
         model.addAttribute("company_id", companyId);
         return "admin-company-course-edit";
     }
@@ -253,6 +255,27 @@ public class AdminController {
                                      @PathVariable(name = "course_id") UUID courseId,
                                      @PathVariable(name = "student_id") UUID studentId) {
         boolean result = companyService.deleteStudentFromCourse(studentId, courseId);
+        System.out.println(result);
+        return "redirect:/$2a$10$HZR3IGneje95jJVEomN.vuEKlxwRt6Tn5oeLEXySZXh7L/WLiX6fm/company/" + companyId + "/course/" + courseId + "/edit";
+    }
+
+    @PostMapping("add_schedule_to_course")
+    public String addScheduleToCourse(@RequestParam(name = "start_time") String startTime,
+                                      @RequestParam(name = "end_time") String endTime,
+                                      @RequestParam(name = "week_day") String weekDay,
+                                      @RequestParam(name = "course_id") UUID courseId,
+                                      @RequestParam(name = "company_id") UUID companyId) {
+        Schedule schedule = new Schedule(UUID.randomUUID(), startTime, endTime, weekDay, courseId);
+        boolean result = companyService.addScheduleToCourse(schedule, courseId);
+        System.out.println(result);
+        return "redirect:/$2a$10$HZR3IGneje95jJVEomN.vuEKlxwRt6Tn5oeLEXySZXh7L/WLiX6fm/company/" + companyId + "/course/" + courseId + "/edit";
+    }
+
+    @GetMapping(path = "company/{company_id}/course/{course_id}/delete_schedule/{schedule_id}")
+    public String deleteScheduleFromCourse(@PathVariable(name = "company_id") UUID companyId,
+                                           @PathVariable(name = "course_id") UUID courseId,
+                                           @PathVariable(name = "schedule_id") UUID scheduleId) {
+        boolean result = companyService.deleteScheduleFromCourse(scheduleId);
         System.out.println(result);
         return "redirect:/$2a$10$HZR3IGneje95jJVEomN.vuEKlxwRt6Tn5oeLEXySZXh7L/WLiX6fm/company/" + companyId + "/course/" + courseId + "/edit";
     }

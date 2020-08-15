@@ -606,6 +606,43 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
     }
 
     @Override
+    public List<Schedule> getAllCourseSchedule(UUID courseId) {
+        final String sql = String.format("SELECT * FROM Schedule " +
+                "WHERE course_id = '%s';", courseId);
+        return jdbcTemplate.query(sql, ((resultSet, i) -> {
+            UUID id = UUID.fromString(resultSet.getString("schedule_id"));
+            String startTime = resultSet.getString("schedule_time_start");
+            String endTime = resultSet.getString("schedule_time_end");
+            String weekDay = resultSet.getString("schedule_week_day");
+            UUID courseId_ = UUID.fromString(resultSet.getString("course_id"));
+            return new Schedule(id, startTime, endTime, weekDay, courseId_);
+        }));
+    }
+
+    @Override
+    public boolean addScheduleToCourse(Schedule schedule, UUID courseId) {
+        for (Schedule s : getAllCourseSchedule(courseId)) {
+            if (s.getWeekDay().equals(schedule.getWeekDay()) && timeIntersects(s.getStartTime(), s.getEndTime(), schedule.getStartTime(), schedule.getEndTime())) {
+                return false;
+            }
+        }
+        final String sql = String.format("INSERT INTO Schedule " +
+                "(schedule_id, schedule_time_start, schedule_time_end, schedule_week_day, course_id) " +
+                "VALUES ('%s', '%s', '%s', '%s', '%s');",
+                schedule.getId(), schedule.getStartTime(), schedule.getEndTime(), schedule.getWeekDay(), courseId);
+        jdbcTemplate.execute(sql);
+        return true;
+    }
+
+    @Override
+    public boolean deleteScheduleFromCourse(UUID scheduleId) {
+        final String sql = String.format("DELETE FROM Schedule " +
+                "WHERE schedule_id = '%s';", scheduleId);
+        jdbcTemplate.execute(sql);
+        return true;
+    }
+
+    @Override
     public boolean updateManagementStaffById(UUID managerId, ManagementStaff managementStaff) {
         if (selectUserTeacherByLogin(managementStaff.getLogin()).isPresent() ||
             selectUserStudentByLogin(managementStaff.getLogin()).isPresent()) {
@@ -756,5 +793,19 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
             return new Admin(id, login_, password);
         }));
         return admins.stream().findFirst();
+    }
+
+    private boolean timeIntersects(String startTime1, String endTime1, String startTime2, String endTime2) {
+        int st1 = timeToInt(startTime1);
+        int et1 = timeToInt(endTime1);
+        int st2 = timeToInt(startTime2);
+        int et2 = timeToInt(endTime2);
+        return (st1 <= st2 && st2 <= et1) || (st1 <= et2 && et2 <= et1) ||
+                (st2 <= st1 && st1 <= et2) || (st2 <= et1 && et1 <= et2);
+    }
+
+    private int timeToInt(String time) {
+        String[] s = time.split(":");
+        return Integer.parseInt(s[0]) * 60 + Integer.parseInt(s[1]);
     }
 }

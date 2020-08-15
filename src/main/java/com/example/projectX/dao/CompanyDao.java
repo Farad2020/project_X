@@ -62,4 +62,10 @@ public interface CompanyDao {
 
     List<UserStudent> getAllTeacherStudents(UUID teacherId);
 
+    List<Schedule> getAllCourseSchedule(UUID courseId);
+
+    boolean addScheduleToCourse(Schedule schedule, UUID courseId);
+
+    boolean deleteScheduleFromCourse(UUID scheduleId);
+
 }
