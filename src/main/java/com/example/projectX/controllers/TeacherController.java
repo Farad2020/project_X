@@ -106,16 +106,6 @@ public class TeacherController {
         return "teacher-tasks-page";
     }
 
-    @GetMapping("teacher_courses/{course_id}")
-    public String genericCourse(Model model,
-                                @PathVariable(name = "course_id") UUID course_id,
-                                @AuthenticationPrincipal UserTeacher teacher
-                                ) {
-        Course course = companyService.getCourseById(course_id).get();
-        model.addAttribute("course", course );
-        return "course-page";
-    }
-
     @GetMapping("task")
     public String genericTask(Model model) {
         return "task-page";
