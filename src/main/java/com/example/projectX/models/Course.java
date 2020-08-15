@@ -57,6 +57,10 @@ public class Course {
         return price;
     }
 
+    public String getPriceString() {
+        return ((Double) price).toString().replaceAll(",",".");
+    }
+
     public int getPayoutNum() {
         return payoutNum;
     }

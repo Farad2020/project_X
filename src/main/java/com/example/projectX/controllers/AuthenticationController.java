@@ -4,6 +4,7 @@ package com.example.projectX.controllers;
 import com.example.projectX.models.Company;
 import com.example.projectX.models.ManagementStaff;
 import com.example.projectX.models.UserStudent;
+import com.example.projectX.models.UserTeacher;
 import com.example.projectX.services.CompanyService;
 import com.example.projectX.services.UserAuthenticationService;
 import org.hibernate.engine.jdbc.connections.internal.UserSuppliedConnectionProviderImpl;
@@ -25,6 +26,7 @@ public class AuthenticationController {
 
     private final CompanyService companyService;
     private final UserAuthenticationService userAuthenticationService;
+
 
     @Autowired
     public AuthenticationController(CompanyService companyService, UserAuthenticationService userAuthenticationService) {
@@ -50,4 +52,5 @@ public class AuthenticationController {
         System.out.println(result);
         return result ? "redirect:/login" : "redirect:/registration";
     }
+
 }

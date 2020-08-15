@@ -1,5 +1,6 @@
 package com.example.projectX.controllers;
 
+import com.example.projectX.helper.UserIdentifier;
 import com.example.projectX.models.*;
 import com.example.projectX.services.CompanyService;
 import com.example.projectX.services.UserAuthenticationService;
@@ -21,11 +22,13 @@ public class StudentController {
 
     private final CompanyService companyService;
     private final UserAuthenticationService userAuthenticationService;
+    private final UserIdentifier userIdentifier;
 
     @Autowired
-    public StudentController(CompanyService companyService, UserAuthenticationService userAuthenticationService) {
+    public StudentController(CompanyService companyService, UserAuthenticationService userAuthenticationService, UserIdentifier userIdentifier) {
         this.companyService = companyService;
         this.userAuthenticationService = userAuthenticationService;
+        this.userIdentifier = userIdentifier;
     }
 
     @GetMapping("")
@@ -37,9 +40,11 @@ public class StudentController {
 
     @GetMapping("/student_profile")
     public String userProfile(Model model,
-                              @AuthenticationPrincipal UserStudent student){
-        model.addAttribute("student", student);
+                              @AuthenticationPrincipal UserDetails user){
 
+        //model.addAttribute("student", student);
+
+        userIdentifier.getUserClass(user,model);
         /*
         if( userAuthenticationService.getUserStudentByLogin(user.getUsername()).isPresent() ){
             model.addAttribute("isStudent", true);
@@ -69,7 +74,7 @@ public class StudentController {
                                        @PathVariable(name = "course_id") UUID course_id,
                                        @AuthenticationPrincipal UserStudent student) {
 
-        Course course = companyService.getCourseById(student.getCompanyId()).get();
+        Course course = companyService.getCourseById(course_id).get();
         UserTeacher teacher = companyService.getTeacherById(course.getTeacherId()).get();
 
         model.addAttribute("course", course );
