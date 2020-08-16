@@ -1,9 +1,10 @@
 package com.example.projectX.dao;
 
-import com.example.projectX.models.*;
+import com.example.projectX.models.ManagementStaff;
+import com.example.projectX.models.UserStudent;
+import com.example.projectX.models.UserTeacher;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 

@@ -1,6 +1,5 @@
 package com.example.projectX.models;
 
-import java.util.Date;
 import java.util.UUID;
 
 public class Course {
@@ -45,7 +44,7 @@ public class Course {
         return active;
     }
 
-    public String getStarDate() {
+    public String getStartDate() {
         return startDate;
     }
 

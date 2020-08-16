@@ -28,7 +28,7 @@
             <p th:text="'Цена: ' + ${course.getPrice()}"></p>
             <p th:text="'Payout Number: ' + ${course.getPayoutNum()}"></p>
             <a class="info-link" th:text="'Учитель: ' + ${teacher.getName()} + ' ' + ${teacher.getSurname()} + ' ' + ${teacher.getLastname()}"
-               th:href="@{'teachers_profile/'} + ${teachers.get(i).getId()}"></a>
+               th:href="@{'teachers_profile/'} + ${teacher.getId()}"></a>
         </div>
     </div>
 </div>

@@ -111,7 +111,7 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
         final String sql = String.format("INSERT INTO Courses " +
                         "(course_id, course_name, course_description, course_is_active, course_start_date, course_price, course_payout_num, user_teacher_id, company_id) " +
                         "VALUES ('%s', '%s', '%s', '%s', '%s', %s, %d, '%s', '%s');",
-                course.getId(), course.getName(), course.getDescription(), course.isActive(), course.getStarDate(), course.getPriceString(), course.getPayoutNum(), course.getTeacherId(), companyId);
+                course.getId(), course.getName(), course.getDescription(), course.isActive(), course.getStartDate(), course.getPriceString(), course.getPayoutNum(), course.getTeacherId(), companyId);
         jdbcTemplate.execute(sql);
         return true;
     }
@@ -348,7 +348,7 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
                 course.getName(),
                 course.getDescription(),
                 course.isActive(),
-                course.getStarDate(),
+                course.getStartDate(),
                 course.getEndDate().isEmpty() ? null : "'" + course.getEndDate() + "'",
                 course.getPriceString(),
                 course.getPayoutNum(),
@@ -519,7 +519,7 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
         final String sql = String.format("SELECT * FROM Courses " +
                 "WHERE course_id = ANY (" +
                 "SELECT course_id FROM Students_Courses " +
-                "WHERE student_id = '%s');");
+                "WHERE student_id = '%s');", studentId);
         return jdbcTemplate.query(sql, ((resultSet, i) -> {
             UUID id = UUID.fromString(resultSet.getString("course_id"));
             String name = resultSet.getString("course_name");
