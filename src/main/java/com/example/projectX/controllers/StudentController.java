@@ -32,18 +32,11 @@ public class StudentController {
         this.userIdentifier = userIdentifier;
     }
 
-    @GetMapping("")
-    public String home(Model model) {
-        model.addAttribute("companies", companyService.getAllCompanies());
-        return "student-home";
-    }
-
 
     @GetMapping("/student_profile")
     public String userProfile(Model model,
                               @AuthenticationPrincipal UserDetails user){
         userIdentifier.getUserClass(user,model);
-        System.out.println(model.getAttribute("isStudent"));
         if( (Boolean) model.getAttribute("isStudent")  )
             return "student-account-page";
         else{
@@ -51,52 +44,102 @@ public class StudentController {
         }
     }
 
+    @GetMapping("student_courses")
+    public String userCourses(Model model,
+                              @AuthenticationPrincipal UserDetails user) {
+        userIdentifier.getUserClass(user,model);
+        if( (Boolean) model.getAttribute("isStudent")  ){
+            List<Course> courses = companyService.getAllStudentCourses(  ((UserStudent) user).getId() );
+            model.addAttribute("courses", courses );
+            return "student-courses-page";
+        }else{
+            return "error-page";
+        }
+    }
+
+    /* !!!!!!!!!! A BIT OF REDESIGN FOR PERSONAL COURSE PAGES WILL REQUIRED !!!!!!!!!  */
+    @GetMapping("student_courses/{course_id}")
+    public String getStudentCourseById(Model model,
+                                       @PathVariable(name = "course_id") UUID course_id,
+                                       @AuthenticationPrincipal UserDetails user) {
+        userIdentifier.getUserClass(user,model);
+        if( (Boolean) model.getAttribute("isStudent")  ){
+
+            Optional<Course> course = companyService.getCourseById(course_id);
+            if (course.isPresent() && course.get().getCompanyId().equals( ((UserStudent) user).getCompanyId() ) ) {
+
+                model.addAttribute("course", course.get());
+                Optional<UserTeacher> teacher = companyService.getTeacherById(course.get().getTeacherId());
+                teacher.ifPresent(userTeacher -> model.addAttribute("teacher", userTeacher));
+                System.out.println((Boolean) model.getAttribute("isStudent") );
+                System.out.println((Boolean) model.getAttribute("isManagementStaff") );
+                System.out.println((Boolean) model.getAttribute("isTeacher") );
+                return "company-course-page";
+            }else{
+                return "error-page";
+                /* !!!!!!!!!! TRY TO CHANGE LATER FOR AN "nO SUCH COURSE YET" !!!!!!!!!  */
+            }
+        }else{
+            return "error-page";
+        }
+    }
+
+
+    @GetMapping("student_teachers")
+    public String userTeachers(Model model,
+                               @AuthenticationPrincipal UserDetails user) {
+        userIdentifier.getUserClass(user,model);
+
+        if( (Boolean) model.getAttribute("isStudent")  ){
+            List<UserTeacher> teachers = companyService.getAllStudentTeachers( ((UserStudent) user).getId() );
+            model.addAttribute("teachers", teachers );
+            return "student-teachers-page";
+        }else{
+            return "error-page";
+        }
+    }
+
+    @GetMapping("student_teachers/{teacher_id}")
+    public String getStudentTeacherById(Model model,
+                               @PathVariable(name = "teacher_id") UUID teacher_id,
+                               @AuthenticationPrincipal UserDetails user) {
+        userIdentifier.getUserClass(user,model);
+
+        if( (Boolean) model.getAttribute("isStudent")  ){
+
+            Optional<UserTeacher> teacher = companyService.getTeacherById(teacher_id);
+            if (teacher.isPresent() && teacher.get().getCompanyId().equals( ((UserStudent) user).getCompanyId() ) ) {
+
+                model.addAttribute("teacher", teacher.get());
+                // courses means all courses related to chosen teacher
+                List<Course> courses = companyService.getAllTeacherCourses(teacher_id);
+                /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! null exception !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  */
+                if( courses == null ){
+                    model.addAttribute("no_courses", true);
+                }else{
+                    model.addAttribute("courses", courses);
+                }
+                return "teacher-account-page";
+            }else{
+                return "error-page";
+                /* !!!!!!!!!! TRY TO CHANGE LATER FOR AN "nO SUCH COURSE YET" !!!!!!!!!  */
+            }
+        }else{
+            return "error-page";
+        }
+    }
+
+
+    /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  */
+
     @GetMapping("student_attendance")
     public String userAttendance(Model model) {
         return "student-attendance-journal";
     }
 
-    @GetMapping("student_courses")
-    public String userCourses(Model model,
-                              @AuthenticationPrincipal UserStudent student) {
-        List<Course> courses = companyService.getAllStudentCourses(student.getId());
-        model.addAttribute("courses", courses );
-        return "student-courses-page";
-    }
-
-    @GetMapping("student_courses/{course_id}")
-    public String getStudentCourseById(Model model,
-                                       @PathVariable(name = "course_id") UUID course_id,
-                                       @AuthenticationPrincipal UserStudent student) {
-        Optional<Course> course = companyService.getCourseById(course_id);
-        if (course.isPresent()) {
-            model.addAttribute("course", course.get());
-            Optional<UserTeacher> teacher = companyService.getTeacherById(course.get().getTeacherId());
-            teacher.ifPresent(userTeacher -> model.addAttribute("teacher", userTeacher));
-        }
-        return "company-course-page";
-    }
-
-
     @GetMapping("student_tasks")
     public String userTasks(Model model) {
         return "student-tasks-page";
-    }
-
-    @GetMapping("student_teachers")
-    public String userTeachers(Model model,
-                               @AuthenticationPrincipal UserStudent student) {
-
-        List<UserTeacher> teachers = companyService.getAllStudentTeachers(student.getId());
-        model.addAttribute("teachers", teachers );
-        return "student-teachers-page";
-    }
-
-    /* Filter By Teacher? By Course? Try it! */
-    /* Note to reader. I dont rememvber why I used this method*/
-    @GetMapping("student_home")
-    public String home2(Model model) {
-        return "student-home";
     }
 
 }

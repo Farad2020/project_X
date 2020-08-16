@@ -20,7 +20,7 @@
 
 <header th:insert="blocks/header :: header"></header>
 
-<div th:insert="blocks/teacher-left-menu-bar :: teacher-left-menu-bar"></div>
+<div th:insert="blocks/default-left-menu-bar :: default-left-menu-bar"></div>
 
 <div class="account-content">
     <div class="account-img-box">
@@ -31,10 +31,41 @@
     <div class="account-info-box">
         <div class="card" id="account-info-card">
             <h5 th:text="${teacher.getUsername()}"></h5>
-            <h6 class="account-status" th:text="${teacher.getName()} + ' ' + ${teacher.getSurname()} + ' ' + ${teacher.getLastname()"></h6>
+            <h6 class="account-status" th:text="${teacher.getName()} + ' ' + ${teacher.getSurname()} + ' ' + ${teacher.getLastname()}"></h6>
             <div class="account-divider"></div>
             <p th:text="'Почта: ' + ${teacher.getEmail()}"></p>
 
+
+            <p th:if="no_courses" th:text="'На данный момент курсы не записаны'"></p>
+            <table th:unless="no_courses" class="table">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Starting Date</th>
+                    <th scope="col">Currently Active</th>
+                </tr>
+                </thead>
+                <tbody>
+                <th:block th:each="i :  ${#numbers.sequence(0, courses.size() -1 )}" th:if="${courses.size() > 0}" >
+                    <tr class="course-list-item table-item">
+                        <th scope="row"  th:text="${i+1}"></th>
+                        <td>
+                            <a class="table-row-link" th:href="@{'~/company_courses/'} + ${courses.get(i).getId()}"
+                               th:text="${courses.get(i).getName()}"/>
+                        </td>
+                        <td >
+                            <a class="table-row-link" th:href="@{'~/company_courses/'} + ${courses.get(i).getId()}"
+                               th:text="${courses.get(i).getStarDate()}"/>
+                        </td>
+                        <td>
+                            <a class="table-row-link" th:href="@{'~/company_courses/'} + ${courses.get(i).getId()}"
+                               th:text="${courses.get(i).isActive()}"/>
+                        </td>
+                    </tr>
+                </th:block>
+                </tbody>
+            </table>
             <!--
             <button class="btn btn-default" id="show-full-account-desc-btn" onclick="showMoreAccountInfo()">Показать
                 подробную информацию

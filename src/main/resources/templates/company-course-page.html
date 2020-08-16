@@ -11,7 +11,7 @@
 <body>
 <header th:insert="blocks/header :: header"></header>
 
-<div th:insert="blocks/company-left-menu-bar :: company-left-menu-bar"></div>
+<div th:insert="blocks/default-left-menu-bar :: default-left-menu-bar"></div>
 
 <div class="account-content">
     <div class="account-info-box">
@@ -28,7 +28,7 @@
             <p th:text="'Цена: ' + ${course.getPrice()}"></p>
             <p th:text="'Payout Number: ' + ${course.getPayoutNum()}"></p>
             <a class="info-link" th:text="'Учитель: ' + ${teacher.getName()} + ' ' + ${teacher.getSurname()} + ' ' + ${teacher.getLastname()}"
-               th:href="@{'teachers_profile/'} + ${teacher.getId()}"></a>
+               th:href="@{'~/teachers_profile/'} + ${teacher.getId()}"></a>
         </div>
     </div>
 </div>
