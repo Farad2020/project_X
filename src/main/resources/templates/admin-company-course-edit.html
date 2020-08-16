@@ -40,5 +40,26 @@
         <p th:text="${student.getName()} + ' ' + ${student.getSurname()}"></p>
         <a th:href="@{add_student/} + ${student.getId()}">ADD TO COURSE</a>
     </div>
+    <h2>Schedule of the Course: </h2>
+    <div th:each="schedule : ${scheduleList}">
+        <p th:text="${schedule.getWeekDay()} + ' from: ' + ${schedule.getStartTime()} + ' till: ' + ${schedule.getEndTime()}"></p>
+        <a th:href="@{delete_schedule/} + ${schedule.getId()}">DELETE</a>
+    </div>
+    <form action="/$2a$10$HZR3IGneje95jJVEomN.vuEKlxwRt6Tn5oeLEXySZXh7L/WLiX6fm/add_schedule_to_course" method="post">
+        <input type="time" name="start_time" placeholder="Start time" required="">
+        <input type="time" name="end_time" placeholder="End time" required="">
+        <select name = "week_day" required="">
+            <option value="Monday">Monday</option>
+            <option value="Tuesday">Tuesday</option>
+            <option value="Wednesday">Wednesday</option>
+            <option value="Thursday">Thursday</option>
+            <option value="Friday">Friday</option>
+            <option value="Saturday">Saturday</option>
+            <option value="Sunday">Sunday</option>
+        </select>
+        <input type="hidden" name="course_id" th:value="${course.getId()}">
+        <input type="hidden" name="company_id" th:value="${company_id}">
+        <input type="submit">
+    </form>
 </body>
 </html>

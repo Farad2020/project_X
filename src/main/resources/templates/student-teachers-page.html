@@ -1,4 +1,4 @@
-<!DOCTYPE HTML>
+ <!DOCTYPE HTML>
 <!--
 взять как список
 -->
@@ -50,11 +50,11 @@
         </tr>
         </thead>
         <tbody>
-        <th:block th:each="i :  ${#numbers.sequence(0, students.size() -1 )}" th:if="${teachers.size() > 0}"> <!-- style="cursor: pointer" -->
+        <th:block th:each="i :  ${#numbers.sequence(0, teachers.size() -1 )}" th:if="${teachers.size() > 0}"> <!-- style="cursor: pointer" -->
             <tr class="course-list-item table-item">
                 <th scope="row" th:text="${i+1}"></th>
                 <td><a class="table-row-link" th:href="@{'teachers_profile/'} + ${teachers.get(i).getId()}"
-                       th:text="${students.get(i).getName()}"/></td>
+                       th:text="${teachers.get(i).getName()}"/></td>
                 <td><a class="table-row-link" th:href="@{'teachers_profile/'} + ${teachers.get(i).getId()}"
                        th:text="${teachers.get(i).getSurname()}"/></td>
                 <td><a class="table-row-link" th:href="@{'teachers_profile/'} + ${teachers.get(i).getId()}"

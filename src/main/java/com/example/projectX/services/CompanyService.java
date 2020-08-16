@@ -90,25 +90,38 @@ public class CompanyService {
 
     public boolean deleteStudentFromCourse(UUID studentId, UUID courseId) {
         return companyDao.deleteStudentFromCourse(studentId, courseId);
-
     }
-    public List<ManagementStaff> selectAllCompanyManagers(Company company){
+
+    public List<ManagementStaff> selectAllCompanyManagers(Company company) {
         return companyDao.selectAllCompanyManagers(company);
     }
 
-    public List<Course> getAllStudentCourses(UUID studentId){
+    public List<Course> getAllStudentCourses(UUID studentId) {
         return companyDao.getAllStudentCourses(studentId);
     }
 
-    public List<UserTeacher> getAllStudentTeachers(UUID studentId){
+    public List<UserTeacher> getAllStudentTeachers(UUID studentId) {
         return companyDao.getAllStudentTeachers(studentId);
     }
 
-    public List<Course> getAllTeacherCourses(UUID teacherId){
+    public List<Course> getAllTeacherCourses(UUID teacherId) {
         return companyDao.getAllTeacherCourses(teacherId);
     }
 
-    public List<UserStudent> getAllTeacherStudents(UUID teacherId){
+    public List<UserStudent> getAllTeacherStudents(UUID teacherId) {
         return companyDao.getAllTeacherStudents(teacherId);
     }
+
+    public List<Schedule> getAllCourseSchedule(UUID courseId) {
+        return companyDao.getAllCourseSchedule(courseId);
+    }
+
+    public boolean addScheduleToCourse(Schedule schedule, UUID courseId) {
+        return companyDao.addScheduleToCourse(schedule, courseId);
+    }
+
+    public boolean deleteScheduleFromCourse(UUID scheduleId) {
+        return companyDao.deleteScheduleFromCourse(scheduleId);
+    }
+
 }

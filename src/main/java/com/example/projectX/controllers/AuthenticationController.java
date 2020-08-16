@@ -1,24 +1,14 @@
 package com.example.projectX.controllers;
 
 
-import com.example.projectX.models.Company;
-import com.example.projectX.models.ManagementStaff;
-import com.example.projectX.models.UserStudent;
-import com.example.projectX.models.UserTeacher;
 import com.example.projectX.services.CompanyService;
 import com.example.projectX.services.UserAuthenticationService;
-import org.hibernate.engine.jdbc.connections.internal.UserSuppliedConnectionProviderImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("/")

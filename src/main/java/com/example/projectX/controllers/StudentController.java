@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Controller
@@ -41,9 +42,6 @@ public class StudentController {
     @GetMapping("/student_profile")
     public String userProfile(Model model,
                               @AuthenticationPrincipal UserDetails user){
-
-        //model.addAttribute("student", student);
-
         userIdentifier.getUserClass(user,model);
         System.out.println(model.getAttribute("isStudent"));
         if( (Boolean) model.getAttribute("isStudent")  )
@@ -61,9 +59,7 @@ public class StudentController {
     @GetMapping("student_courses")
     public String userCourses(Model model,
                               @AuthenticationPrincipal UserStudent student) {
-/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ЗАПРОС НУЖЕН БОЛЕЕ ЛУЧШИЙ   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-        List<Course> courses = companyService.getAllCompanyCourses(student.getCompanyId());
-
+        List<Course> courses = companyService.getAllStudentCourses(student.getId());
         model.addAttribute("courses", courses );
         return "student-courses-page";
     }
@@ -72,13 +68,13 @@ public class StudentController {
     public String getStudentCourseById(Model model,
                                        @PathVariable(name = "course_id") UUID course_id,
                                        @AuthenticationPrincipal UserStudent student) {
-
-        Course course = companyService.getCourseById(course_id).get();
-        UserTeacher teacher = companyService.getTeacherById(course.getTeacherId()).get();
-
-        model.addAttribute("course", course );
-        model.addAttribute("teacher", teacher );
-        return "company-course_page";
+        Optional<Course> course = companyService.getCourseById(course_id);
+        if (course.isPresent()) {
+            model.addAttribute("course", course.get());
+            Optional<UserTeacher> teacher = companyService.getTeacherById(course.get().getTeacherId());
+            teacher.ifPresent(userTeacher -> model.addAttribute("teacher", userTeacher));
+        }
+        return "company-course-page";
     }
 
 
@@ -91,9 +87,7 @@ public class StudentController {
     public String userTeachers(Model model,
                                @AuthenticationPrincipal UserStudent student) {
 
-        List<UserTeacher> teachers = companyService.getAllCompanyTeachers(student.getCompanyId());
-        /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ЗАПРОС НУЖЕН БОЛЕЕ ЛУЧШИЙ   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-
+        List<UserTeacher> teachers = companyService.getAllStudentTeachers(student.getId());
         model.addAttribute("teachers", teachers );
         return "student-teachers-page";
     }

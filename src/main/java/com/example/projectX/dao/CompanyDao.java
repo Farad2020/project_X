@@ -1,7 +1,6 @@
 package com.example.projectX.dao;
 
 import com.example.projectX.models.*;
-import org.checkerframework.checker.nullness.Opt;
 
 import java.util.List;
 import java.util.Optional;
@@ -61,5 +60,11 @@ public interface CompanyDao {
     List<Course> getAllTeacherCourses(UUID teacherId);
 
     List<UserStudent> getAllTeacherStudents(UUID teacherId);
+
+    List<Schedule> getAllCourseSchedule(UUID courseId);
+
+    boolean addScheduleToCourse(Schedule schedule, UUID courseId);
+
+    boolean deleteScheduleFromCourse(UUID scheduleId);
 
 }
