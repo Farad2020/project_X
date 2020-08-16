@@ -96,4 +96,19 @@ public class CompanyService {
         return companyDao.selectAllCompanyManagers(company);
     }
 
+    public List<Course> getAllStudentCourses(UUID studentId){
+        return companyDao.getAllStudentCourses(studentId);
+    }
+
+    public List<UserTeacher> getAllStudentTeachers(UUID studentId){
+        return companyDao.getAllStudentTeachers(studentId);
+    }
+
+    public List<Course> getAllTeacherCourses(UUID teacherId){
+        return companyDao.getAllTeacherCourses(teacherId);
+    }
+
+    public List<UserStudent> getAllTeacherStudents(UUID teacherId){
+        return companyDao.getAllTeacherStudents(teacherId);
+    }
 }

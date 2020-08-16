@@ -45,13 +45,12 @@ public class StudentController {
         //model.addAttribute("student", student);
 
         userIdentifier.getUserClass(user,model);
-        /*
-        if( userAuthenticationService.getUserStudentByLogin(user.getUsername()).isPresent() ){
-            model.addAttribute("isStudent", true);
-            model.addAttribute("student", (UserStudent)user);
+        System.out.println(model.getAttribute("isStudent"));
+        if( (Boolean) model.getAttribute("isStudent")  )
+            return "student-account-page";
+        else{
+            return "error-page";
         }
-        */
-        return "student-account-page";
     }
 
     @GetMapping("student_attendance")
