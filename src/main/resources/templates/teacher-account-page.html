@@ -36,8 +36,7 @@
             <p th:text="'Почта: ' + ${teacher.getEmail()}"></p>
 
 
-            <p th:if="no_courses" th:text="'На данный момент курсы не записаны'"></p>
-            <table th:unless="no_courses" class="table">
+            <table th:if="courses" class="table">
                 <thead>
                 <tr>
                     <th scope="col">#</th>
@@ -51,21 +50,23 @@
                     <tr class="course-list-item table-item">
                         <th scope="row"  th:text="${i+1}"></th>
                         <td>
-                            <a class="table-row-link" th:href="@{'~/company_courses/'} + ${courses.get(i).getId()}"
+                            <p class="table-row-link"
                                th:text="${courses.get(i).getName()}"/>
                         </td>
                         <td >
-                            <a class="table-row-link" th:href="@{'~/company_courses/'} + ${courses.get(i).getId()}"
-                               th:text="${courses.get(i).getStarDate()}"/>
+                            <p class="table-row-link"
+                               th:text="${courses.get(i).getStartDate()}"/>
                         </td>
                         <td>
-                            <a class="table-row-link" th:href="@{'~/company_courses/'} + ${courses.get(i).getId()}"
+                            <p class="table-row-link"
                                th:text="${courses.get(i).isActive()}"/>
                         </td>
                     </tr>
                 </th:block>
                 </tbody>
             </table>
+
+            <p th:unless="courses" th:text="'На данный момент курсы не записаны'"></p>
             <!--
             <button class="btn btn-default" id="show-full-account-desc-btn" onclick="showMoreAccountInfo()">Показать
                 подробную информацию

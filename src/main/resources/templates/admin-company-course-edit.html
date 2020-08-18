@@ -15,7 +15,7 @@
                 <option value="0" th:selected="${!course.isActive()}">False</option>
             </select>
         </div>
-        <div><input type="date" name="start_date" th:value="${course.getStarDate()}"></div>
+        <div><input type="date" name="start_date" th:value="${course.getStartDate()}"></div>
         <div><input type="date" name="end_date" th:value="${course.getEndDate()}"></div>
         <div><input type="number" name="price" th:value="${course.getPrice()}"></div>
         <div><input type="number" name="payout_num" th:value="${course.getPayoutNum()}"></div>

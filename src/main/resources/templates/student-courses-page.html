@@ -48,7 +48,8 @@
         <a class="list-item-link" th:href="@{generic_course}"><li class="course-list-item">Course 3</li></a>
         <a class="list-item-link" th:href="@{generic_course}"><li class="course-list-item">Course 4</li></a>
     </ul> -->
-    <table class="table">
+    <p th:if="courses == null"> Не удалось найти записанные курсы. </p>
+    <table th:if="courses != null" class="table">
         <thead>
         <tr>
             <th scope="col">#</th>

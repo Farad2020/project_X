@@ -71,13 +71,9 @@ public class StudentController {
                 model.addAttribute("course", course.get());
                 Optional<UserTeacher> teacher = companyService.getTeacherById(course.get().getTeacherId());
                 teacher.ifPresent(userTeacher -> model.addAttribute("teacher", userTeacher));
-                System.out.println((Boolean) model.getAttribute("isStudent") );
-                System.out.println((Boolean) model.getAttribute("isManagementStaff") );
-                System.out.println((Boolean) model.getAttribute("isTeacher") );
                 return "company-course-page";
             }else{
                 return "error-page";
-                /* !!!!!!!!!! TRY TO CHANGE LATER FOR AN "nO SUCH COURSE YET" !!!!!!!!!  */
             }
         }else{
             return "error-page";
@@ -105,24 +101,22 @@ public class StudentController {
                                @AuthenticationPrincipal UserDetails user) {
         userIdentifier.getUserClass(user,model);
 
-        if( (Boolean) model.getAttribute("isStudent")  ){
+        if( model.getAttribute("isStudent") != null ){
 
             Optional<UserTeacher> teacher = companyService.getTeacherById(teacher_id);
+
             if (teacher.isPresent() && teacher.get().getCompanyId().equals( ((UserStudent) user).getCompanyId() ) ) {
 
                 model.addAttribute("teacher", teacher.get());
                 // courses means all courses related to chosen teacher
                 List<Course> courses = companyService.getAllTeacherCourses(teacher_id);
+                System.out.println( courses );
                 /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! null exception !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  */
-                if( courses == null ){
-                    model.addAttribute("no_courses", true);
-                }else{
-                    model.addAttribute("courses", courses);
-                }
+                /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  Menu bar dissappeared !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  */
+                model.addAttribute("courses", courses);
                 return "teacher-account-page";
             }else{
                 return "error-page";
-                /* !!!!!!!!!! TRY TO CHANGE LATER FOR AN "nO SUCH COURSE YET" !!!!!!!!!  */
             }
         }else{
             return "error-page";
