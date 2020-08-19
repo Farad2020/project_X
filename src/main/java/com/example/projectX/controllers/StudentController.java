@@ -33,11 +33,17 @@ public class StudentController {
     }
 
     @GetMapping("")
-    public String home(Model model) {
-        model.addAttribute("companies", companyService.getAllCompanies());
-        return "student-home";
+    public String home(Model model,
+                       @AuthenticationPrincipal UserDetails user) {
+        userIdentifier.getUserClass(user, model);
+        if (model.getAttribute("isStudent") != null) {
+            return "student-home";
+        } else if (model.getAttribute("IsTeacher") != null) {
+            return "teacher-home";
+        } else  {
+            return "company-home";
+        }
     }
-
 
     @GetMapping("/student_profile")
     public String userProfile(Model model,

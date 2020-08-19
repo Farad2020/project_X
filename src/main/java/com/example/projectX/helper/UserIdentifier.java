@@ -24,10 +24,10 @@ public class UserIdentifier {
             model.addAttribute("student", (UserStudent)user);
         }else if( userAuthenticationService.getManagerStaffByLogin(user.getUsername()).isPresent() ){
             model.addAttribute("isManagementStaff", true);
-            model.addAttribute("student", (ManagementStaff)user);
+            model.addAttribute("manager", (ManagementStaff)user);
         }else if( userAuthenticationService.getUserTeacherByLogin(user.getUsername()).isPresent() ){
             model.addAttribute("isTeacher", true);
-            model.addAttribute("student", (UserTeacher)user);
+            model.addAttribute("teacher", (UserTeacher)user);
         }
     }
 }
