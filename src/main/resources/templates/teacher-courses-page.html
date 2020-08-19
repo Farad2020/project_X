@@ -39,7 +39,8 @@
     </nav>
 
 
-    <table class="table">
+    <p th:unless="courses">Не удалось найти соответствующию инфомацию.</p>
+    <table th:if="courses" class="table">
         <thead>
         <tr>
             <th scope="col">#</th>

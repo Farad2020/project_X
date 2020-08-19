@@ -42,7 +42,8 @@
 
 
 
-    <table class="table">
+    <p th:unless="students">Не удалось найти нужные данные.</p>
+    <table th:if="students" class="table">
         <thead>
         <tr>
             <th scope="col">#</th>
