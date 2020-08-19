@@ -50,20 +50,20 @@
         </tr>
         </thead>
         <tbody>
-        <th:block th:each="i :  ${#numbers.sequence(0, managementStaffs.size() -1 )}" th:if="${managementStaffs.size() > 0}">
+        <th:block th:each="i :  ${#numbers.sequence(0, managementStaffs.size() -1 )}">
             <tr class="course-list-item table-item">
                 <th scope="row"  th:text="${i+1}"></th>
                 <td>
-                    <a class="table-row-link" th:href="@{'students_profile/'} + ${teachers.get(i).getId()}"
-                       th:text="${managementStaffs.get(i).getName()}"/>
+                    <a class="table-row-link" th:href="@{'company_management_staff/'} + ${managementStaffs.get(i).getId()}"
+                       th:text="${managementStaffs.get(i).getName()}"></a>
                 </td>
                 <td>
-                    <a class="table-row-link" th:href="@{'students_profile/'} + ${teachers.get(i).getId()}"
-                       th:text="${managementStaffs.get(i).getSurname()}"/>
+                    <a class="table-row-link" th:href="@{'company_management_staff/'} + ${managementStaffs.get(i).getId()}"
+                       th:text="${managementStaffs.get(i).getSurname()}"></a>
                 </td>
                 <td>
-                    <a class="table-row-link" th:href="@{'students_profile/'} + ${teachers.get(i).getId()}"
-                       th:text="${managementStaffs.get(i).getLastname()}"/>
+                    <a class="table-row-link" th:href="@{'company_management_staff/'} + ${managementStaffs.get(i).getId()}"
+                       th:text="${managementStaffs.get(i).getLastname()}"></a>
                 </td>
             </tr>
         </th:block>
