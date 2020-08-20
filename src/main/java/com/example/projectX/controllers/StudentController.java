@@ -37,7 +37,7 @@ public class StudentController {
     public String userProfile(Model model,
                               @AuthenticationPrincipal UserDetails user){
         userIdentifier.getUserClass(user,model);
-        if( (Boolean) model.getAttribute("isStudent")  )
+        if( model.getAttribute("isStudent") != null  )
             return "student-account-page";
         else{
             return "error-page";
@@ -48,7 +48,7 @@ public class StudentController {
     public String userCourses(Model model,
                               @AuthenticationPrincipal UserDetails user) {
         userIdentifier.getUserClass(user,model);
-        if( (Boolean) model.getAttribute("isStudent")  ){
+        if( model.getAttribute("isStudent") != null ){
             List<Course> courses = companyService.getAllStudentCourses(  ((UserStudent) user).getId() );
             model.addAttribute("courses", courses );
             return "student-courses-page";
@@ -63,7 +63,7 @@ public class StudentController {
                                        @PathVariable(name = "course_id") UUID course_id,
                                        @AuthenticationPrincipal UserDetails user) {
         userIdentifier.getUserClass(user,model);
-        if( (Boolean) model.getAttribute("isStudent")  ){
+        if( model.getAttribute("isStudent") != null  ){
 
             Optional<Course> course = companyService.getCourseById(course_id);
             if (course.isPresent() && course.get().getCompanyId().equals( ((UserStudent) user).getCompanyId() ) ) {
@@ -86,7 +86,7 @@ public class StudentController {
                                @AuthenticationPrincipal UserDetails user) {
         userIdentifier.getUserClass(user,model);
 
-        if( (Boolean) model.getAttribute("isStudent")  ){
+        if( model.getAttribute("isStudent") != null  ){
             List<UserTeacher> teachers = companyService.getAllStudentTeachers( ((UserStudent) user).getId() );
             model.addAttribute("teachers", teachers );
             return "student-teachers-page";
@@ -125,6 +125,18 @@ public class StudentController {
 
 
     /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  */
+
+    @GetMapping("student_schedule")
+    public String userSchedule(Model model,
+                               @AuthenticationPrincipal UserDetails user) {
+        userIdentifier.getUserClass(user,model);
+
+        if( model.getAttribute("isStudent") != null ){
+            return "student-schedule-page";
+        }else{
+            return "error-page";
+        }
+    }
 
     @GetMapping("student_attendance")
     public String userAttendance(Model model) {
