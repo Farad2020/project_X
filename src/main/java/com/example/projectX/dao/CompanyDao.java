@@ -3,6 +3,7 @@ package com.example.projectX.dao;
 import com.example.projectX.models.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -63,8 +64,18 @@ public interface CompanyDao {
 
     List<Schedule> getAllCourseSchedule(UUID courseId);
 
+    List<Schedule> getAllTeacherSchedule(UUID teacherId);
+
+    List<Schedule> getAllStudentSchedule(UUID studentId);
+
     boolean addScheduleToCourse(Schedule schedule, UUID courseId);
 
     boolean deleteScheduleFromCourse(UUID scheduleId);
+
+    Map<Integer, List<Schedule>> getMappedCourseSchedule(UUID courseId);
+
+    Map<Integer, List<Schedule>> getMappedTeacherSchedule(UUID teacherId);
+
+    Map<Integer, List<Schedule>> getMappedStudentSchedule(UUID studentId);
 
 }

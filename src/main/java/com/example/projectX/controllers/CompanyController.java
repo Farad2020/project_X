@@ -13,10 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 @RequestMapping("/")
@@ -178,8 +175,10 @@ public class CompanyController {
             Optional<Course> course = companyService.getCourseById(course_id);
             if (course.isPresent()) {
                 Optional<UserTeacher> userTeacher = companyService.getTeacherById(course.get().getTeacherId());
+                Map<Integer, List<Schedule>> scheduleMap = companyService.getMappedCourseSchedule(course_id);
                 model.addAttribute("course", course.get());
                 userTeacher.ifPresent(teacher -> model.addAttribute("teacher", teacher));
+                model.addAttribute("schedule_map", scheduleMap);
                 return "company-course-page";
             }
         }
