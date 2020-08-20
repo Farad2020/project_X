@@ -32,7 +32,6 @@ public class StudentController {
         this.userIdentifier = userIdentifier;
     }
 
-
     @GetMapping("/student_profile")
     public String userProfile(Model model,
                               @AuthenticationPrincipal UserDetails user){
