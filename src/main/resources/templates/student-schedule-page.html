@@ -27,33 +27,86 @@
     <table class="table table-bordered">
         <thead>
         <tr>
-            <th scope="col">Monday </th>
-            <th scope="col">Tuesday </th>
-            <th scope="col">Wednesday </th>
-            <th scope="col">Thursday </th>
-            <th scope="col">Friday </th>
-            <th scope="col">Saturday </th>
-            <th scope="col">Sunday </th>
+            <th scope="col week-schedule-col">Monday </th>
+            <th scope="col week-schedule-col">Tuesday </th>
+            <th scope="col week-schedule-col">Wednesday </th>
+            <th scope="col week-schedule-col">Thursday </th>
+            <th scope="col week-schedule-col">Friday </th>
+            <th scope="col week-schedule-col">Saturday </th>
+            <th scope="col week-schedule-col">Sunday </th>
         </tr>
         </thead>
         <tbody>
-        <th:block th:each="i :  ${#numbers.sequence(0, managementStaffs.size() -1 )}" th:if="${managementStaffs.size() > 0}">
             <tr class="course-list-item table-item">
-                <th scope="row"  th:text="${i+1}"></th>
                 <td>
-                    <a class="table-row-link" th:href="@{'students_profile/'} + ${teachers.get(i).getId()}"
-                       th:text="${managementStaffs.get(i).getName()}"/>
+                        <div class="card-body">
+                            <h5 class="card-title">Card title</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                            <a href="#" class="card-link">Card link</a>
+                            <a href="#" class="card-link">Another link</a>
+                        </div>
                 </td>
                 <td>
-                    <a class="table-row-link" th:href="@{'students_profile/'} + ${teachers.get(i).getId()}"
-                       th:text="${managementStaffs.get(i).getSurname()}"/>
+                        <div class="card-body">
+                            <h5 class="card-title">Card title</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                            <a href="#" class="card-link">Card link</a>
+                            <a href="#" class="card-link">Another link</a>
+                        </div>
                 </td>
+
                 <td>
-                    <a class="table-row-link" th:href="@{'students_profile/'} + ${teachers.get(i).getId()}"
-                       th:text="${managementStaffs.get(i).getLastname()}"/>
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <a href="#" class="card-link">Card link</a>
+                        <a href="#" class="card-link">Another link</a>
+                    </div>
+                </td>
+
+                <td>
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <a href="#" class="card-link">Card link</a>
+                        <a href="#" class="card-link">Another link</a>
+                    </div>
+                </td>
+
+                <td>
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <a href="#" class="card-link">Card link</a>
+                        <a href="#" class="card-link">Another link</a>
+                    </div>
+                </td>
+
+                <td>
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <a href="#" class="card-link">Card link</a>
+                        <a href="#" class="card-link">Another link</a>
+                    </div>
+                </td>
+
+                <td>
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <a href="#" class="card-link">Card link</a>
+                        <a href="#" class="card-link">Another link</a>
+                    </div>
                 </td>
             </tr>
-        </th:block>
         </tbody>
     </table>
 

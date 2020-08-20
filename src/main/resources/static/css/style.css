@@ -294,6 +294,10 @@ a.info-link:hover{
  margin-top: 1em; 
 }
 
+.col.week-schedule-col{
+    width: 7em;
+}
+
 /* Task */
 
 .task-container{
