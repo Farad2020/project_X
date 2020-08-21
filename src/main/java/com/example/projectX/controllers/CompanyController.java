@@ -9,9 +9,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
@@ -177,7 +175,10 @@ public class CompanyController {
                 Optional<UserTeacher> userTeacher = companyService.getTeacherById(course.get().getTeacherId());
                 Map<Integer, List<Schedule>> scheduleMap = companyService.getMappedCourseSchedule(course_id);
                 model.addAttribute("course", course.get());
-                userTeacher.ifPresent(teacher -> model.addAttribute("teacher", teacher));
+                userTeacher.ifPresent(teacher -> {
+                    model.addAttribute("teacher", teacher);
+                    model.addAttribute("company_id", teacher.getCompanyId());
+                });
                 model.addAttribute("schedule_map", scheduleMap);
                 return "company-course-page";
             }
@@ -226,6 +227,35 @@ public class CompanyController {
             return "management-staff-page-for-one";
         }
         return "error-page";
+    }
+
+    @GetMapping("/company_courses/{course_id}/delete_schedule/{schedule_id}")
+    public String deleteScheduleFromCourse(@PathVariable(name = "course_id") UUID courseId,
+                                           @PathVariable(name = "schedule_id") UUID scheduleId,
+                                           @AuthenticationPrincipal UserDetails user,
+                                           Model model) {
+        userIdentifier.getUserClass(user, model);
+        if (model.getAttribute("isManagementStaff") != null) {
+            ManagementStaff managementStaff = (ManagementStaff) user;
+            if (managementStaff.getRole() == 1 || managementStaff.isAbleToDeleteSchedule()) {
+                companyService.deleteScheduleFromCourse(scheduleId);
+            } else {
+                model.addAttribute("permission_error", true);
+            }
+            return "redirect:/company_courses/" + courseId;
+        }
+        return "error-page";
+    }
+
+    @PostMapping("add_schedule_to_course")
+    public String addScheduleToCourse(@RequestParam(name = "start_time") String startTime,
+                                      @RequestParam(name = "end_time") String endTime,
+                                      @RequestParam(name = "week_day") String weekDay,
+                                      @RequestParam(name = "course_id") UUID courseId,
+                                      @RequestParam(name = "company_id") UUID companyId) {
+        Schedule schedule = new Schedule(UUID.randomUUID(), startTime, endTime, weekDay, courseId);
+        boolean result = companyService.addScheduleToCourse(schedule, courseId);
+        return "redirect:/company_courses/" + courseId;
     }
 
 }
