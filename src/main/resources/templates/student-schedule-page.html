@@ -6,15 +6,13 @@
 -->
 <html xmlns:th="http://www.thymeleaf.org" data-theme="light">
 <head>
-    <title th:text="${title}" > </title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title th:text="${title}"></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-
-    <link rel="stylesheet" type="text/css" href="/css/weekly_schedule_style.css" />
-
-    <link rel="stylesheet" type="text/css" href="/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="/css/style.css"/>
 </head>
 <body>
 <header th:insert="blocks/header :: header"></header>
@@ -24,95 +22,84 @@
 
 <div class="main-content">
 
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th scope="col week-schedule-col">Monday </th>
-            <th scope="col week-schedule-col">Tuesday </th>
-            <th scope="col week-schedule-col">Wednesday </th>
-            <th scope="col week-schedule-col">Thursday </th>
-            <th scope="col week-schedule-col">Friday </th>
-            <th scope="col week-schedule-col">Saturday </th>
-            <th scope="col week-schedule-col">Sunday </th>
-        </tr>
-        </thead>
-        <tbody>
-            <tr class="course-list-item table-item">
-                <td>
-                        <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            <a href="#" class="card-link">Card link</a>
-                            <a href="#" class="card-link">Another link</a>
-                        </div>
-                </td>
-                <td>
-                        <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            <a href="#" class="card-link">Card link</a>
-                            <a href="#" class="card-link">Another link</a>
-                        </div>
-                </td>
+    <div class="container schedule-block">
 
-                <td>
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <a href="#" class="card-link">Card link</a>
-                        <a href="#" class="card-link">Another link</a>
-                    </div>
-                </td>
+        <h4 class="schedule-title" th:text="${course.getName()}"></h4>
+        <hr class="schedule-hr"/>
+        <div class="container schedule-table">
+            <div class="schedule-col">
+                <h6>Monday</h6>
+                <div class="card border-dark bg-light weekday Monday" th:each="schedule : ${schedule_map.get(1)}">
+                    <p th:text="${course.getName()}"></p>
+                    <p th:text="${schedule.getStartTime()}"></p>
+                    <p th:text="${schedule.getEndTime()}"></p>
+                    <br>
+                </div>
+            </div>
 
-                <td>
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <a href="#" class="card-link">Card link</a>
-                        <a href="#" class="card-link">Another link</a>
-                    </div>
-                </td>
+            <div class="schedule-col">
+                <h6>Tuesday</h6>
+                <div class="card border-dark bg-light weekday Tuesday" th:each="schedule : ${schedule_map.get(2)}">
+                    <p th:text="${course.getName()}"></p>
+                    <p th:text="${schedule.getStartTime()}"></p>
+                    <p th:text="${schedule.getEndTime()}"></p>
+                    <br>
+                </div>
+            </div>
 
-                <td>
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <a href="#" class="card-link">Card link</a>
-                        <a href="#" class="card-link">Another link</a>
-                    </div>
-                </td>
+            <div class="schedule-col">
+                <h6>Wednesday</h6>
+                <div class="card border-dark bg-light weekday Wednesday" th:each="schedule : ${schedule_map.get(3)}">
+                    <p th:text="${course.getName()}"></p>
+                    <p th:text="${schedule.getStartTime()}"></p>
+                    <p th:text="${schedule.getEndTime()}"></p>
+                    <br>
+                </div>
+            </div>
 
-                <td>
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <a href="#" class="card-link">Card link</a>
-                        <a href="#" class="card-link">Another link</a>
-                    </div>
-                </td>
+            <div class="schedule-col">
+                <h6>Thursday</h6>
+                <div class="card border-dark bg-light weekday Thursday" th:each="schedule : ${schedule_map.get(4)}">
+                    <p th:text="${course.getName()}"></p>
+                    <p th:text="${schedule.getStartTime()}"></p>
+                    <p th:text="${schedule.getEndTime()}"></p>
+                    <br>
+                </div>
+            </div>
 
-                <td>
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <a href="#" class="card-link">Card link</a>
-                        <a href="#" class="card-link">Another link</a>
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+            <div class="schedule-col">
+                <h6>Friday</h6>
+                <div class="card border-dark bg-light weekday Friday" th:each="schedule : ${schedule_map.get(5)}">
+                    <p th:text="${course.getName()}"></p>
+                    <p th:text="${schedule.getStartTime()}"></p>
+                    <p th:text="${schedule.getEndTime()}"></p>
+                    <br>
+                </div>
+            </div>
 
+            <div class="schedule-col">
+                <h6>Saturday</h6>
+                <div class="card border-dark bg-light weekday Saturday" th:each="schedule : ${schedule_map.get(6)}">
+                    <p th:text="${course.getName()}"></p>
+                    <p th:text="${schedule.getStartTime()}"></p>
+                    <p th:text="${schedule.getEndTime()}"></p>
+                    <br>
+                </div>
+            </div>
+
+            <div class="schedule-col">
+                <h6>Sunday</h6>
+                <div class="card border-dark bg-light weekday Sunday" th:each="schedule : ${schedule_map.get(i)}">
+                    <p th:text="${course.getName()}"></p>
+                    <p th:text="${schedule.getStartTime()}"></p>
+                    <p th:text="${schedule.getEndTime()}"></p>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-<script src="/js/main.js" th:src="@{/js/weekly_schedule.js}"></script>
 <footer th:insert="blocks/footer :: footer"></footer>
 </body>
 </html>

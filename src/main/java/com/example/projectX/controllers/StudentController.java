@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -125,12 +126,19 @@ public class StudentController {
 
     /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  */
 
-    @GetMapping("student_schedule")
+    @GetMapping("student_schedule/{course_id}")
     public String userSchedule(Model model,
+                               @PathVariable(name = "course_id") UUID course_id,
                                @AuthenticationPrincipal UserDetails user) {
         userIdentifier.getUserClass(user,model);
 
         if( model.getAttribute("isStudent") != null ){
+
+
+            Course course = companyService.getCourseById(course_id).get();
+            Map<Integer, List<Schedule>> scheduleMap = companyService.getMappedCourseSchedule(course_id);
+            model.addAttribute("course", course);
+            model.addAttribute("schedule_map", scheduleMap);
             return "student-schedule-page";
         }else{
             return "error-page";

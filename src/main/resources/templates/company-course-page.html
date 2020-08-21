@@ -19,6 +19,8 @@
             <h5 class="company-name" th:text="'Название: ' + ${course.getName()}"><button type="button" class="btn btn-light">Edit</button></h5>
             <p class="company-name" th:text="'Описание: ' + ${course.getDescription()}"> Almost As Good As Eating Burgers When You're Hungry</p>
 
+            <a th:text="Расписание" th:if="isStudent" th:href="@{~/student_schedule/} + ${course.getId()}"></a>
+
             <p th:if="${course.isActive()}" th:text="'Статус: Активен'"></p>
             <p th:unless="${course.isActive()}" th:text="'Статус: Не Активен'"></p>
 
@@ -29,14 +31,6 @@
             <p th:text="'Payout Number: ' + ${course.getPayoutNum()}"></p>
             <a class="info-link" th:text="'Учитель: ' + ${teacher.getName()} + ' ' + ${teacher.getSurname()} + ' ' + ${teacher.getLastname()}"
                th:href="@{'~/teachers_profile/'} + ${teacher.getId()}"></a>
-        </div>
-    </div>
-    <div th:each="i :  ${#numbers.sequence(1, schedule_map.keySet().size())}" th:if="${schedule_map.keySet().size() > 0}">
-        <div th:each="schedule : ${schedule_map.get(i)}">
-            <p th:text="${schedule.getWeekDay()}"></p>
-            <p th:text="${schedule.getStartTime()}"></p>
-            <p th:text="${schedule.getEndTime()}"></p>
-            <br>
         </div>
     </div>
 </div>

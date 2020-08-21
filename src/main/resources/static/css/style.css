@@ -298,6 +298,49 @@ a.info-link:hover{
     width: 7em;
 }
 
+/* Schedule Table */
+
+.container.schedule-block{
+    border-width: 0.1em;
+    border: 0.1em;
+    border-style: solid;
+    border-radius: 0.5em;
+}
+
+hr.schedule-hr{
+color: black;
+background-color: black;
+}
+
+.schedule-title{
+    margin-top: 1em;
+    margin-bottom: 0em;
+    text-align: center;
+}
+
+.container.schedule-table{
+    margin-top: 0em;
+    align-items: center;
+}
+
+.schedule-col{
+    display: flex;
+    margin: 0.6em;
+    display: inline-block;
+    vertical-align:top;
+    width: 6.5em;
+    text-align: center;
+}
+
+.schedule-col p{
+    margin:0;
+}
+
+.card.border-dark.weekday{
+    padding:0.1em;
+    text-align: center;
+}
+
 /* Task */
 
 .task-container{
@@ -324,3 +367,4 @@ a.info-link:hover{
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
