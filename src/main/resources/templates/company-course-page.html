@@ -31,6 +31,14 @@
                th:href="@{'~/teachers_profile/'} + ${teacher.getId()}"></a>
         </div>
     </div>
+    <div th:each="i :  ${#numbers.sequence(1, schedule_map.keySet().size())}" th:if="${schedule_map.keySet().size() > 0}">
+        <div th:each="schedule : ${schedule_map.get(i)}">
+            <p th:text="${schedule.getWeekDay()}"></p>
+            <p th:text="${schedule.getStartTime()}"></p>
+            <p th:text="${schedule.getEndTime()}"></p>
+            <br>
+        </div>
+    </div>
 </div>
 
 <footer th:insert="blocks/footer :: footer"></footer>

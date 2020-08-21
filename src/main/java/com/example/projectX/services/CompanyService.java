@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -122,6 +123,18 @@ public class CompanyService {
 
     public boolean deleteScheduleFromCourse(UUID scheduleId) {
         return companyDao.deleteScheduleFromCourse(scheduleId);
+    }
+
+    public Map<Integer, List<Schedule>> getMappedCourseSchedule (UUID courseId) {
+        return companyDao.getMappedCourseSchedule(courseId);
+    }
+
+    public Map<Integer, List<Schedule>> getMappedTeacherSchedule(UUID teacherId) {
+        return companyDao.getMappedTeacherSchedule(teacherId);
+    }
+
+    public Map<Integer, List<Schedule>> getMappedStudentSchedule(UUID studentId) {
+        return companyDao.getMappedStudentSchedule(studentId);
     }
 
 }

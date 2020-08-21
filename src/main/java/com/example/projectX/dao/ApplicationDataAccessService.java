@@ -7,9 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Repository("postgres")
 public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminDao {
@@ -608,7 +606,42 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
     @Override
     public List<Schedule> getAllCourseSchedule(UUID courseId) {
         final String sql = String.format("SELECT * FROM Schedule " +
-                "WHERE course_id = '%s';", courseId);
+                "WHERE course_id = '%s' " +
+                "ORDER BY schedule_time_start ASC;", courseId);
+        return jdbcTemplate.query(sql, ((resultSet, i) -> {
+            UUID id = UUID.fromString(resultSet.getString("schedule_id"));
+            String startTime = resultSet.getString("schedule_time_start");
+            String endTime = resultSet.getString("schedule_time_end");
+            String weekDay = resultSet.getString("schedule_week_day");
+            UUID courseId_ = UUID.fromString(resultSet.getString("course_id"));
+            return new Schedule(id, startTime, endTime, weekDay, courseId_);
+        }));
+    }
+
+    @Override
+    public List<Schedule> getAllTeacherSchedule(UUID teacherId) {
+        final String sql = String.format("SELECT * FROM Schedule " +
+                "WHERE course_id = ANY (" +
+                "SELECT course_id FROM Courses " +
+                "WHERE user_teacher_id = '%s') " +
+                "ORDER BY schedule_time_start ASC;", teacherId);
+        return jdbcTemplate.query(sql, ((resultSet, i) -> {
+            UUID id = UUID.fromString(resultSet.getString("schedule_id"));
+            String startTime = resultSet.getString("schedule_time_start");
+            String endTime = resultSet.getString("schedule_time_end");
+            String weekDay = resultSet.getString("schedule_week_day");
+            UUID courseId_ = UUID.fromString(resultSet.getString("course_id"));
+            return new Schedule(id, startTime, endTime, weekDay, courseId_);
+        }));
+    }
+
+    @Override
+    public List<Schedule> getAllStudentSchedule(UUID studentId) {
+        final String sql = String.format("SELECT * FROM Schedule " +
+                "WHERE course_id = ANY (" +
+                "SELECT course_id FROM Students_Courses " +
+                "WHERE student_id = '%s') " +
+                "ORDER BY schedule_time_start ASC;", studentId);
         return jdbcTemplate.query(sql, ((resultSet, i) -> {
             UUID id = UUID.fromString(resultSet.getString("schedule_id"));
             String startTime = resultSet.getString("schedule_time_start");
@@ -640,6 +673,21 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
                 "WHERE schedule_id = '%s';", scheduleId);
         jdbcTemplate.execute(sql);
         return true;
+    }
+
+    @Override
+    public Map<Integer, List<Schedule>> getMappedCourseSchedule(UUID courseId) {
+        return createMappedSchedule(getAllCourseSchedule(courseId));
+    }
+
+    @Override
+    public Map<Integer, List<Schedule>> getMappedTeacherSchedule(UUID teacherId) {
+        return createMappedSchedule(getAllTeacherSchedule(teacherId));
+    }
+
+    @Override
+    public Map<Integer, List<Schedule>> getMappedStudentSchedule(UUID studentId) {
+        return createMappedSchedule(getAllStudentSchedule(studentId));
     }
 
     @Override
@@ -807,5 +855,24 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
     private int timeToInt(String time) {
         String[] s = time.split(":");
         return Integer.parseInt(s[0]) * 60 + Integer.parseInt(s[1]);
+    }
+
+    private Map<Integer, List<Schedule>> createMappedSchedule(List<Schedule> scheduleList) {
+        Map<Integer, List<Schedule>> res = new HashMap<>();
+        for (int i = 1; i <= 7; ++i) {
+            res.put(i, new ArrayList<>());
+        }
+        for (Schedule schedule : scheduleList) {
+            switch (schedule.getWeekDay()) {
+                case "Monday": res.get(1).add(schedule); break;
+                case "Tuesday": res.get(2).add(schedule); break;
+                case "Wednesday": res.get(3).add(schedule); break;
+                case "Thursday": res.get(4).add(schedule); break;
+                case "Friday": res.get(5).add(schedule); break;
+                case "Saturday": res.get(6).add(schedule); break;
+                case "Sunday": res.get(7).add(schedule); break;
+            }
+        }
+        return res;
     }
 }
