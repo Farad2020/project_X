@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.RegEx;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -176,8 +177,15 @@ public class AdminController {
                               @RequestParam(name = "is_able_to_add_student") boolean isAbleToAddStudent,
                               @RequestParam(name = "is_able_to_delete_course") boolean isAbleToDeleteCourse,
                               @RequestParam(name = "is_able_to_add_course") boolean isAbleToAddCourse,
+                              @RequestParam(name = "is_able_to_delete_schedule") boolean isAbleToDeleteSchedule,
+                              @RequestParam(name = "is_able_to_add_schedule") boolean isAbleToAddSchedule,
+                              @RequestParam(name = "is_able_to_edit_manager") boolean isAbleToEditManagement,
+                              @RequestParam(name = "is_able_to_edit_teacher") boolean isAbleToEditTeacher,
+                              @RequestParam(name = "is_able_to_edit_student") boolean isAbleToEditStudent,
+                              @RequestParam(name = "is_able_to_edit_course") boolean isAbleToEditCourse,
+                              @RequestParam(name = "is_able_to_edit_schedule") boolean isAbleToEditSchedule,
                               @RequestParam(name = "manager_id") UUID managerId) {
-        ManagementStaff managementStaff = new ManagementStaff(managerId, name, surname, lastname, login, password, email, telephone, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled, companyId, role, isAbleToDeleteManager, isAbleToDeleteTeacher, isAbleToDeleteStudent, isAbleToAddManager, isAbleToAddTeacher, isAbleToAddStudent, isAbleToDeleteCourse, isAbleToAddCourse);
+        ManagementStaff managementStaff = new ManagementStaff(managerId, name, surname, lastname, login, password, email, telephone, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled, companyId, role, isAbleToDeleteManager, isAbleToDeleteTeacher, isAbleToDeleteStudent, isAbleToAddManager, isAbleToAddTeacher, isAbleToAddStudent, isAbleToDeleteCourse, isAbleToAddCourse, isAbleToDeleteSchedule, isAbleToAddSchedule, isAbleToEditManagement, isAbleToEditTeacher, isAbleToEditStudent, isAbleToEditCourse, isAbleToEditSchedule);
         boolean result = userAuthenticationService.updateManagementStaffById(managerId, managementStaff);
         System.out.println(result);
         return "redirect:/$2a$10$HZR3IGneje95jJVEomN.vuEKlxwRt6Tn5oeLEXySZXh7L/WLiX6fm/company/" + companyId;

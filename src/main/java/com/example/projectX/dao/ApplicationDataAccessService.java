@@ -140,7 +140,14 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
             boolean isAbleToAddStudent = resultSet.getBoolean("is_able_to_add_student");
             boolean isAbleToDeleteCourse = resultSet.getBoolean("is_able_to_delete_course");
             boolean isAbleToAddCourse = resultSet.getBoolean("is_able_to_add_course");
-            return new ManagementStaff(id_, name, surname, lastname, login_, password, email, telephone, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled, companyId, role, isAbleToDeleteManager, isAbleToDeleteTeacher, isAbleToDeleteStudent, isAbleToAddManager, isAbleToAddTeacher, isAbleToAddStudent, isAbleToDeleteCourse, isAbleToAddCourse);
+            boolean isAbleToDeleteSchedule = resultSet.getBoolean("is_able_to_delete_schedule");
+            boolean isAbleToAddSchedule = resultSet.getBoolean("is_able_to_add_schedule");
+            boolean isAbleToEditManagement = resultSet.getBoolean("is_able_to_edit_manager");
+            boolean isAbleToEditTeacher = resultSet.getBoolean("is_able_to_edit_teacher");
+            boolean isAbleToEditStudent = resultSet.getBoolean("is_able_to_edit_student");
+            boolean isAbleToEditCourse = resultSet.getBoolean("is_able_to_edit_course");
+            boolean isAbleToEditSchedule = resultSet.getBoolean("is_able_to_edit_schedule");
+            return new ManagementStaff(id_, name, surname, lastname, login_, password, email, telephone, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled, companyId, role, isAbleToDeleteManager, isAbleToDeleteTeacher, isAbleToDeleteStudent, isAbleToAddManager, isAbleToAddTeacher, isAbleToAddStudent, isAbleToDeleteCourse, isAbleToAddCourse, isAbleToDeleteSchedule, isAbleToAddSchedule, isAbleToEditManagement, isAbleToEditTeacher, isAbleToEditStudent, isAbleToEditCourse, isAbleToEditSchedule);
         }));
         return managers.stream().findFirst();
     }
@@ -439,7 +446,14 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
             boolean isAbleToAddStudent = resultSet.getBoolean("is_able_to_add_student");
             boolean isAbleToDeleteCourse = resultSet.getBoolean("is_able_to_delete_course");
             boolean isAbleToAddCourse = resultSet.getBoolean("is_able_to_add_course");
-            return new ManagementStaff(id, name, surname, lastname, login_, password, email, telephone, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled, companyId, role, isAbleToDeleteManager, isAbleToDeleteTeacher, isAbleToDeleteStudent, isAbleToAddManager, isAbleToAddTeacher, isAbleToAddStudent, isAbleToDeleteCourse, isAbleToAddCourse);
+            boolean isAbleToDeleteSchedule = resultSet.getBoolean("is_able_to_delete_schedule");
+            boolean isAbleToAddSchedule = resultSet.getBoolean("is_able_to_add_schedule");
+            boolean isAbleToEditManagement = resultSet.getBoolean("is_able_to_edit_manager");
+            boolean isAbleToEditTeacher = resultSet.getBoolean("is_able_to_edit_teacher");
+            boolean isAbleToEditStudent = resultSet.getBoolean("is_able_to_edit_student");
+            boolean isAbleToEditCourse = resultSet.getBoolean("is_able_to_edit_course");
+            boolean isAbleToEditSchedule = resultSet.getBoolean("is_able_to_edit_schedule");
+            return new ManagementStaff(id, name, surname, lastname, login_, password, email, telephone, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled, companyId, role, isAbleToDeleteManager, isAbleToDeleteTeacher, isAbleToDeleteStudent, isAbleToAddManager, isAbleToAddTeacher, isAbleToAddStudent, isAbleToDeleteCourse, isAbleToAddCourse, isAbleToDeleteSchedule, isAbleToAddSchedule, isAbleToEditManagement, isAbleToEditTeacher, isAbleToEditStudent, isAbleToEditCourse, isAbleToEditSchedule);
         })).stream().findFirst();
     }
 
@@ -508,7 +522,14 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
             boolean isAbleToAddStudent = resultSet.getBoolean("is_able_to_add_student");
             boolean isAbleToDeleteCourse = resultSet.getBoolean("is_able_to_delete_course");
             boolean isAbleToAddCourse = resultSet.getBoolean("is_able_to_add_course");
-            return new ManagementStaff(id, name, surname, lastname, login, password, email, telephone, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled, companyId, role, isAbleToDeleteManager, isAbleToDeleteTeacher, isAbleToDeleteStudent, isAbleToAddManager, isAbleToAddTeacher, isAbleToAddStudent, isAbleToDeleteCourse, isAbleToAddCourse);
+            boolean isAbleToDeleteSchedule = resultSet.getBoolean("is_able_to_delete_schedule");
+            boolean isAbleToAddSchedule = resultSet.getBoolean("is_able_to_add_schedule");
+            boolean isAbleToEditManagement = resultSet.getBoolean("is_able_to_edit_manager");
+            boolean isAbleToEditTeacher = resultSet.getBoolean("is_able_to_edit_teacher");
+            boolean isAbleToEditStudent = resultSet.getBoolean("is_able_to_edit_student");
+            boolean isAbleToEditCourse = resultSet.getBoolean("is_able_to_edit_course");
+            boolean isAbleToEditSchedule = resultSet.getBoolean("is_able_to_edit_schedule");
+            return new ManagementStaff(id, name, surname, lastname, login, password, email, telephone, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled, companyId, role, isAbleToDeleteManager, isAbleToDeleteTeacher, isAbleToDeleteStudent, isAbleToAddManager, isAbleToAddTeacher, isAbleToAddStudent, isAbleToDeleteCourse, isAbleToAddCourse, isAbleToDeleteSchedule, isAbleToAddSchedule, isAbleToEditManagement, isAbleToEditTeacher, isAbleToEditStudent, isAbleToEditCourse, isAbleToEditSchedule);
         }));
     }
 
