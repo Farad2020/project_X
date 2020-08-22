@@ -286,4 +286,8 @@ public class AdminController {
         System.out.println(result);
         return "redirect:/$2a$10$HZR3IGneje95jJVEomN.vuEKlxwRt6Tn5oeLEXySZXh7L/WLiX6fm/company/" + companyId + "/course/" + courseId + "/edit";
     }
+
+
+
+
 }

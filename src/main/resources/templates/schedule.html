@@ -1,10 +1,112 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE HTML>
+<!--
+фильтры (по курсам/ исполнению/ времени)
+украсть с платонуса
+как список
+-->
+<html xmlns:th="http://www.thymeleaf.org" data-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title th:text="${title}"></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" href="/css/style.css"/>
 </head>
 <body>
+<header th:insert="blocks/header :: header"></header>
 
+<div th:insert="blocks/default-left-menu-bar :: default-left-menu-bar"></div>
+
+
+<div class="main-content">
+
+    <div class="container schedule-block">
+
+        <h4 class="schedule-title"> Расписание </h4>
+        <hr class="schedule-hr"/>
+        <div class="container schedule-table">
+            <div class="schedule-col">
+                <h6>Monday</h6>
+                <div class="card border-dark bg-light weekday Monday" th:each="schedule : ${schedule_map.get(1)}">
+                    <th:block th:each="course:${courses}" th:if="${course.getId() == schedule.getCourseId()}">
+                        <p class="course-name-link" th:text="${course.getNameSnippet()}" data-toggle="tooltip" th:title="${course.getName()}"></p>
+                        <p th:text="${schedule.getStartTime()}"></p>
+                        <p th:text="${schedule.getEndTime()}"></p>
+                    </th:block>
+                </div>
+            </div>
+
+            <div class="schedule-col">
+                <h6>Tuesday</h6>
+                <div class="card border-dark bg-light weekday Tuesday" th:each="schedule : ${schedule_map.get(2)}">
+                    <th:block th:each="course:${courses}" th:if="${course.getId() == schedule.getCourseId()}">
+                        <p class="course-name-link" th:text="${course.getNameSnippet()}" data-toggle="tooltip" th:title="${course.getName()}"></p>
+                        <p th:text="${schedule.getStartTime()}"></p>
+                        <p th:text="${schedule.getEndTime()}"></p>
+                    </th:block>
+                </div>
+            </div>
+
+            <div class="schedule-col">
+                <h6>Wednesday</h6>
+                <div class="card border-dark bg-light weekday Wednesday" th:each="schedule : ${schedule_map.get(3)}">
+                    <th:block th:each="course:${courses}" th:if="${course.getId() == schedule.getCourseId()}">
+                        <p class="course-name-link" th:text="${course.getNameSnippet()}" data-toggle="tooltip" th:title="${course.getName()}"></p>
+                        <p th:text="${schedule.getStartTime()}"></p>
+                        <p th:text="${schedule.getEndTime()}"></p>
+                    </th:block>
+                </div>
+            </div>
+
+            <div class="schedule-col">
+                <h6>Thursday</h6>
+                <div class="card border-dark bg-light weekday Thursday" th:each="schedule : ${schedule_map.get(4)}">
+                    <th:block th:each="course:${courses}" th:if="${course.getId() == schedule.getCourseId()}">
+                        <p class="course-name-link" th:text="${course.getNameSnippet()}" data-toggle="tooltip" th:title="${course.getName()}"></p>
+                        <p th:text="${schedule.getStartTime()}"></p>
+                        <p th:text="${schedule.getEndTime()}"></p>
+                    </th:block>
+                </div>
+            </div>
+
+            <div class="schedule-col">
+                <h6>Friday</h6>
+                <div class="card border-dark bg-light weekday Friday" th:each="schedule : ${schedule_map.get(5)}">
+                    <th:block th:each="course:${courses}" th:if="${course.getId() == schedule.getCourseId()}">
+                        <p class="course-name-link" th:text="${course.getNameSnippet()}" data-toggle="tooltip" th:title="${course.getName()}"></p>
+                        <p th:text="${schedule.getStartTime()}"></p>
+                        <p th:text="${schedule.getEndTime()}"></p>
+                    </th:block>
+                </div>
+            </div>
+
+            <div class="schedule-col">
+                <h6>Saturday</h6>
+                <div class="card border-dark bg-light weekday Saturday" th:each="schedule : ${schedule_map.get(6)}">
+                    <th:block th:each="course:${courses}" th:if="${course.getId() == schedule.getCourseId()}">
+                        <p class="course-name-link" th:text="${course.getNameSnippet()}" data-toggle="tooltip" th:title="${course.getName()}"></p>
+                        <p th:text="${schedule.getStartTime()}"></p>
+                        <p th:text="${schedule.getEndTime()}"></p>
+                    </th:block>
+                </div>
+            </div>
+
+            <div class="schedule-col">
+                <h6>Sunday</h6>
+                <div class="card border-dark bg-light weekday Sunday" th:each="schedule : ${schedule_map.get(i)}">
+                    <th:block th:each="course:${courses}" th:if="${course.getId() == schedule.getCourseId()}">
+                        <p class="course-name-link" th:text="${course.getNameSnippet()}" data-toggle="tooltip" th:title="${course.getName()}"></p>
+                        <p th:text="${schedule.getStartTime()}"></p>
+                        <p th:text="${schedule.getEndTime()}"></p>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer th:insert="blocks/footer :: footer"></footer>
 </body>
 </html>

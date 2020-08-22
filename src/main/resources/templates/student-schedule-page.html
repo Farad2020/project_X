@@ -30,37 +30,34 @@
             <div class="schedule-col">
                 <h6>Monday</h6>
                 <div class="card border-dark bg-light weekday Monday" th:each="schedule : ${schedule_map.get(1)}">
-                    <p th:text="${course.getName()}"></p>
+                    <p class="course-name-link" th:text="${course.getNameSnippet()}" data-toggle="tooltip" th:title="${course.getName()}"></p>
                     <p th:text="${schedule.getStartTime()}"></p>
                     <p th:text="${schedule.getEndTime()}"></p>
-                    <br>
                 </div>
             </div>
 
             <div class="schedule-col">
                 <h6>Tuesday</h6>
                 <div class="card border-dark bg-light weekday Tuesday" th:each="schedule : ${schedule_map.get(2)}">
-                    <p th:text="${course.getName()}"></p>
+                    <p class="course-name-link" th:text="${course.getNameSnippet()}" data-toggle="tooltip" th:title="${course.getName()}"></p>
                     <p th:text="${schedule.getStartTime()}"></p>
                     <p th:text="${schedule.getEndTime()}"></p>
-                    <br>
                 </div>
             </div>
 
             <div class="schedule-col">
                 <h6>Wednesday</h6>
                 <div class="card border-dark bg-light weekday Wednesday" th:each="schedule : ${schedule_map.get(3)}">
-                    <p th:text="${course.getName()}"></p>
+                    <p class="course-name-link" th:text="${course.getNameSnippet()}" data-toggle="tooltip" th:title="${course.getName()}"></p>
                     <p th:text="${schedule.getStartTime()}"></p>
                     <p th:text="${schedule.getEndTime()}"></p>
-                    <br>
                 </div>
             </div>
 
             <div class="schedule-col">
                 <h6>Thursday</h6>
                 <div class="card border-dark bg-light weekday Thursday" th:each="schedule : ${schedule_map.get(4)}">
-                    <p th:text="${course.getName()}"></p>
+                    <p class="course-name-link" th:text="${course.getNameSnippet()}" data-toggle="tooltip" th:title="${course.getName()}"></p>
                     <p th:text="${schedule.getStartTime()}"></p>
                     <p th:text="${schedule.getEndTime()}"></p>
                     <br>
@@ -70,30 +67,27 @@
             <div class="schedule-col">
                 <h6>Friday</h6>
                 <div class="card border-dark bg-light weekday Friday" th:each="schedule : ${schedule_map.get(5)}">
-                    <p th:text="${course.getName()}"></p>
+                    <p class="course-name-link" th:text="${course.getNameSnippet()}" data-toggle="tooltip" th:title="${course.getName()}"></p>
                     <p th:text="${schedule.getStartTime()}"></p>
                     <p th:text="${schedule.getEndTime()}"></p>
-                    <br>
                 </div>
             </div>
 
             <div class="schedule-col">
                 <h6>Saturday</h6>
                 <div class="card border-dark bg-light weekday Saturday" th:each="schedule : ${schedule_map.get(6)}">
-                    <p th:text="${course.getName()}"></p>
+                    <p class="course-name-link" th:text="${course.getNameSnippet()}" data-toggle="tooltip" th:title="${course.getName()}"></p>
                     <p th:text="${schedule.getStartTime()}"></p>
                     <p th:text="${schedule.getEndTime()}"></p>
-                    <br>
                 </div>
             </div>
 
             <div class="schedule-col">
                 <h6>Sunday</h6>
                 <div class="card border-dark bg-light weekday Sunday" th:each="schedule : ${schedule_map.get(i)}">
-                    <p th:text="${course.getName()}"></p>
+                    <p class="course-name-link" th:text="${course.getNameSnippet()}" data-toggle="tooltip" th:title="${course.getName()}"></p>
                     <p th:text="${schedule.getStartTime()}"></p>
                     <p th:text="${schedule.getEndTime()}"></p>
-                    <br>
                 </div>
             </div>
         </div>

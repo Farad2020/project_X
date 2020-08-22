@@ -71,4 +71,8 @@ public class Course {
     public UUID getCompanyId() {
         return companyId;
     }
+
+    public String getNameSnippet() {
+        return (name.length() < 11 ? name : name.substring(0, 11) + "...");
+    }
 }

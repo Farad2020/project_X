@@ -127,7 +127,7 @@ public class StudentController {
     /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  */
 
     @GetMapping("student_schedule/{course_id}")
-    public String userSchedule(Model model,
+    public String studentCourseSchedule(Model model,
                                @PathVariable(name = "course_id") UUID course_id,
                                @AuthenticationPrincipal UserDetails user) {
         userIdentifier.getUserClass(user,model);
@@ -140,6 +140,23 @@ public class StudentController {
             model.addAttribute("course", course);
             model.addAttribute("schedule_map", scheduleMap);
             return "student-schedule-page";
+        }else{
+            return "error-page";
+        }
+    }
+
+    @GetMapping("student_schedule")
+    public String studentFullSchedule(Model model,
+                               @AuthenticationPrincipal UserDetails user) {
+        userIdentifier.getUserClass(user,model);
+
+        if( model.getAttribute("isStudent") != null ){
+
+            Map<Integer, List<Schedule>> scheduleMap = companyService.getMappedStudentSchedule( ((UserStudent) user).getId() );
+            List<Course> courses = companyService.getAllStudentCourses( ((UserStudent) user).getId() );
+            model.addAttribute("courses", courses);
+            model.addAttribute("schedule_map", scheduleMap);
+            return "schedule";
         }else{
             return "error-page";
         }

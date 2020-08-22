@@ -58,3 +58,7 @@ function showMoreAccountInfo() {
         btnShowAll.innerHTML = "Показать подробную информацию"; 
     }
   }
+
+$(document).ready(function(){
+  $('[data-toggle="tooltip"]').tooltip();
+});
