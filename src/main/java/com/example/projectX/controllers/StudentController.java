@@ -38,7 +38,7 @@ public class StudentController {
                                           @PathVariable(name = "student_id") UUID student_id,
                                           @AuthenticationPrincipal UserDetails user){
         userIdentifier.getUserClass(user,model);
-        if( model.getAttribute("isStudent") != null){
+        if( model.getAttribute("isStudent") != null && ((UserStudent)user).getCompanyId().equals( companyService.getStudentById(student_id).get().getCompanyId() ) ){
             if( ((UserStudent)user).getId().equals(student_id) ){
                 model.addAttribute("isOwner", true);
                 model.addAttribute("student", (UserStudent)user);
@@ -46,7 +46,10 @@ public class StudentController {
                 model.addAttribute("student", companyService.getStudentById(student_id).get());
             }
             return "student-account-page";
-        }else if( model.getAttribute("isManagementStaff") != null || model.getAttribute("isTeacher") != null){
+        }else if( (model.getAttribute("isManagementStaff") != null &&
+                        ((ManagementStaff)user).getCompanyId().equals( companyService.getStudentById(student_id).get().getCompanyId() ) )||
+                (model.getAttribute("isTeacher") != null &&
+                        ((UserTeacher)user).getCompanyId().equals( companyService.getStudentById(student_id).get().getCompanyId() ) )){
             model.addAttribute("student", companyService.getStudentById(student_id).get());
             return "student-account-page";
         }
@@ -105,33 +108,6 @@ public class StudentController {
         }
     }
 
-    @GetMapping("student_teachers/{teacher_id}")
-    public String getStudentTeacherById(Model model,
-                               @PathVariable(name = "teacher_id") UUID teacher_id,
-                               @AuthenticationPrincipal UserDetails user) {
-        userIdentifier.getUserClass(user,model);
-
-        if( model.getAttribute("isStudent") != null ){
-
-            Optional<UserTeacher> teacher = companyService.getTeacherById(teacher_id);
-
-            if (teacher.isPresent() && teacher.get().getCompanyId().equals( ((UserStudent) user).getCompanyId() ) ) {
-
-                model.addAttribute("teacher", teacher.get());
-                // courses means all courses related to chosen teacher
-                List<Course> courses = companyService.getAllTeacherCourses(teacher_id);
-                System.out.println( courses );
-                /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! null exception !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  */
-                /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  Menu bar dissappeared !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  */
-                model.addAttribute("courses", courses);
-                return "teacher-account-page";
-            }else{
-                return "error-page";
-            }
-        }else{
-            return "error-page";
-        }
-    }
 
 
     /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  */
