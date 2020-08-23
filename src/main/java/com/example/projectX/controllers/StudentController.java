@@ -33,21 +33,7 @@ public class StudentController {
         this.userIdentifier = userIdentifier;
     }
 
-/*
-    @GetMapping("/student_profile")
-    public String studentProfile(Model model,
-                              @AuthenticationPrincipal UserDetails user){
-        userIdentifier.getUserClass(user,model);
-        if( model.getAttribute("isStudent") != null  ) {
-            model.addAttribute("student", user );
-            return "student-account-page";
-        }else{
-            return "error-page";
-        }
-    }
-    */
-
-    @GetMapping("/student_profiles/{student_id}")
+    @GetMapping("/student_profile/{student_id}")
     public String differentStudentProfile(Model model,
                                           @PathVariable(name = "student_id") UUID student_id,
                                           @AuthenticationPrincipal UserDetails user){
