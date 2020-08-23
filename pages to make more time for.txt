@@ -1,0 +1,22 @@
+Pages with errors:
+Student courses -> course page
+
+Teacher Totally
+
+
+Refactor th:each  cycle for naming
+
+
+
+Pages for reconstruction:
+FOOTER!!!!!!!!
+
+Main pages
+
+All 3 account pages(after media files update)
+
+Filter in student-teachers page
+
+Filter in Student courses page
+
+Attendance

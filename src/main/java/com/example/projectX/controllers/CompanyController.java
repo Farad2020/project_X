@@ -186,20 +186,6 @@ public class CompanyController {
         return "error-page";
     }
 
-    @GetMapping("/students_profile/{student_id}")
-    public String getUserProfile(Model model,
-                              @PathVariable (name = "student_id") UUID student_id,
-                              @AuthenticationPrincipal UserDetails user) {
-        userIdentifier.getUserClass(user, model);
-        if (model.getAttribute("isManagementStaff") != null) {
-            Optional<UserStudent> student = companyService.getStudentById(student_id);
-            student.ifPresent(userStudent -> model.addAttribute("student", userStudent));
-            /* if student is not the current user validation!!! And user is manager */
-            return "student-account-page";
-        }
-        return "error-page";
-    }
-
     @GetMapping("/teachers_profile/{teacher_id}")
     public String getTeacherProfile(Model model,
                               @PathVariable (name = "teacher_id") UUID teacher_id,

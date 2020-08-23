@@ -22,6 +22,26 @@
 
 <div class="main-content">
 
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light filter-navbar">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#"
+                       id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                        th:text="${'Course filter: '} + ${course.getName()}">
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" th:href="@{'~/student_schedule/'}">None</a>
+                        <th:block th:each="courseX:${courses}">
+                            <a class="dropdown-item" th:href="@{'~/student_schedule/'} + ${courseX.getId()}" th:text="${courseX.getName()}"></a>
+                        </th:block>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
     <div class="container schedule-block">
 
         <h4 class="schedule-title" th:text="${course.getName()}"></h4>

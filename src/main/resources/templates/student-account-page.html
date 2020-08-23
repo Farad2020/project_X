@@ -18,9 +18,9 @@
 <div th:insert="blocks/default-left-menu-bar :: default-left-menu-bar"></div>
 
 <div class="account-content">
-    <div class="account-img-box">
+    <div  class="account-img-box">
         <img class="account-img" src="/design-flow/avatars/avatar_cat.jpg"><br>
-        <a class="btn btn-default" id="edit-account-btn" href="#">Edit</a>
+        <a th:if="${isOwner}" class="btn btn-default" id="edit-account-btn" href="#">Edit</a>
     </div>
 
     <div class="account-info-box">
