@@ -174,12 +174,17 @@ public class CompanyController {
             if (course.isPresent()) {
                 Optional<UserTeacher> userTeacher = companyService.getTeacherById(course.get().getTeacherId());
                 Map<Integer, List<Schedule>> scheduleMap = companyService.getMappedCourseSchedule(course_id);
+                List<UserStudent> participatingStudents = companyService.getAllStudentsOfCourse(course_id);
+                List<UserStudent> notParticipatingStudents = companyService.getAllCompanyStudentsThatNotInCourse(course.get().getCompanyId(), course_id);
                 model.addAttribute("course", course.get());
                 userTeacher.ifPresent(teacher -> {
                     model.addAttribute("teacher", teacher);
                     model.addAttribute("company_id", teacher.getCompanyId());
+
                 });
                 model.addAttribute("schedule_map", scheduleMap);
+                model.addAttribute("participating_students", participatingStudents);
+                model.addAttribute("not_participating_students", notParticipatingStudents);
                 return "company-course-page";
             }
         }

@@ -35,6 +35,9 @@
         <div>
             <button type="button" onclick="showAdditionalInformation()" class="btn btn-info">Показать расписание</button>
         </div>
+        <div>
+            <button type="button" onclick="showAdditionalInformationAboutStudents()" class="btn btn-info">Показать студентов</button>
+        </div>
     </div>
 </div>
 
@@ -70,7 +73,62 @@
             </th:block>
         </div>
         <div>
-            <button type="button" onclick="closeAdditionalInformation()" class="btn btn-info"></button>
+            <button type="button" onclick="closeAdditionalInformation()" class="btn btn-info">Закрыть</button>
+        </div>
+    </div>
+</div>
+
+<div id="additional-info-about-students" class="additional-info hidden">
+    <div class="course-students-pop-up">
+
+        <table class="table">
+            <thead>
+                <tr scope="col"><strong>Students who enrolled to this course</strong></tr>
+            </thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Surname</th>
+                <th scope="col">Lastname</th>
+                <th th:if="${manager.getRole() == 1 or manager.isAbleToEditStudent()}">Action</th>
+            </tr>
+            <tbody>
+            <th:block th:each="i :  ${#numbers.sequence(0, participating_students.size() -1 )}" th:if="${participating_students.size() > 0}"> <!-- style="cursor: pointer" -->
+                <tr class="course-list-item table-item">
+                    <th scope="row" th:text="${i+1}"></th>
+                    <td><a class="table-row-link" th:href="@{'students_profile/'} + ${participating_students.get(i).getId()}"
+                           th:text="${participating_students.get(i).getName()}"/></td>
+                    <td><a class="table-row-link" th:href="@{'students_profile/'} + ${participating_students.get(i).getId()}"
+                           th:text="${participating_students.get(i).getSurname()}"/></td>
+                    <td><a class="table-row-link" th:href="@{'students_profile/'} + ${participating_students.get(i).getId()}"
+                           th:text="${participating_students.get(i).getLastname()}"/></td>
+                </tr>
+            </th:block>
+            </tbody>
+            <tr ><td colspan="4" style="text-align:center"><hr class="schedule-hr"/><br><strong>Students who is not enrolled to this course</strong></td></tr>
+            <tr>
+                <td><strong>#</strong></td>
+                <td><strong>Name</strong></td>
+                <td><strong>Surname</strong></td>
+                <td><strong>Lastname</strong></td>
+                <td th:if="${manager.getRole() == 1 or manager.isAbleToEditStudent()}"><strong>Action</strong></td>
+            </tr>
+            <tbody>
+            <th:block th:each="i :  ${#numbers.sequence(0, not_participating_students.size() -1 )}" th:if="${not_participating_students.size() > 0}"> <!-- style="cursor: pointer" -->
+                <tr class="course-list-item table-item">
+                    <th scope="row" th:text="${i+1}"></th>
+                    <td><a class="table-row-link" th:href="@{'students_profile/'} + ${not_participating_students.get(i).getId()}"
+                           th:text="${not_participating_students.get(i).getName()}"/></td>
+                    <td><a class="table-row-link" th:href="@{'students_profile/'} + ${not_participating_students.get(i).getId()}"
+                           th:text="${not_participating_students.get(i).getSurname()}"/></td>
+                    <td><a class="table-row-link" th:href="@{'students_profile/'} + ${not_participating_students.get(i).getId()}"
+                           th:text="${not_participating_students.get(i).getLastname()}"/></td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+        <div>
+            <button type="button" onclick="closeAdditionalInformationAboutStudents()" class="btn btn-info">Закрыть</button>
         </div>
     </div>
 </div>
