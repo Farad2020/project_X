@@ -1,19 +1,19 @@
 Pages with errors:
-Student courses -> course page
 
-Teacher Totally
+Teacher Courses
 
+Teacher Schedule
 
-Refactor th:each  cycle for naming
+Teacher Students
 
 
 
 Pages for reconstruction:
 FOOTER!!!!!!!!
 
-Main pages
-
 All 3 account pages(after media files update)
+
+Post Task And Main pages after media update
 
 Filter in student-teachers page
 

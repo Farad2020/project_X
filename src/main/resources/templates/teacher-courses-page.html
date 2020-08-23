@@ -17,7 +17,7 @@
 <div th:insert="blocks/default-left-menu-bar :: default-left-menu-bar"></div>
 
 <div class="main-content">
-
+    <!--
     <nav class="navbar navbar-expand-lg navbar-light bg-light filter-navbar">
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
@@ -37,16 +37,14 @@
             </form>
         </div>
     </nav>
+    -->
 
-
-    <p th:unless="courses">Не удалось найти соответствующию инфомацию.</p>
-    <table th:if="courses" class="table">
+    <p th:unless="${courses}">Не удалось найти соответствующию инфомацию.</p>
+    <table th:if="${courses}" class="table">
         <thead>
         <tr>
             <th scope="col">#</th>
-            <th scope="col">Name</th>
-            <th scope="col">Starting Date</th>
-            <th scope="col">Currently Active</th>
+            <th scope="col">Название</th>
         </tr>
         </thead>
         <tbody>
@@ -54,16 +52,8 @@
             <tr class="course-list-item table-item">
                 <th scope="row"  th:text="${i+1}"></th>
                 <td>
-                    <a class="table-row-link" th:href="@{'teacher_courses/'} + ${courses.get(i).getId()}"
+                    <a class="table-row-link" th:href="@{'~/courses/'} + ${courses.get(i).getId()}"
                        th:text="${courses.get(i).getName()}"/>
-                </td>
-                <td >
-                    <a class="table-row-link" th:href="@{'teacher_courses/'} + ${courses.get(i).getId()}"
-                       th:text="${courses.get(i).getStarDate()}"/>
-                </td>
-                <td>
-                    <a class="table-row-link" th:href="@{'teacher_courses/'} + ${courses.get(i).getId()}"
-                       th:text="${courses.get(i).isActive()}"/>
                 </td>
             </tr>
         </th:block>

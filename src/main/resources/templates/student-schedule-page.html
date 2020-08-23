@@ -27,14 +27,27 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#"
-                       id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                        th:text="${'Course filter: '} + ${course.getName()}">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button"
+                       data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false"
+                       th:text="${course}? ${'Курс: ' + course.getNameSnippet()}: ${'Курс: Все'}">
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" th:href="@{'~/student_schedule/'}">None</a>
-                        <th:block th:each="courseX:${courses}">
-                            <a class="dropdown-item" th:href="@{'~/student_schedule/'} + ${courseX.getId()}" th:text="${courseX.getName()}"></a>
+                        <!-- Different link list-->
+                        <th:block th:if="${isStudent != null}">
+                            <a class="dropdown-item" th:href="@{'~/student_schedule/'}">Все</a>
+                            <th:block th:each="course:${courses}">
+                                <a class="dropdown-item" th:href="@{'~/student_schedule/'} + ${course.getId()}"
+                                   th:text="${course.getName()}"></a>
+                            </th:block>
+                        </th:block>
+
+                        <th:block th:if="${isTeacher != null}">
+                            <a class="dropdown-item" th:href="@{'~/teacher_schedule/'}">Все</a>
+                            <th:block th:each="course:${courses}">
+                                <a class="dropdown-item" th:href="@{'~/teacher_schedule/'} + ${course.getId()}"
+                                   th:text="${course.getName()}"></a>
+                            </th:block>
                         </th:block>
                     </div>
                 </li>

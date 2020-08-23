@@ -32,7 +32,7 @@
             <p th:text="'Цена: ' + ${course.getPrice()}"></p>
             <p th:text="'Payout Number: ' + ${course.getPayoutNum()}"></p>
             <a class="info-link" th:text="'Учитель: ' + ${teacher.getName()} + ' ' + ${teacher.getSurname()} + ' ' + ${teacher.getLastname()}"
-               th:href="@{'~/teachers_profile/'} + ${teacher.getId()}"></a>
+               th:href="@{'~/teacher_profile/'} + ${teacher.getId()}"></a>
         </div>
         <div>
             <button type="button" onclick="showAdditionalInformation()" class="btn btn-info">Показать расписание</button>
@@ -42,17 +42,94 @@
 
 <div id="additional-info" class="additional-info hidden">
     <div class="schedule-pop-up">
+        <!--
         <div th:each="i :  ${#numbers.sequence(1, schedule_map.keySet().size())}" th:if="${schedule_map.keySet().size() > 0}">
             <div th:each="schedule : ${schedule_map.get(i)}">
                 <h3 th:text="${schedule.getWeekDay()}"></h3>
                 <p th:text="${schedule.getStartTime()}"></p>
                 <p th:text="${schedule.getEndTime()}"></p>
-                <a th:if="${manager.getRole() == 1 or manager.isAbleToDeleteSchedule()}" th:href="@{${course.getId()}} + '/delete_schedule/' + ${schedule.getId()}">DELETE</a>
+
+                <th:block th:if="${ isManagementStaff}">
+                <a th:if="сurrent_user.getRole() == 1 or current_user.isAbleToDeleteSchedule() }" th:href="@{${course.getId()}} + '/delete_schedule/' + ${schedule.getId()}">DELETE</a>
+                </th:block>
                 <br>
             </div>
         </div>
+        -->
+        <div class="container schedule-block">
+
+            <h4 class="schedule-title" th:text="${course.getName()}"></h4>
+            <hr class="schedule-hr"/>
+            <div class="container schedule-table">
+                <div class="schedule-col">
+                    <h6>Monday</h6>
+                    <div class="card border-dark bg-light weekday Monday" th:each="schedule : ${schedule_map.get(1)}">
+                        <p class="course-name-link" th:text="${course.getNameSnippet()}" data-toggle="tooltip" th:title="${course.getName()}"></p>
+                        <p th:text="${schedule.getStartTime()}"></p>
+                        <p th:text="${schedule.getEndTime()}"></p>
+                    </div>
+                </div>
+
+                <div class="schedule-col">
+                    <h6>Tuesday</h6>
+                    <div class="card border-dark bg-light weekday Tuesday" th:each="schedule : ${schedule_map.get(2)}">
+                        <p class="course-name-link" th:text="${course.getNameSnippet()}" data-toggle="tooltip" th:title="${course.getName()}"></p>
+                        <p th:text="${schedule.getStartTime()}"></p>
+                        <p th:text="${schedule.getEndTime()}"></p>
+                    </div>
+                </div>
+
+                <div class="schedule-col">
+                    <h6>Wednesday</h6>
+                    <div class="card border-dark bg-light weekday Wednesday" th:each="schedule : ${schedule_map.get(3)}">
+                        <p class="course-name-link" th:text="${course.getNameSnippet()}" data-toggle="tooltip" th:title="${course.getName()}"></p>
+                        <p th:text="${schedule.getStartTime()}"></p>
+                        <p th:text="${schedule.getEndTime()}"></p>
+                    </div>
+                </div>
+
+                <div class="schedule-col">
+                    <h6>Thursday</h6>
+                    <div class="card border-dark bg-light weekday Thursday" th:each="schedule : ${schedule_map.get(4)}">
+                        <p class="course-name-link" th:text="${course.getNameSnippet()}" data-toggle="tooltip" th:title="${course.getName()}"></p>
+                        <p th:text="${schedule.getStartTime()}"></p>
+                        <p th:text="${schedule.getEndTime()}"></p>
+                        <br>
+                    </div>
+                </div>
+
+                <div class="schedule-col">
+                    <h6>Friday</h6>
+                    <div class="card border-dark bg-light weekday Friday" th:each="schedule : ${schedule_map.get(5)}">
+                        <p class="course-name-link" th:text="${course.getNameSnippet()}" data-toggle="tooltip" th:title="${course.getName()}"></p>
+                        <p th:text="${schedule.getStartTime()}"></p>
+                        <p th:text="${schedule.getEndTime()}"></p>
+                    </div>
+                </div>
+
+                <div class="schedule-col">
+                    <h6>Saturday</h6>
+                    <div class="card border-dark bg-light weekday Saturday" th:each="schedule : ${schedule_map.get(6)}">
+                        <p class="course-name-link" th:text="${course.getNameSnippet()}" data-toggle="tooltip" th:title="${course.getName()}"></p>
+                        <p th:text="${schedule.getStartTime()}"></p>
+                        <p th:text="${schedule.getEndTime()}"></p>
+                    </div>
+                </div>
+
+                <div class="schedule-col">
+                    <h6>Sunday</h6>
+                    <div class="card border-dark bg-light weekday Sunday" th:each="schedule : ${schedule_map.get(i)}">
+                        <p class="course-name-link" th:text="${course.getNameSnippet()}" data-toggle="tooltip" th:title="${course.getName()}"></p>
+                        <p th:text="${schedule.getStartTime()}"></p>
+                        <p th:text="${schedule.getEndTime()}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div>
-            <th:block th:if="${manager.getRole() == 1 or manager.isAbleToAddSchedule()}">
+            <th:block th:if="${ isManagementStaff}">
+                <th:block th:if="${current_user.getRole() == 1 or current_user.isAbleToAddSchedule()}">
+
                 <form action="/add_schedule_to_course" method="post">
                     <input type="time" name="start_time" placeholder="Start time" required="">
                     <input type="time" name="end_time" placeholder="End time" required="">
@@ -69,6 +146,7 @@
                     <input type="hidden" name="company_id" th:value="${company_id}">
                     <input type="submit">
                 </form>
+                </th:block>
             </th:block>
         </div>
         <div>

@@ -65,15 +65,15 @@ https://getbootstrap.com/docs/4.0/components/list-group/
             <tr class="course-list-item table-item">
                 <th scope="row"  th:text="${i+1}"></th>
                 <td>
-                    <a class="table-row-link" th:href="@{'company_courses/'} + ${courses.get(i).getId()}"
+                    <a class="table-row-link" th:href="@{'courses/'} + ${courses.get(i).getId()}"
                        th:text="${courses.get(i).getName()}"/>
                 </td>
                 <td >
-                    <a class="table-row-link" th:href="@{'company_courses/'} + ${courses.get(i).getId()}"
+                    <a class="table-row-link" th:href="@{'courses/'} + ${courses.get(i).getId()}"
                        th:text="${courses.get(i).getStartDate()}"/>
                 </td>
                 <td>
-                    <a class="table-row-link" th:href="@{'company_courses/'} + ${courses.get(i).getId()}"
+                    <a class="table-row-link" th:href="@{'courses/'} + ${courses.get(i).getId()}"
                        th:text="${courses.get(i).isActive()}"/>
                 </td>
             </tr>

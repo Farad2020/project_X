@@ -69,31 +69,6 @@ public class StudentController {
         }
     }
 
-    /* !!!!!!!!!! A BIT OF REDESIGN FOR PERSONAL COURSE PAGES WILL REQUIRED !!!!!!!!!  */
-    @GetMapping("student_courses/{course_id}")
-    public String getStudentCourseById(Model model,
-                                       @PathVariable(name = "course_id") UUID course_id,
-                                       @AuthenticationPrincipal UserDetails user) {
-        userIdentifier.getUserClass(user,model);
-        if( model.getAttribute("isStudent") != null  ){
-
-            Optional<Course> course = companyService.getCourseById(course_id);
-            if (course.isPresent() && course.get().getCompanyId().equals( ((UserStudent) user).getCompanyId() ) ) {
-
-                Map<Integer, List<Schedule>> scheduleMap = companyService.getMappedCourseSchedule(course_id);
-                model.addAttribute("course", course.get());
-                Optional<UserTeacher> teacher = companyService.getTeacherById(course.get().getTeacherId());
-                teacher.ifPresent(userTeacher -> {
-                    model.addAttribute("teacher", userTeacher);
-                    model.addAttribute("company_id", userTeacher.getCompanyId());
-                });
-                model.addAttribute("schedule_map", scheduleMap);
-                return "company-course-page";
-            }
-        }
-         return "error-page";
-    }
-
     @GetMapping("student_teachers")
     public String userTeachers(Model model,
                                @AuthenticationPrincipal UserDetails user) {
@@ -126,7 +101,7 @@ public class StudentController {
             model.addAttribute("courses", courses);
             model.addAttribute("course", course);
             model.addAttribute("schedule_map", scheduleMap);
-            return "student-schedule-page";
+            return "schedule";
         }else{
             return "error-page";
         }
@@ -143,7 +118,7 @@ public class StudentController {
             List<Course> courses = companyService.getAllStudentCourses( ((UserStudent) user).getId() );
             model.addAttribute("courses", courses);
             model.addAttribute("schedule_map", scheduleMap);
-            return "schedule";
+            return "student-schedule-page";
         }else{
             return "error-page";
         }
