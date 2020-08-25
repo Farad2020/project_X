@@ -1,24 +1,35 @@
 package com.example.projectX.dao;
 
+import com.example.projectX.datasource.PostgresDataSource;
 import com.example.projectX.models.*;
+import org.postgresql.PGConnection;
+import org.postgresql.geometric.PGcircle;
+import org.postgresql.largeobject.LargeObject;
+import org.postgresql.largeobject.LargeObjectManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.*;
 
 @Repository("postgres")
-public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminDao {
+public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminDao, MediaFilesDao {
 
     private final JdbcTemplate jdbcTemplate;
     private final PasswordEncoder passwordEncoder;
+    private final PostgresDataSource postgresDataSource;
 
     @Autowired
-    public ApplicationDataAccessService(JdbcTemplate jdbcTemplate, PasswordEncoder passwordEncoder) {
+    public ApplicationDataAccessService(JdbcTemplate jdbcTemplate, PasswordEncoder passwordEncoder, PostgresDataSource postgresDataSource) {
         this.jdbcTemplate = jdbcTemplate;
         this.passwordEncoder = passwordEncoder;
+        this.postgresDataSource = postgresDataSource;
     }
 
     @Override
@@ -190,11 +201,12 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
             if (resultSet.getString("company_id") != null) {
                 companyId = UUID.fromString(resultSet.getString("company_id"));
             }
+            long profileImageOid = resultSet.getLong("user_student_profile_image");
             boolean isAccountNonExpired = resultSet.getBoolean("is_account_non_expired");
             boolean isAccountNonLocked = resultSet.getBoolean("is_account_non_locked");
             boolean isCredentialsNonExpired = resultSet.getBoolean("is_credentials_non_expired");
             boolean isEnabled = resultSet.getBoolean("is_enabled");
-            return new UserStudent(id, name, surname, lastname, login_, password, email, telephone, companyId, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
+            return new UserStudent(id, name, surname, lastname, login_, password, email, telephone, companyId, profileImageOid, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
         }));
         return userStudents.stream().findFirst();
     }
@@ -233,11 +245,12 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
             if (resultSet.getString("company_id") != null) {
                 companyId_ = UUID.fromString(resultSet.getString("company_id"));
             }
+            long profileImageOid = resultSet.getLong("user_student_profile_image");
             boolean isAccountNonExpired = resultSet.getBoolean("is_account_non_expired");
             boolean isAccountNonLocked = resultSet.getBoolean("is_account_non_locked");
             boolean isCredentialsNonExpired = resultSet.getBoolean("is_credentials_non_expired");
             boolean isEnabled = resultSet.getBoolean("is_enabled");
-            return new UserStudent(id, name, surname, lastname, login_, password, email, telephone, companyId_, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
+            return new UserStudent(id, name, surname, lastname, login_, password, email, telephone, companyId_, profileImageOid, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
         }));
     }
 
@@ -300,11 +313,12 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
             if (resultSet.getString("company_id") != null) {
                 companyId_ = UUID.fromString(resultSet.getString("company_id"));
             }
+            long profileImageOid = resultSet.getLong("user_student_profile_image");
             boolean isAccountNonExpired = resultSet.getBoolean("is_account_non_expired");
             boolean isAccountNonLocked = resultSet.getBoolean("is_account_non_locked");
             boolean isCredentialsNonExpired = resultSet.getBoolean("is_credentials_non_expired");
             boolean isEnabled = resultSet.getBoolean("is_enabled");
-            return new UserStudent(id, name, surname, lastname, login_, password, email, telephone, companyId_, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
+            return new UserStudent(id, name, surname, lastname, login_, password, email, telephone, companyId_, profileImageOid, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
         }));
     }
 
@@ -328,11 +342,12 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
             if (resultSet.getString("company_id") != null) {
                 companyId_ = UUID.fromString(resultSet.getString("company_id"));
             }
+            long profileImageOid = resultSet.getLong("user_student_profile_image");
             boolean isAccountNonExpired = resultSet.getBoolean("is_account_non_expired");
             boolean isAccountNonLocked = resultSet.getBoolean("is_account_non_locked");
             boolean isCredentialsNonExpired = resultSet.getBoolean("is_credentials_non_expired");
             boolean isEnabled = resultSet.getBoolean("is_enabled");
-            return new UserStudent(id, name, surname, lastname, login_, password, email, telephone, companyId_, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
+            return new UserStudent(id, name, surname, lastname, login_, password, email, telephone, companyId_, profileImageOid, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
         }));
     }
 
@@ -411,11 +426,12 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
             if (resultSet.getString("company_id") != null) {
                 companyId = UUID.fromString(resultSet.getString("company_id"));
             }
+            long profileImageOid = resultSet.getLong("user_student_profile_image");
             boolean isAccountNonExpired = resultSet.getBoolean("is_account_non_expired");
             boolean isAccountNonLocked = resultSet.getBoolean("is_account_non_locked");
             boolean isCredentialsNonExpired = resultSet.getBoolean("is_credentials_non_expired");
             boolean isEnabled = resultSet.getBoolean("is_enabled");
-            return new UserStudent(id, name, surname, lastname, login_, password, email, telephone, companyId, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
+            return new UserStudent(id, name, surname, lastname, login_, password, email, telephone, companyId, profileImageOid, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
         }));
         return userStudents.stream().findFirst();
     }
@@ -616,11 +632,12 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
             if (resultSet.getString("company_id") != null) {
                 companyId_ = UUID.fromString(resultSet.getString("company_id"));
             }
+            long profileImageOid = resultSet.getLong("user_student_profile_image");
             boolean isAccountNonExpired = resultSet.getBoolean("is_account_non_expired");
             boolean isAccountNonLocked = resultSet.getBoolean("is_account_non_locked");
             boolean isCredentialsNonExpired = resultSet.getBoolean("is_credentials_non_expired");
             boolean isEnabled = resultSet.getBoolean("is_enabled");
-            return new UserStudent(id, name, surname, lastname, login_, password, email, telephone, companyId_, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
+            return new UserStudent(id, name, surname, lastname, login_, password, email, telephone, companyId_, profileImageOid, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
         }));
     }
 
@@ -862,6 +879,61 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
             return new Admin(id, login_, password);
         }));
         return admins.stream().findFirst();
+    }
+
+    @Override
+    public boolean changeStudentProfilePicture(UUID studentId, MultipartFile image) {
+        try {
+            Connection connection = postgresDataSource.getHikariDataSource().getConnection();
+            connection.setAutoCommit(false);
+            PGConnection pgConnection;
+            if (connection.isWrapperFor(PGConnection.class)) {
+                pgConnection = connection.unwrap(PGConnection.class);
+            } else {
+                return false;
+            }
+            LargeObjectManager largeObjectManager = pgConnection.getLargeObjectAPI();
+            long oid = largeObjectManager.createLO(LargeObjectManager.READ | LargeObjectManager.WRITE);
+            LargeObject largeObject = largeObjectManager.open(oid, LargeObjectManager.WRITE);
+            byte[] buf = image.getBytes();
+            largeObject.write(buf);
+            largeObject.close();
+            final String sql = String.format("UPDATE User_Students SET " +
+                    "user_student_profile_image = %d " +
+                    "WHERE user_student_id = '%s';", oid, studentId);
+            jdbcTemplate.execute(sql);
+            connection.commit();
+            connection.setAutoCommit(true);
+            return true;
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public byte[] getStudentProfilePicture(UserStudent student) {
+        try {
+            Connection connection = postgresDataSource.getHikariDataSource().getConnection();
+            connection.setAutoCommit(false);
+            PGConnection pgConnection;
+
+            if (connection.isWrapperFor(PGConnection.class)) {
+                pgConnection = connection.unwrap(PGConnection.class);
+            } else {
+                return null;
+            }
+
+            LargeObjectManager largeObjectManager = pgConnection.getLargeObjectAPI();
+            LargeObject largeObject = largeObjectManager.open(student.getProfileImageOid(), LargeObjectManager.READ);
+            byte[] buf = new byte[largeObject.size()];
+            largeObject.read(buf, 0, largeObject.size());
+            largeObject.close();
+            return buf;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            return null;
+        }
     }
 
     private boolean timeIntersects(String startTime1, String endTime1, String startTime2, String endTime2) {

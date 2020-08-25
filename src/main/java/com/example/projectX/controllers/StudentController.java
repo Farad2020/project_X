@@ -3,17 +3,18 @@ package com.example.projectX.controllers;
 import com.example.projectX.helper.UserIdentifier;
 import com.example.projectX.models.*;
 import com.example.projectX.services.CompanyService;
+import com.example.projectX.services.MediaFilesService;
 import com.example.projectX.services.UserAuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -24,21 +25,25 @@ public class StudentController {
     private final CompanyService companyService;
     private final UserAuthenticationService userAuthenticationService;
     private final UserIdentifier userIdentifier;
+    private final MediaFilesService mediaFilesService;
 
     @Autowired
-    public StudentController(CompanyService companyService, UserAuthenticationService userAuthenticationService, UserIdentifier userIdentifier) {
+    public StudentController(CompanyService companyService, UserAuthenticationService userAuthenticationService, UserIdentifier userIdentifier, MediaFilesService mediaFilesService) {
         this.companyService = companyService;
         this.userAuthenticationService = userAuthenticationService;
         this.userIdentifier = userIdentifier;
+        this.mediaFilesService = mediaFilesService;
     }
 
     @GetMapping("/student_profile")
     public String userProfile(Model model,
                               @AuthenticationPrincipal UserDetails user){
         userIdentifier.getUserClass(user,model);
-        if( (Boolean) model.getAttribute("isStudent")  )
+        if(model.getAttribute("isStudent") != null) {
+            model.addAttribute("profile_picture", mediaFilesService.getStudentProfilePicture((UserStudent) model.getAttribute("student")));
             return "student-account-page";
-        else{
+        }
+        else {
             return "error-page";
         }
     }
@@ -133,6 +138,16 @@ public class StudentController {
     @GetMapping("student_tasks")
     public String userTasks(Model model) {
         return "student-tasks-page";
+    }
+
+    @PostMapping("student_profile/change_profile_picture")
+    public String changeProfilePicture(@RequestParam(name = "image") MultipartFile image,
+                                       @RequestParam(name = "student_id") UUID studentId) {
+        if (Objects.requireNonNull(image.getContentType()).contains("image")) {
+            boolean result = mediaFilesService.changeStudentProfilePicture(studentId, image);
+            System.out.println(result);
+        }
+        return "redirect:/student_profile";
     }
 
 }
