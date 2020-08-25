@@ -56,11 +56,11 @@
         <th:block th:each="i :  ${#numbers.sequence(0, students.size() -1 )}" th:if="${students.size() > 0}"> <!-- style="cursor: pointer" -->
             <tr class="course-list-item table-item">
                 <th scope="row" th:text="${i+1}"></th>
-                <td><a class="table-row-link" th:href="@{'students_profile/'} + ${students.get(i).getId()}"
+                <td><a class="table-row-link" th:href="@{'student_profile/'} + ${students.get(i).getId()}"
                        th:text="${students.get(i).getName()}"/></td>
-                <td><a class="table-row-link" th:href="@{'students_profile/'} + ${students.get(i).getId()}"
+                <td><a class="table-row-link" th:href="@{'student_profile/'} + ${students.get(i).getId()}"
                        th:text="${students.get(i).getSurname()}"/></td>
-                <td><a class="table-row-link" th:href="@{'students_profile/'} + ${students.get(i).getId()}"
+                <td><a class="table-row-link" th:href="@{'student_profile/'} + ${students.get(i).getId()}"
                        th:text="${students.get(i).getLastname()}"/></td>
             </tr>
         </th:block>

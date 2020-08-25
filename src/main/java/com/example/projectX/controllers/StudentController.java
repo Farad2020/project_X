@@ -101,7 +101,7 @@ public class StudentController {
             model.addAttribute("courses", courses);
             model.addAttribute("course", course);
             model.addAttribute("schedule_map", scheduleMap);
-            return "schedule";
+            return "student-schedule-page";
         }else{
             return "error-page";
         }
@@ -118,7 +118,7 @@ public class StudentController {
             List<Course> courses = companyService.getAllStudentCourses( ((UserStudent) user).getId() );
             model.addAttribute("courses", courses);
             model.addAttribute("schedule_map", scheduleMap);
-            return "student-schedule-page";
+            return "schedule";
         }else{
             return "error-page";
         }
