@@ -1,0 +1,16 @@
+.login-form-wrapper{
+     text-align: center;
+      justify-content: center;
+      align-items: center;
+}
+
+.admin-form{
+      display: flex;
+    display: inline-block;
+    margin: auto;
+}
+
+a{
+    text-decoration: none;
+
+}
