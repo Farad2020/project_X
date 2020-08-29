@@ -1,0 +1,22 @@
+Pages with errors:
+
+Teacher Courses
+
+Teacher Schedule
+
+Teacher Students
+
+
+
+Pages for reconstruction:
+FOOTER!!!!!!!!
+
+All 3 account pages(after media files update)
+
+Post Task And Main pages after media update
+
+Filter in student-teachers page
+
+Filter in Student courses page
+
+Attendance

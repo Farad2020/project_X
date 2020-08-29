@@ -22,21 +22,18 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Course, Ascending
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false"
+                       th:text=" ${course}? ${'Выбранный Курс: ' + course.getNameSnippet()} : ${'Выбранный Курс: Все'}">
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="#">Course, Ascending</a>
-                        <a class="dropdown-item" href="#">Course, Descending</a>
-                        <a class="dropdown-item" href="#">Alphabet, Ascending</a>
-                        <a class="dropdown-item" href="#">Alphabet, Descending</a>
+                        <a class="dropdown-item" th:href="@{'~/teacher_students/'}">Все</a>
+                        <th:block th:each="courseX:${courses}">
+                            <a class="dropdown-item" th:href="@{'~/teacher_students/'} + ${courseX.getId()}" th:text="${courseX.getName()}"></a>
+                        </th:block>
                     </div>
                 </li>
             </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>
         </div>
     </nav>
 
@@ -56,11 +53,11 @@
         <th:block th:each="i :  ${#numbers.sequence(0, students.size() -1 )}" th:if="${students.size() > 0}"> <!-- style="cursor: pointer" -->
             <tr class="course-list-item table-item">
                 <th scope="row" th:text="${i+1}"></th>
-                <td><a class="table-row-link" th:href="@{'teacher_students/'} + ${students.get(i).getId()}"
+                <td><a class="table-row-link" th:href="@{'~/student_profile/'} + ${students.get(i).getId()}"
                        th:text="${students.get(i).getName()}"/></td>
-                <td><a class="table-row-link" th:href="@{'teacher_students/'} + ${students.get(i).getId()}"
+                <td><a class="table-row-link" th:href="@{'~/student_profile/'} + ${students.get(i).getId()}"
                        th:text="${students.get(i).getSurname()}"/></td>
-                <td><a class="table-row-link" th:href="@{'teacher_students/'} + ${students.get(i).getId()}"
+                <td><a class="table-row-link" th:href="@{'~/student_profile/'} + ${students.get(i).getId()}"
                        th:text="${students.get(i).getLastname()}"/></td>
             </tr>
         </th:block>

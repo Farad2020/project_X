@@ -152,7 +152,7 @@ public class CompanyController {
         return "error-page";
     }
 
-    @GetMapping("company_courses")
+    @GetMapping("courses")
     public String companyCourses(Model model,
                                  @AuthenticationPrincipal UserDetails user) {
         userIdentifier.getUserClass(user, model);
@@ -164,7 +164,7 @@ public class CompanyController {
         return "error-page";
     }
 
-    @GetMapping("company_courses/{course_id}")
+    @GetMapping("courses/{course_id}")
     public String getCompanyCourseById(Model model,
                                  @PathVariable (name = "course_id") UUID course_id,
                                  @AuthenticationPrincipal UserDetails user) {
@@ -187,20 +187,36 @@ public class CompanyController {
                 model.addAttribute("not_participating_students", notParticipatingStudents);
                 return "company-course-page";
             }
-        }
-        return "error-page";
-    }
+        } else if( model.getAttribute("isStudent") != null ){
 
-    @GetMapping("/students_profile/{student_id}")
-    public String getUserProfile(Model model,
-                              @PathVariable (name = "student_id") UUID student_id,
-                              @AuthenticationPrincipal UserDetails user) {
-        userIdentifier.getUserClass(user, model);
-        if (model.getAttribute("isManagementStaff") != null) {
-            Optional<UserStudent> student = companyService.getStudentById(student_id);
-            student.ifPresent(userStudent -> model.addAttribute("student", userStudent));
-            /* if student is not the current user validation!!! And user is manager */
-            return "student-account-page";
+            Optional<Course> course = companyService.getCourseById(course_id);
+            if (course.isPresent() && course.get().getCompanyId().equals( ((UserStudent) user).getCompanyId() ) ) {
+
+                Map<Integer, List<Schedule>> scheduleMap = companyService.getMappedCourseSchedule(course_id);
+                model.addAttribute("course", course.get());
+                Optional<UserTeacher> teacher = companyService.getTeacherById(course.get().getTeacherId());
+                teacher.ifPresent(userTeacher -> {
+                    model.addAttribute("teacher", userTeacher);
+                    model.addAttribute("company_id", userTeacher.getCompanyId());
+                });
+                model.addAttribute("schedule_map", scheduleMap);
+                return "company-course-page";
+            }
+        }else if( model.getAttribute("isTeacher") != null ){
+
+            Optional<Course> course = companyService.getCourseById(course_id);
+            if (course.isPresent() && course.get().getCompanyId().equals( ((UserTeacher) user).getCompanyId() ) ) {
+
+                Map<Integer, List<Schedule>> scheduleMap = companyService.getMappedCourseSchedule(course_id);
+                model.addAttribute("course", course.get());
+                Optional<UserTeacher> teacher = companyService.getTeacherById(course.get().getTeacherId());
+                teacher.ifPresent(userTeacher -> {
+                    model.addAttribute("teacher", userTeacher);
+                    model.addAttribute("company_id", userTeacher.getCompanyId());
+                });
+                model.addAttribute("schedule_map", scheduleMap);
+                return "company-course-page";
+            }
         }
         return "error-page";
     }

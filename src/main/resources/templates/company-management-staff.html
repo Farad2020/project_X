@@ -39,36 +39,6 @@
             </form>
         </div>
     </nav>
-
-    <table class="table">
-        <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Name</th>
-            <th scope="col">Surname</th>
-            <th scope="col">Lastname</th>
-        </tr>
-        </thead>
-        <tbody>
-        <th:block th:each="i :  ${#numbers.sequence(0, managementStaffs.size() -1 )}">
-            <tr class="course-list-item table-item">
-                <th scope="row"  th:text="${i+1}"></th>
-                <td>
-                    <a class="table-row-link" th:href="@{'company_management_staff/'} + ${managementStaffs.get(i).getId()}"
-                       th:text="${managementStaffs.get(i).getName()}"></a>
-                </td>
-                <td>
-                    <a class="table-row-link" th:href="@{'company_management_staff/'} + ${managementStaffs.get(i).getId()}"
-                       th:text="${managementStaffs.get(i).getSurname()}"></a>
-                </td>
-                <td>
-                    <a class="table-row-link" th:href="@{'company_management_staff/'} + ${managementStaffs.get(i).getId()}"
-                       th:text="${managementStaffs.get(i).getLastname()}"></a>
-                </td>
-            </tr>
-        </th:block>
-        </tbody>
-    </table>
 </div>
 
 <footer th:insert="blocks/footer :: footer"></footer>

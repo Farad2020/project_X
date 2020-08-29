@@ -23,21 +23,31 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Course: None
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button"
+                       data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false"
+                       th:text="${course}? ${'Курс: ' + course.getNameSnippet()}: ${'Курс: Все'}">
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="#">None</a>
-                        <a class="dropdown-item" href="#">Alphabet, Ascending</a>
-                        <a class="dropdown-item" href="#">Alphabet, Descending</a>
+                        <!-- Different link list-->
+                        <th:block th:if="${isStudent != null}">
+                            <a class="dropdown-item" th:href="@{'~/student_schedule/'}">Все</a>
+                            <th:block th:each="course:${courses}">
+                                <a class="dropdown-item" th:href="@{'~/student_schedule/'} + ${course.getId()}"
+                                   th:text="${course.getName()}"></a>
+                            </th:block>
+                        </th:block>
+
+                        <th:block th:if="${isTeacher != null}">
+                            <a class="dropdown-item" th:href="@{'~/teacher_schedule/'}">Все</a>
+                            <th:block th:each="course:${courses}">
+                                <a class="dropdown-item" th:href="@{'~/teacher_schedule/'} + ${course.getId()}"
+                                   th:text="${course.getName()}"></a>
+                            </th:block>
+                        </th:block>
                     </div>
                 </li>
             </ul>
-
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>
         </div>
     </nav>
 
@@ -48,8 +58,8 @@
         <a class="list-item-link" th:href="@{generic_course}"><li class="course-list-item">Course 3</li></a>
         <a class="list-item-link" th:href="@{generic_course}"><li class="course-list-item">Course 4</li></a>
     </ul> -->
-    <p th:if="courses == null"> Не удалось найти записанные курсы. </p>
-    <table th:if="courses != null" class="table">
+    <p th:if="${courses == null}"> Не удалось найти записанные курсы. </p>
+    <table th:if="${courses != null}" class="table">
         <thead>
         <tr>
             <th scope="col">#</th>
@@ -63,15 +73,15 @@
             <tr class="course-list-item table-item">
                 <th scope="row"  th:text="${i+1}"></th>
                 <td>
-                    <a class="table-row-link" th:href="@{'student_courses/'} + ${courses.get(i).getId()}"
+                    <a class="table-row-link" th:href="@{'courses/'} + ${courses.get(i).getId()}"
                        th:text="${courses.get(i).getName()}"/>
                 </td>
                 <td >
-                    <a class="table-row-link" th:href="@{'student_courses/'} + ${courses.get(i).getId()}"
+                    <a class="table-row-link" th:href="@{'courses/'} + ${courses.get(i).getId()}"
                        th:text="${courses.get(i).getStartDate()}"/>
                 </td>
                 <td>
-                    <a class="table-row-link" th:href="@{'student_courses/'} + ${courses.get(i).getId()}"
+                    <a class="table-row-link" th:href="@{'courses/'} + ${courses.get(i).getId()}"
                        th:text="${courses.get(i).isActive()}"/>
                 </td>
             </tr>

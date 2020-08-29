@@ -1,11 +1,22 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
     <title>Title</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/admin-style.css}"/>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" href="/css/style.css" />
+
+    <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet" crossorigin="anonymous">
+
+
 </head>
 <body>
-    <form action="/$2a$10$HZR3IGneje95jJVEomN.vuEKlxwRt6Tn5oeLEXySZXh7L/WLiX6fm/login" method="POST">
+    <div class="login-form-wrapper">
+    <form class="admin-form" action="/$2a$10$HZR3IGneje95jJVEomN.vuEKlxwRt6Tn5oeLEXySZXh7L/WLiX6fm/login" method="POST" >
         <div>
             <input type="text" name="username" placeholder="Login" required="">
         </div>
@@ -16,5 +27,6 @@
             <input type="submit">
         </div>
     </form>
+    </div>
 </body>
 </html>

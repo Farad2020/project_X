@@ -53,15 +53,17 @@ public class AuthenticationController {
     public String home(Model model,
                        @AuthenticationPrincipal UserDetails user){
         userIdentifier.getUserClass(user,model);
-        if( (Boolean) model.getAttribute("isStudent") != null ){
+        if( model.getAttribute("isStudent") != null ){
             return "student-home";
-        }else if ( (Boolean) model.getAttribute("isManagementStaff") != null ){
+        }else if ( model.getAttribute("isManagementStaff") != null ){
             return "company-home";
-        }else if ( (Boolean) model.getAttribute("isTeacher") != null ){
+        }else if ( model.getAttribute("isTeacher") != null ){
             return "teacher-home";
         }
         return "error-page";
 
     }
+
+
 
 }

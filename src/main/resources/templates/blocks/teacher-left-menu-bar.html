@@ -7,7 +7,7 @@
                 </li>
             </a>
 
-            <a class="place_box" th:href="@{~/teacher_account}">
+            <a class="place_box" th:href="@{~/teacher_profile/} + ${current_user.getId()}">
                 <li class="list-group-item">
                     <h5 class="info-bar-text">Мой Профиль</h5>
                 </li>

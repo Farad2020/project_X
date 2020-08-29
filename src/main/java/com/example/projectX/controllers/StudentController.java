@@ -1,9 +1,7 @@
 package com.example.projectX.controllers;
 
 import com.example.projectX.helper.UserIdentifier;
-import com.example.projectX.models.Course;
-import com.example.projectX.models.UserStudent;
-import com.example.projectX.models.UserTeacher;
+import com.example.projectX.models.*;
 import com.example.projectX.services.CompanyService;
 import com.example.projectX.services.MediaFilesService;
 import com.example.projectX.services.UserAuthenticationService;
@@ -23,7 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
+import java.util.Map;
 import java.util.UUID;
 
 @Controller
@@ -43,33 +41,34 @@ public class StudentController {
         this.mediaFilesService = mediaFilesService;
     }
 
-    @GetMapping("/student_profile")
-    public String userProfile(Model model,
-                              @AuthenticationPrincipal UserDetails user){
+    @GetMapping("/student_profile/{student_id}")
+    public String differentStudentProfile(Model model,
+                                          @PathVariable(name = "student_id") UUID student_id,
+                                          @AuthenticationPrincipal UserDetails user){
         userIdentifier.getUserClass(user,model);
-        if(model.getAttribute("isStudent") != null) {
-            Resource file = mediaFilesService.getStudentProfilePicture((UserStudent) model.getAttribute("student"));
-            try {
-                if (file != null) {
-                    //System.out.println(Arrays.toString(file.getInputStream().readAllBytes()));
-                    //model.addAttribute("profile_picture", file.getURL());
-                    System.out.println(file.contentLength());
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+        if( model.getAttribute("isStudent") != null && ((UserStudent)user).getCompanyId().equals( companyService.getStudentById(student_id).get().getCompanyId() ) ){
+            if( ((UserStudent)user).getId().equals(student_id) ){
+                model.addAttribute("isOwner", true);
+                model.addAttribute("student", (UserStudent)user);
+            }else{
+                model.addAttribute("student", companyService.getStudentById(student_id).get());
             }
             return "student-account-page";
+        }else if( (model.getAttribute("isManagementStaff") != null &&
+                        ((ManagementStaff)user).getCompanyId().equals( companyService.getStudentById(student_id).get().getCompanyId() ) )||
+                (model.getAttribute("isTeacher") != null &&
+                        ((UserTeacher)user).getCompanyId().equals( companyService.getStudentById(student_id).get().getCompanyId() ) )){
+            model.addAttribute("student", companyService.getStudentById(student_id).get());
+            return "student-account-page";
         }
-        else {
-            return "error-page";
-        }
+        return "error-page";
     }
 
     @GetMapping("student_courses")
     public String userCourses(Model model,
                               @AuthenticationPrincipal UserDetails user) {
         userIdentifier.getUserClass(user,model);
-        if( (Boolean) model.getAttribute("isStudent")  ){
+        if( model.getAttribute("isStudent") != null ){
             List<Course> courses = companyService.getAllStudentCourses(  ((UserStudent) user).getId() );
             model.addAttribute("courses", courses );
             return "student-courses-page";
@@ -78,36 +77,12 @@ public class StudentController {
         }
     }
 
-    /* !!!!!!!!!! A BIT OF REDESIGN FOR PERSONAL COURSE PAGES WILL REQUIRED !!!!!!!!!  */
-    @GetMapping("student_courses/{course_id}")
-    public String getStudentCourseById(Model model,
-                                       @PathVariable(name = "course_id") UUID course_id,
-                                       @AuthenticationPrincipal UserDetails user) {
-        userIdentifier.getUserClass(user,model);
-        if( (Boolean) model.getAttribute("isStudent")  ){
-
-            Optional<Course> course = companyService.getCourseById(course_id);
-            if (course.isPresent() && course.get().getCompanyId().equals( ((UserStudent) user).getCompanyId() ) ) {
-
-                model.addAttribute("course", course.get());
-                Optional<UserTeacher> teacher = companyService.getTeacherById(course.get().getTeacherId());
-                teacher.ifPresent(userTeacher -> model.addAttribute("teacher", userTeacher));
-                return "company-course-page";
-            }else{
-                return "error-page";
-            }
-        }else{
-            return "error-page";
-        }
-    }
-
-
     @GetMapping("student_teachers")
     public String userTeachers(Model model,
                                @AuthenticationPrincipal UserDetails user) {
         userIdentifier.getUserClass(user,model);
 
-        if( (Boolean) model.getAttribute("isStudent")  ){
+        if( model.getAttribute("isStudent") != null  ){
             List<UserTeacher> teachers = companyService.getAllStudentTeachers( ((UserStudent) user).getId() );
             model.addAttribute("teachers", teachers );
             return "student-teachers-page";
@@ -116,36 +91,46 @@ public class StudentController {
         }
     }
 
-    @GetMapping("student_teachers/{teacher_id}")
-    public String getStudentTeacherById(Model model,
-                               @PathVariable(name = "teacher_id") UUID teacher_id,
+
+
+    /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  */
+
+    @GetMapping("student_schedule/{course_id}")
+    public String studentCourseSchedule(Model model,
+                               @PathVariable(name = "course_id") UUID course_id,
                                @AuthenticationPrincipal UserDetails user) {
         userIdentifier.getUserClass(user,model);
 
         if( model.getAttribute("isStudent") != null ){
 
-            Optional<UserTeacher> teacher = companyService.getTeacherById(teacher_id);
-
-            if (teacher.isPresent() && teacher.get().getCompanyId().equals( ((UserStudent) user).getCompanyId() ) ) {
-
-                model.addAttribute("teacher", teacher.get());
-                // courses means all courses related to chosen teacher
-                List<Course> courses = companyService.getAllTeacherCourses(teacher_id);
-                System.out.println( courses );
-                /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! null exception !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  */
-                /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  Menu bar dissappeared !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  */
-                model.addAttribute("courses", courses);
-                return "teacher-account-page";
-            }else{
-                return "error-page";
-            }
+            List<Course> courses = companyService.getAllStudentCourses( ((UserStudent)user).getId() );
+            Course course = companyService.getCourseById(course_id).get();
+            Map<Integer, List<Schedule>> scheduleMap = companyService.getMappedCourseSchedule(course_id);
+            model.addAttribute("courses", courses);
+            model.addAttribute("course", course);
+            model.addAttribute("schedule_map", scheduleMap);
+            return "student-schedule-page";
         }else{
             return "error-page";
         }
     }
 
+    @GetMapping("student_schedule")
+    public String studentFullSchedule(Model model,
+                               @AuthenticationPrincipal UserDetails user) {
+        userIdentifier.getUserClass(user,model);
 
-    /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  */
+        if( model.getAttribute("isStudent") != null ){
+
+            Map<Integer, List<Schedule>> scheduleMap = companyService.getMappedStudentSchedule( ((UserStudent) user).getId() );
+            List<Course> courses = companyService.getAllStudentCourses( ((UserStudent) user).getId() );
+            model.addAttribute("courses", courses);
+            model.addAttribute("schedule_map", scheduleMap);
+            return "schedule";
+        }else{
+            return "error-page";
+        }
+    }
 
     @GetMapping("student_attendance")
     public String userAttendance(Model model) {

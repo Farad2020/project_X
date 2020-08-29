@@ -21,13 +21,13 @@ public class UserIdentifier {
     public void getUserClass(UserDetails user, Model model){
         if( userAuthenticationService.getUserStudentByLogin(user.getUsername()).isPresent() ){
             model.addAttribute("isStudent", true);
-            model.addAttribute("student", (UserStudent)user);
+            model.addAttribute("current_user", (UserStudent)user);
         }else if( userAuthenticationService.getManagerStaffByLogin(user.getUsername()).isPresent() ){
             model.addAttribute("isManagementStaff", true);
-            model.addAttribute("manager", (ManagementStaff)user);
+            model.addAttribute("current_user", (ManagementStaff)user);
         }else if( userAuthenticationService.getUserTeacherByLogin(user.getUsername()).isPresent() ){
             model.addAttribute("isTeacher", true);
-            model.addAttribute("teacher", (UserTeacher)user);
+            model.addAttribute("current_user", (UserTeacher)user);
         }
     }
 }

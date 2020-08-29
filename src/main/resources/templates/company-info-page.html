@@ -23,7 +23,7 @@
 <div class="account-content">
     <div class="account-info-box">
         <div class="card" id="account-info-card">
-            <h5 class="company-name" th:text="'Название: ' + ${company.getName()}"><button type="button" class="btn btn-light">Edit</button></h5>
+            <h5 class="company-name" th:text="'Название: ' + ${company.getName()}"></h5><button type="button" class="btn btn-light">Edit</button>
             <p class="company-address" th:text="'Слоган: ' ">: + ${company.getSlogan()} Almost As Good As Eating Burgers When You're Hungry</p>
             <p th:text="'Описание: ' "> This is legit description of totally real company based on Mane.</p>
             <p class="company-phone" th:text="'Номер: ' + ${company.getTelephone()}">Номер: 8-800-555-3535(Легче позвонить чем у кого-то занимать!)</p>

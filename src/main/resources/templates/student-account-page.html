@@ -27,7 +27,7 @@
         <th:block th:if="${student.getProfileImageOid() != 0}">
             <img class="account-img" th:src="@{'~/student_profile_picture/'} + ${student.getId()}"><br>
         </th:block>
-        <button type="button" class="btn btn-default" id="edit-account-btn" onclick="showAdditionalEditInformation()">Edit</button>
+        <button th:if="${isOwner}" type="button" class="btn btn-default" id="edit-account-btn" onclick="showAdditionalEditInformation()">Edit</button>
     </div>
 
     <div class="account-info-box">
