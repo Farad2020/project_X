@@ -7,6 +7,8 @@ import org.postgresql.geometric.PGcircle;
 import org.postgresql.largeobject.LargeObject;
 import org.postgresql.largeobject.LargeObjectManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -882,7 +884,7 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
     }
 
     @Override
-    public boolean changeStudentProfilePicture(UUID studentId, MultipartFile image) {
+    public boolean changeStudentProfilePicture(UUID studentId, Resource image) {
         try {
             Connection connection = postgresDataSource.getHikariDataSource().getConnection();
             connection.setAutoCommit(false);
@@ -895,15 +897,16 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
             LargeObjectManager largeObjectManager = pgConnection.getLargeObjectAPI();
             long oid = largeObjectManager.createLO(LargeObjectManager.READ | LargeObjectManager.WRITE);
             LargeObject largeObject = largeObjectManager.open(oid, LargeObjectManager.WRITE);
-            byte[] buf = image.getBytes();
-            largeObject.write(buf);
+            byte[] buf = image.getInputStream().readAllBytes();
+            System.out.println(buf.length);
+            largeObject.write(buf, 0, buf.length);
             largeObject.close();
             final String sql = String.format("UPDATE User_Students SET " +
                     "user_student_profile_image = %d " +
                     "WHERE user_student_id = '%s';", oid, studentId);
             jdbcTemplate.execute(sql);
             connection.commit();
-            connection.setAutoCommit(true);
+//            connection.setAutoCommit(true);
             return true;
         } catch (IOException | SQLException e) {
             e.printStackTrace();
@@ -912,7 +915,7 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
     }
 
     @Override
-    public byte[] getStudentProfilePicture(UserStudent student) {
+    public Resource getStudentProfilePicture(UserStudent student) {
         try {
             Connection connection = postgresDataSource.getHikariDataSource().getConnection();
             connection.setAutoCommit(false);
@@ -925,12 +928,19 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
             }
 
             LargeObjectManager largeObjectManager = pgConnection.getLargeObjectAPI();
+            System.out.println(student.getProfileImageOid());
+            if (student.getProfileImageOid() == 0) {
+                return null;
+            }
             LargeObject largeObject = largeObjectManager.open(student.getProfileImageOid(), LargeObjectManager.READ);
-            byte[] buf = new byte[largeObject.size()];
-            largeObject.read(buf, 0, largeObject.size());
+//            byte[] buf = new byte[largeObject.size()];
+//            largeObject.read(buf, 0, largeObject.size());
+            ByteArrayResource byteArrayResource = new ByteArrayResource(largeObject.getInputStream().readAllBytes());
             largeObject.close();
-            return buf;
-        } catch (SQLException throwables) {
+            connection.commit();
+//            connection.setAutoCommit(true);
+            return byteArrayResource;
+        } catch (SQLException | IOException throwables) {
             throwables.printStackTrace();
             return null;
         }

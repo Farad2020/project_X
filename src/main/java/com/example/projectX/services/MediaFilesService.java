@@ -4,8 +4,8 @@ import com.example.projectX.dao.MediaFilesDao;
 import com.example.projectX.models.UserStudent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
@@ -19,11 +19,11 @@ public class MediaFilesService {
         this.mediaFilesDao = mediaFilesDao;
     }
 
-    public boolean changeStudentProfilePicture(UUID studentId, MultipartFile image) {
+    public boolean changeStudentProfilePicture(UUID studentId, Resource image) {
         return mediaFilesDao.changeStudentProfilePicture(studentId, image);
     }
 
-    public byte[] getStudentProfilePicture(UserStudent student) {
+    public Resource getStudentProfilePicture(UserStudent student) {
         return mediaFilesDao.getStudentProfilePicture(student);
     }
 }

@@ -6,17 +6,17 @@ import com.example.projectX.services.CompanyService;
 import com.example.projectX.services.MediaFilesService;
 import com.example.projectX.services.UserAuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.core.io.Resource;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
+import java.io.IOException;
+import java.util.*;
 
 @Controller
 @RequestMapping("/")
@@ -40,7 +40,16 @@ public class StudentController {
                               @AuthenticationPrincipal UserDetails user){
         userIdentifier.getUserClass(user,model);
         if(model.getAttribute("isStudent") != null) {
-            model.addAttribute("profile_picture", mediaFilesService.getStudentProfilePicture((UserStudent) model.getAttribute("student")));
+            Resource file = mediaFilesService.getStudentProfilePicture((UserStudent) model.getAttribute("student"));
+            try {
+                if (file != null) {
+                    //System.out.println(Arrays.toString(file.getInputStream().readAllBytes()));
+                    //model.addAttribute("profile_picture", file.getURL());
+                    System.out.println(file.);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             return "student-account-page";
         }
         else {
@@ -144,7 +153,7 @@ public class StudentController {
     public String changeProfilePicture(@RequestParam(name = "image") MultipartFile image,
                                        @RequestParam(name = "student_id") UUID studentId) {
         if (Objects.requireNonNull(image.getContentType()).contains("image")) {
-            boolean result = mediaFilesService.changeStudentProfilePicture(studentId, image);
+            boolean result = mediaFilesService.changeStudentProfilePicture(studentId, image.getResource());
             System.out.println(result);
         }
         return "redirect:/student_profile";
