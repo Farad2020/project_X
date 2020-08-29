@@ -21,7 +21,12 @@
 
 <div class="account-content">
     <div class="account-img-box">
-        <img class="account-img" src="/design-flow/avatars/avatar_cat.jpg"><br>
+        <th:block th:if="${student.getProfileImageOid() == 0}">
+            <img class="account-img" src="/design-flow/avatars/avatar_cat.jpg"><br>
+        </th:block>
+        <th:block th:if="${student.getProfileImageOid() != 0}">
+            <img class="account-img" th:src="@{'~/student_profile_picture/'} + ${student.getId()}"><br>
+        </th:block>
         <button type="button" class="btn btn-default" id="edit-account-btn" onclick="showAdditionalEditInformation()">Edit</button>
     </div>
 

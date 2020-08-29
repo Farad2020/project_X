@@ -898,7 +898,7 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
             long oid = largeObjectManager.createLO(LargeObjectManager.READ | LargeObjectManager.WRITE);
             LargeObject largeObject = largeObjectManager.open(oid, LargeObjectManager.WRITE);
             byte[] buf = image.getInputStream().readAllBytes();
-            System.out.println(buf.length);
+            //System.out.println(buf.length);
             largeObject.write(buf, 0, buf.length);
             largeObject.close();
             final String sql = String.format("UPDATE User_Students SET " +
@@ -906,7 +906,7 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
                     "WHERE user_student_id = '%s';", oid, studentId);
             jdbcTemplate.execute(sql);
             connection.commit();
-//            connection.setAutoCommit(true);
+            connection.setAutoCommit(true);
             return true;
         } catch (IOException | SQLException e) {
             e.printStackTrace();
@@ -938,7 +938,7 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
             ByteArrayResource byteArrayResource = new ByteArrayResource(largeObject.getInputStream().readAllBytes());
             largeObject.close();
             connection.commit();
-//            connection.setAutoCommit(true);
+            connection.setAutoCommit(true);
             return byteArrayResource;
         } catch (SQLException | IOException throwables) {
             throwables.printStackTrace();

@@ -1,22 +1,30 @@
 package com.example.projectX.controllers;
 
 import com.example.projectX.helper.UserIdentifier;
-import com.example.projectX.models.*;
+import com.example.projectX.models.Course;
+import com.example.projectX.models.UserStudent;
+import com.example.projectX.models.UserTeacher;
 import com.example.projectX.services.CompanyService;
 import com.example.projectX.services.MediaFilesService;
 import com.example.projectX.services.UserAuthenticationService;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.core.io.Resource;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.*;
+import java.io.InputStream;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/")
@@ -45,7 +53,7 @@ public class StudentController {
                 if (file != null) {
                     //System.out.println(Arrays.toString(file.getInputStream().readAllBytes()));
                     //model.addAttribute("profile_picture", file.getURL());
-                    System.out.println(file.);
+                    System.out.println(file.contentLength());
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -157,6 +165,16 @@ public class StudentController {
             System.out.println(result);
         }
         return "redirect:/student_profile";
+    }
+
+    @GetMapping("/student_profile_picture/{student_id}")
+    public void showStudentProfilePicture(@PathVariable(name = "student_id") UUID studentId,
+                                          HttpServletResponse response) throws IOException {
+        response.setContentType("image/jpeg");
+
+        Resource file = mediaFilesService.getStudentProfilePicture(companyService.getStudentById(studentId).get());
+        InputStream is = new ByteArrayInputStream(file.getInputStream().readAllBytes());
+        IOUtils.copy(is, response.getOutputStream());
     }
 
 }
