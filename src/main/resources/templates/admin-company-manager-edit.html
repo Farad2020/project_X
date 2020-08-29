@@ -107,6 +107,55 @@
             </select>
         </div>
         <div>
+            <p>is_able_to_delete_schedule</p>
+            <select name="is_able_to_delete_schedule">
+                <option value="1" th:selected="${manager.isAbleToDeleteSchedule()}">True</option>
+                <option value="0" th:selected="${!manager.isAbleToDeleteSchedule()}">False</option>
+            </select>
+        </div>
+        <div>
+            <p>is_able_to_add_schedule</p>
+            <select name="is_able_to_add_schedule">
+                <option value="1" th:selected="${manager.isAbleToAddSchedule()}">True</option>
+                <option value="0" th:selected="${!manager.isAbleToAddSchedule()}">False</option>
+            </select>
+        </div>
+        <div>
+            <p>is_able_to_edit_manager</p>
+            <select name="is_able_to_edit_manager">
+                <option value="1" th:selected="${manager.isAbleToEditManager()}">True</option>
+                <option value="0" th:selected="${!manager.isAbleToEditManager()}">False</option>
+            </select>
+        </div>
+        <div>
+            <p>is_able_to_edit_teacher</p>
+            <select name="is_able_to_edit_teacher">
+                <option value="1" th:selected="${manager.isAbleToEditTeacher()}">True</option>
+                <option value="0" th:selected="${!manager.isAbleToEditTeacher()}">False</option>
+            </select>
+        </div>
+        <div>
+            <p>is_able_to_edit_student</p>
+            <select name="is_able_to_edit_student">
+                <option value="1" th:selected="${manager.isAbleToEditStudent()}">True</option>
+                <option value="0" th:selected="${!manager.isAbleToEditStudent()}">False</option>
+            </select>
+        </div>
+        <div>
+            <p>is_able_to_edit_course</p>
+            <select name="is_able_to_edit_course">
+                <option value="1" th:selected="${manager.isAbleToEditCourse()}">True</option>
+                <option value="0" th:selected="${!manager.isAbleToEditCourse()}">False</option>
+            </select>
+        </div>
+        <div>
+            <p>is_able_to_edit_schedule</p>
+            <select name="is_able_to_edit_schedule">
+                <option value="1" th:selected="${manager.isAbleToEditSchedule()}">True</option>
+                <option value="0" th:selected="${!manager.isAbleToEditSchedule()}">False</option>
+            </select>
+        </div>
+        <div>
             <input type="hidden" th:value="${manager.getId()}" name="manager_id">
         </div>
         <div>

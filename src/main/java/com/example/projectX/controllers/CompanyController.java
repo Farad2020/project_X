@@ -1,5 +1,6 @@
 package com.example.projectX.controllers;
 
+import com.example.projectX.helper.UserIdentifier;
 import com.example.projectX.models.*;
 import com.example.projectX.services.CompanyService;
 import com.example.projectX.services.UserAuthenticationService;
@@ -8,70 +9,92 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 @RequestMapping("/")
 public class CompanyController {
     private final CompanyService companyService;
     private final UserAuthenticationService userAuthenticationService;
+    private final UserIdentifier userIdentifier;
 
     @Autowired
-    public CompanyController(CompanyService companyService, UserAuthenticationService userAuthenticationService) {
+    public CompanyController(CompanyService companyService, UserAuthenticationService userAuthenticationService, UserIdentifier userIdentifier) {
         this.companyService = companyService;
         this.userAuthenticationService = userAuthenticationService;
+        this.userIdentifier = userIdentifier;
     }
-
-
     //Компании
 
     @GetMapping("/company_home")
-    public String companyHome(Model model) {
-        return "company-home";
+    public String companyHome(Model model,
+                              @AuthenticationPrincipal UserDetails user) {
+        userIdentifier.getUserClass(user, model);
+        if (model.getAttribute("isManagementStaff") != null) {
+            return "company-home";
+        }
+        return "error-page";
     }
 
     @GetMapping("company_info")
     public String companyInfo(Model model,
-                              @AuthenticationPrincipal ManagementStaff manager) {
-        Company company = companyService.getCompanyById(manager.getCompanyId()).get();
-        //Posts
-        model.addAttribute("company", company );
-        return "company-info-page";
+                              @AuthenticationPrincipal UserDetails user) {
+        userIdentifier.getUserClass(user, model);
+        if (model.getAttribute("isManagementStaff") != null) {
+            Optional<Company> company = companyService.getCompanyById(((ManagementStaff) user).getCompanyId());
+            if (company.isPresent()) {
+                //TODO get posts from DB
+                model.addAttribute("company", company.get());
+            }
+            return "company-info-page";
+        }
+        return "error-page";
     }
 
     @GetMapping("company_management_stuff")
     public String companyManagementStuff(Model model,
-                                         @AuthenticationPrincipal ManagementStaff manager) {
-        List<ManagementStaff> managementStaffs = companyService.selectAllCompanyManagers( companyService.getCompanyById(manager.getCompanyId()).get() );
-
-        model.addAttribute("managementStaffs", managementStaffs );
-
-        return "company-management-staff";
+                                         @AuthenticationPrincipal UserDetails user) {
+        userIdentifier.getUserClass(user, model);
+        if (model.getAttribute("isManagementStaff") != null) {
+            Optional<Company> company = companyService.getCompanyById(((ManagementStaff) user).getCompanyId());
+            if (company.isPresent()) {
+                //TODO get posts from DB
+                List<ManagementStaff> managementStaffs = companyService.selectAllCompanyManagers(company.get());
+                model.addAttribute("managementStaffs", managementStaffs );
+                model.addAttribute("company", company.get());
+            }
+            return "company-management-staff";
+        }
+        return "error-page";
     }
 
     @GetMapping("company_posts")
-    public String companyPosts(Model model) {
-        return "company-posts-page";
+    public String companyPosts(Model model,
+                               @AuthenticationPrincipal UserDetails user) {
+        userIdentifier.getUserClass(user, model);
+        if (model.getAttribute("isManagementStaff") != null) {
+            //TODO get posts from DB
+            return "company-posts-page";
+        }
+        return "error-page";
     }
 
 
     @GetMapping("company_students")
     public String companyStudents(Model model,
-                                  @AuthenticationPrincipal ManagementStaff manager) {
-        List<UserStudent> students = companyService.getAllCompanyStudents(manager.getCompanyId());
-        //Sorting by name currently; Later variations should be added!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        Comparator<UserStudent> compareByName = Comparator.comparing(UserStudent::getName);
-        Collections.sort(students, compareByName);
-
-        model.addAttribute("students", students );
-        return "company-students";
+                                  @AuthenticationPrincipal UserDetails user) {
+        userIdentifier.getUserClass(user, model);
+        if (model.getAttribute("isManagementStaff") != null) {
+            List<UserStudent> students = companyService.getAllCompanyStudents(((ManagementStaff)user).getCompanyId());
+            //Sorting by name currently; Later variations should be added!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            Comparator<UserStudent> compareByName = Comparator.comparing(UserStudent::getName);
+            students.sort(compareByName);
+            model.addAttribute("students", students );
+            return "company-students";
+        }
+        return "error-page";
     }
 
     /*
@@ -99,11 +122,14 @@ public class CompanyController {
 
     @GetMapping("company_students_filtered")
     public String companyStudentsFiltered(Model model,
-                                  @AuthenticationPrincipal ManagementStaff manager) {
-        List<UserStudent> students = companyService.getAllCompanyStudents(manager.getCompanyId());
-
-        model.addAttribute("students", students );
-        return "company-students-filtered";
+                                  @AuthenticationPrincipal UserDetails user) {
+        userIdentifier.getUserClass(user, model);
+        if (model.getAttribute("isManagementStaff") != null) {
+            List<UserStudent> students = companyService.getAllCompanyStudents(((ManagementStaff)user).getCompanyId());
+            model.addAttribute("students", students );
+            return "company-students-filtered";
+        }
+        return "error-page";
     }
 
     /*
@@ -116,55 +142,125 @@ public class CompanyController {
 
     @GetMapping("company_teachers")
     public String companyTeachers(Model model,
-                                  @AuthenticationPrincipal ManagementStaff manager) {
-
-        List<UserTeacher> teachers = companyService.getAllCompanyTeachers(manager.getCompanyId());
-
-        model.addAttribute("teachers", teachers );
-        return "company-teachers";
+                                  @AuthenticationPrincipal UserDetails user) {
+        userIdentifier.getUserClass(user, model);
+        if (model.getAttribute("isManagementStaff") != null) {
+            List<UserTeacher> teachers = companyService.getAllCompanyTeachers(((ManagementStaff)user).getCompanyId());
+            model.addAttribute("teachers", teachers );
+            return "company-teachers";
+        }
+        return "error-page";
     }
 
     @GetMapping("company_courses")
     public String companyCourses(Model model,
-                                 @AuthenticationPrincipal ManagementStaff manager) {
-
-        List<Course> courses = companyService.getAllCompanyCourses(manager.getCompanyId());
-
-        model.addAttribute("courses", courses );
-        return "company-courses";
+                                 @AuthenticationPrincipal UserDetails user) {
+        userIdentifier.getUserClass(user, model);
+        if (model.getAttribute("isManagementStaff") != null) {
+            List<Course> courses = companyService.getAllCompanyCourses(((ManagementStaff)user).getCompanyId());
+            model.addAttribute("courses", courses );
+            return "company-courses";
+        }
+        return "error-page";
     }
 
     @GetMapping("company_courses/{course_id}")
     public String getCompanyCourseById(Model model,
                                  @PathVariable (name = "course_id") UUID course_id,
-                                 @AuthenticationPrincipal ManagementStaff manager) {
+                                 @AuthenticationPrincipal UserDetails user) {
+        userIdentifier.getUserClass(user, model);
+        if (model.getAttribute("isManagementStaff") != null) {
+            Optional<Course> course = companyService.getCourseById(course_id);
+            if (course.isPresent()) {
+                Optional<UserTeacher> userTeacher = companyService.getTeacherById(course.get().getTeacherId());
+                Map<Integer, List<Schedule>> scheduleMap = companyService.getMappedCourseSchedule(course_id);
+                List<UserStudent> participatingStudents = companyService.getAllStudentsOfCourse(course_id);
+                List<UserStudent> notParticipatingStudents = companyService.getAllCompanyStudentsThatNotInCourse(course.get().getCompanyId(), course_id);
+                model.addAttribute("course", course.get());
+                userTeacher.ifPresent(teacher -> {
+                    model.addAttribute("teacher", teacher);
+                    model.addAttribute("company_id", teacher.getCompanyId());
 
-        Course course = companyService.getCourseById(manager.getCompanyId()).get();
-        UserTeacher teacher = companyService.getTeacherById(course.getTeacherId()).get();
-
-        model.addAttribute("course", course );
-        model.addAttribute("teacher", teacher );
-        return "company-course_page";
+                });
+                model.addAttribute("schedule_map", scheduleMap);
+                model.addAttribute("participating_students", participatingStudents);
+                model.addAttribute("not_participating_students", notParticipatingStudents);
+                return "company-course-page";
+            }
+        }
+        return "error-page";
     }
 
     @GetMapping("/students_profile/{student_id}")
     public String getUserProfile(Model model,
                               @PathVariable (name = "student_id") UUID student_id,
-                              @AuthenticationPrincipal User user){
-        UserStudent student = companyService.getStudentById(student_id).get();
-        model.addAttribute("student", student );
-
-        /* if student is not the current user validation!!! And user is manager */
-        return "student-account-page";
+                              @AuthenticationPrincipal UserDetails user) {
+        userIdentifier.getUserClass(user, model);
+        if (model.getAttribute("isManagementStaff") != null) {
+            Optional<UserStudent> student = companyService.getStudentById(student_id);
+            student.ifPresent(userStudent -> model.addAttribute("student", userStudent));
+            /* if student is not the current user validation!!! And user is manager */
+            return "student-account-page";
+        }
+        return "error-page";
     }
 
     @GetMapping("/teachers_profile/{teacher_id}")
     public String getTeacherProfile(Model model,
                               @PathVariable (name = "teacher_id") UUID teacher_id,
                               @AuthenticationPrincipal UserDetails user){
-        UserTeacher teacher = companyService.getTeacherById(teacher_id).get();
-        model.addAttribute("teacher", teacher );
-        return "teacher-account-page";
+        userIdentifier.getUserClass(user, model);
+        if (model.getAttribute("isManagementStaff") != null) {
+            Optional<UserTeacher> teacher = companyService.getTeacherById(teacher_id);
+            teacher.ifPresent(userTeacher -> {
+                model.addAttribute("teacher", userTeacher);
+                model.addAttribute("courses", companyService.getAllTeacherCourses(userTeacher.getId()));
+            });
+            return "teacher-account-page";
+        }
+        return "error-page";
+    }
+
+    @GetMapping("/company_management_staff/{management_staff_id}")
+    public String getManagementStaffProfile(Model model,
+                                            @PathVariable(name = "management_staff_id") UUID managementStaffId,
+                                            @AuthenticationPrincipal UserDetails user) {
+        userIdentifier.getUserClass(user, model);
+        if (model.getAttribute("isManagementStaff") != null) {
+            Optional<ManagementStaff> managementStaff = companyService.getManagerById(managementStaffId);
+            managementStaff.ifPresent(staff -> model.addAttribute("manager", staff));
+            return "management-staff-page-for-one";
+        }
+        return "error-page";
+    }
+
+    @GetMapping("/company_courses/{course_id}/delete_schedule/{schedule_id}")
+    public String deleteScheduleFromCourse(@PathVariable(name = "course_id") UUID courseId,
+                                           @PathVariable(name = "schedule_id") UUID scheduleId,
+                                           @AuthenticationPrincipal UserDetails user,
+                                           Model model) {
+        userIdentifier.getUserClass(user, model);
+        if (model.getAttribute("isManagementStaff") != null) {
+            ManagementStaff managementStaff = (ManagementStaff) user;
+            if (managementStaff.getRole() == 1 || managementStaff.isAbleToDeleteSchedule()) {
+                companyService.deleteScheduleFromCourse(scheduleId);
+            } else {
+                model.addAttribute("permission_error", true);
+            }
+            return "redirect:/company_courses/" + courseId;
+        }
+        return "error-page";
+    }
+
+    @PostMapping("add_schedule_to_course")
+    public String addScheduleToCourse(@RequestParam(name = "start_time") String startTime,
+                                      @RequestParam(name = "end_time") String endTime,
+                                      @RequestParam(name = "week_day") String weekDay,
+                                      @RequestParam(name = "course_id") UUID courseId,
+                                      @RequestParam(name = "company_id") UUID companyId) {
+        Schedule schedule = new Schedule(UUID.randomUUID(), startTime, endTime, weekDay, courseId);
+        boolean result = companyService.addScheduleToCourse(schedule, courseId);
+        return "redirect:/company_courses/" + courseId;
     }
 
 }

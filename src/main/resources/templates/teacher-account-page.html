@@ -46,7 +46,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <th:block th:each="i :  ${#numbers.sequence(0, courses.size() -1 )}" th:if="${courses.size() > 0}" >
+                <th:block th:each="i :  ${#numbers.sequence(0, courses.size() -1 )}" >
                     <tr class="course-list-item table-item">
                         <th scope="row"  th:text="${i+1}"></th>
                         <td>

@@ -1,26 +1,37 @@
 package com.example.projectX.dao;
 
+import com.example.projectX.datasource.PostgresDataSource;
 import com.example.projectX.models.*;
+import org.postgresql.PGConnection;
+import org.postgresql.geometric.PGcircle;
+import org.postgresql.largeobject.LargeObject;
+import org.postgresql.largeobject.LargeObjectManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.*;
 
 @Repository("postgres")
-public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminDao {
+public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminDao, MediaFilesDao {
 
     private final JdbcTemplate jdbcTemplate;
     private final PasswordEncoder passwordEncoder;
+    private final PostgresDataSource postgresDataSource;
 
     @Autowired
-    public ApplicationDataAccessService(JdbcTemplate jdbcTemplate, PasswordEncoder passwordEncoder) {
+    public ApplicationDataAccessService(JdbcTemplate jdbcTemplate, PasswordEncoder passwordEncoder, PostgresDataSource postgresDataSource) {
         this.jdbcTemplate = jdbcTemplate;
         this.passwordEncoder = passwordEncoder;
+        this.postgresDataSource = postgresDataSource;
     }
 
     @Override
@@ -142,7 +153,14 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
             boolean isAbleToAddStudent = resultSet.getBoolean("is_able_to_add_student");
             boolean isAbleToDeleteCourse = resultSet.getBoolean("is_able_to_delete_course");
             boolean isAbleToAddCourse = resultSet.getBoolean("is_able_to_add_course");
-            return new ManagementStaff(id_, name, surname, lastname, login_, password, email, telephone, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled, companyId, role, isAbleToDeleteManager, isAbleToDeleteTeacher, isAbleToDeleteStudent, isAbleToAddManager, isAbleToAddTeacher, isAbleToAddStudent, isAbleToDeleteCourse, isAbleToAddCourse);
+            boolean isAbleToDeleteSchedule = resultSet.getBoolean("is_able_to_delete_schedule");
+            boolean isAbleToAddSchedule = resultSet.getBoolean("is_able_to_add_schedule");
+            boolean isAbleToEditManagement = resultSet.getBoolean("is_able_to_edit_manager");
+            boolean isAbleToEditTeacher = resultSet.getBoolean("is_able_to_edit_teacher");
+            boolean isAbleToEditStudent = resultSet.getBoolean("is_able_to_edit_student");
+            boolean isAbleToEditCourse = resultSet.getBoolean("is_able_to_edit_course");
+            boolean isAbleToEditSchedule = resultSet.getBoolean("is_able_to_edit_schedule");
+            return new ManagementStaff(id_, name, surname, lastname, login_, password, email, telephone, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled, companyId, role, isAbleToDeleteManager, isAbleToDeleteTeacher, isAbleToDeleteStudent, isAbleToAddManager, isAbleToAddTeacher, isAbleToAddStudent, isAbleToDeleteCourse, isAbleToAddCourse, isAbleToDeleteSchedule, isAbleToAddSchedule, isAbleToEditManagement, isAbleToEditTeacher, isAbleToEditStudent, isAbleToEditCourse, isAbleToEditSchedule);
         }));
         return managers.stream().findFirst();
     }
@@ -185,11 +203,12 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
             if (resultSet.getString("company_id") != null) {
                 companyId = UUID.fromString(resultSet.getString("company_id"));
             }
+            long profileImageOid = resultSet.getLong("user_student_profile_image");
             boolean isAccountNonExpired = resultSet.getBoolean("is_account_non_expired");
             boolean isAccountNonLocked = resultSet.getBoolean("is_account_non_locked");
             boolean isCredentialsNonExpired = resultSet.getBoolean("is_credentials_non_expired");
             boolean isEnabled = resultSet.getBoolean("is_enabled");
-            return new UserStudent(id, name, surname, lastname, login_, password, email, telephone, companyId, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
+            return new UserStudent(id, name, surname, lastname, login_, password, email, telephone, companyId, profileImageOid, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
         }));
         return userStudents.stream().findFirst();
     }
@@ -228,11 +247,12 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
             if (resultSet.getString("company_id") != null) {
                 companyId_ = UUID.fromString(resultSet.getString("company_id"));
             }
+            long profileImageOid = resultSet.getLong("user_student_profile_image");
             boolean isAccountNonExpired = resultSet.getBoolean("is_account_non_expired");
             boolean isAccountNonLocked = resultSet.getBoolean("is_account_non_locked");
             boolean isCredentialsNonExpired = resultSet.getBoolean("is_credentials_non_expired");
             boolean isEnabled = resultSet.getBoolean("is_enabled");
-            return new UserStudent(id, name, surname, lastname, login_, password, email, telephone, companyId_, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
+            return new UserStudent(id, name, surname, lastname, login_, password, email, telephone, companyId_, profileImageOid, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
         }));
     }
 
@@ -295,11 +315,12 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
             if (resultSet.getString("company_id") != null) {
                 companyId_ = UUID.fromString(resultSet.getString("company_id"));
             }
+            long profileImageOid = resultSet.getLong("user_student_profile_image");
             boolean isAccountNonExpired = resultSet.getBoolean("is_account_non_expired");
             boolean isAccountNonLocked = resultSet.getBoolean("is_account_non_locked");
             boolean isCredentialsNonExpired = resultSet.getBoolean("is_credentials_non_expired");
             boolean isEnabled = resultSet.getBoolean("is_enabled");
-            return new UserStudent(id, name, surname, lastname, login_, password, email, telephone, companyId_, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
+            return new UserStudent(id, name, surname, lastname, login_, password, email, telephone, companyId_, profileImageOid, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
         }));
     }
 
@@ -323,11 +344,12 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
             if (resultSet.getString("company_id") != null) {
                 companyId_ = UUID.fromString(resultSet.getString("company_id"));
             }
+            long profileImageOid = resultSet.getLong("user_student_profile_image");
             boolean isAccountNonExpired = resultSet.getBoolean("is_account_non_expired");
             boolean isAccountNonLocked = resultSet.getBoolean("is_account_non_locked");
             boolean isCredentialsNonExpired = resultSet.getBoolean("is_credentials_non_expired");
             boolean isEnabled = resultSet.getBoolean("is_enabled");
-            return new UserStudent(id, name, surname, lastname, login_, password, email, telephone, companyId_, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
+            return new UserStudent(id, name, surname, lastname, login_, password, email, telephone, companyId_, profileImageOid, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
         }));
     }
 
@@ -406,11 +428,12 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
             if (resultSet.getString("company_id") != null) {
                 companyId = UUID.fromString(resultSet.getString("company_id"));
             }
+            long profileImageOid = resultSet.getLong("user_student_profile_image");
             boolean isAccountNonExpired = resultSet.getBoolean("is_account_non_expired");
             boolean isAccountNonLocked = resultSet.getBoolean("is_account_non_locked");
             boolean isCredentialsNonExpired = resultSet.getBoolean("is_credentials_non_expired");
             boolean isEnabled = resultSet.getBoolean("is_enabled");
-            return new UserStudent(id, name, surname, lastname, login_, password, email, telephone, companyId, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
+            return new UserStudent(id, name, surname, lastname, login_, password, email, telephone, companyId, profileImageOid, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
         }));
         return userStudents.stream().findFirst();
     }
@@ -441,7 +464,14 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
             boolean isAbleToAddStudent = resultSet.getBoolean("is_able_to_add_student");
             boolean isAbleToDeleteCourse = resultSet.getBoolean("is_able_to_delete_course");
             boolean isAbleToAddCourse = resultSet.getBoolean("is_able_to_add_course");
-            return new ManagementStaff(id, name, surname, lastname, login_, password, email, telephone, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled, companyId, role, isAbleToDeleteManager, isAbleToDeleteTeacher, isAbleToDeleteStudent, isAbleToAddManager, isAbleToAddTeacher, isAbleToAddStudent, isAbleToDeleteCourse, isAbleToAddCourse);
+            boolean isAbleToDeleteSchedule = resultSet.getBoolean("is_able_to_delete_schedule");
+            boolean isAbleToAddSchedule = resultSet.getBoolean("is_able_to_add_schedule");
+            boolean isAbleToEditManagement = resultSet.getBoolean("is_able_to_edit_manager");
+            boolean isAbleToEditTeacher = resultSet.getBoolean("is_able_to_edit_teacher");
+            boolean isAbleToEditStudent = resultSet.getBoolean("is_able_to_edit_student");
+            boolean isAbleToEditCourse = resultSet.getBoolean("is_able_to_edit_course");
+            boolean isAbleToEditSchedule = resultSet.getBoolean("is_able_to_edit_schedule");
+            return new ManagementStaff(id, name, surname, lastname, login_, password, email, telephone, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled, companyId, role, isAbleToDeleteManager, isAbleToDeleteTeacher, isAbleToDeleteStudent, isAbleToAddManager, isAbleToAddTeacher, isAbleToAddStudent, isAbleToDeleteCourse, isAbleToAddCourse, isAbleToDeleteSchedule, isAbleToAddSchedule, isAbleToEditManagement, isAbleToEditTeacher, isAbleToEditStudent, isAbleToEditCourse, isAbleToEditSchedule);
         })).stream().findFirst();
     }
 
@@ -510,7 +540,14 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
             boolean isAbleToAddStudent = resultSet.getBoolean("is_able_to_add_student");
             boolean isAbleToDeleteCourse = resultSet.getBoolean("is_able_to_delete_course");
             boolean isAbleToAddCourse = resultSet.getBoolean("is_able_to_add_course");
-            return new ManagementStaff(id, name, surname, lastname, login, password, email, telephone, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled, companyId, role, isAbleToDeleteManager, isAbleToDeleteTeacher, isAbleToDeleteStudent, isAbleToAddManager, isAbleToAddTeacher, isAbleToAddStudent, isAbleToDeleteCourse, isAbleToAddCourse);
+            boolean isAbleToDeleteSchedule = resultSet.getBoolean("is_able_to_delete_schedule");
+            boolean isAbleToAddSchedule = resultSet.getBoolean("is_able_to_add_schedule");
+            boolean isAbleToEditManagement = resultSet.getBoolean("is_able_to_edit_manager");
+            boolean isAbleToEditTeacher = resultSet.getBoolean("is_able_to_edit_teacher");
+            boolean isAbleToEditStudent = resultSet.getBoolean("is_able_to_edit_student");
+            boolean isAbleToEditCourse = resultSet.getBoolean("is_able_to_edit_course");
+            boolean isAbleToEditSchedule = resultSet.getBoolean("is_able_to_edit_schedule");
+            return new ManagementStaff(id, name, surname, lastname, login, password, email, telephone, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled, companyId, role, isAbleToDeleteManager, isAbleToDeleteTeacher, isAbleToDeleteStudent, isAbleToAddManager, isAbleToAddTeacher, isAbleToAddStudent, isAbleToDeleteCourse, isAbleToAddCourse, isAbleToDeleteSchedule, isAbleToAddSchedule, isAbleToEditManagement, isAbleToEditTeacher, isAbleToEditStudent, isAbleToEditCourse, isAbleToEditSchedule);
         }));
     }
 
@@ -597,18 +634,54 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
             if (resultSet.getString("company_id") != null) {
                 companyId_ = UUID.fromString(resultSet.getString("company_id"));
             }
+            long profileImageOid = resultSet.getLong("user_student_profile_image");
             boolean isAccountNonExpired = resultSet.getBoolean("is_account_non_expired");
             boolean isAccountNonLocked = resultSet.getBoolean("is_account_non_locked");
             boolean isCredentialsNonExpired = resultSet.getBoolean("is_credentials_non_expired");
             boolean isEnabled = resultSet.getBoolean("is_enabled");
-            return new UserStudent(id, name, surname, lastname, login_, password, email, telephone, companyId_, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
+            return new UserStudent(id, name, surname, lastname, login_, password, email, telephone, companyId_, profileImageOid, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
         }));
     }
 
     @Override
     public List<Schedule> getAllCourseSchedule(UUID courseId) {
         final String sql = String.format("SELECT * FROM Schedule " +
-                "WHERE course_id = '%s';", courseId);
+                "WHERE course_id = '%s' " +
+                "ORDER BY schedule_time_start ASC;", courseId);
+        return jdbcTemplate.query(sql, ((resultSet, i) -> {
+            UUID id = UUID.fromString(resultSet.getString("schedule_id"));
+            String startTime = resultSet.getString("schedule_time_start");
+            String endTime = resultSet.getString("schedule_time_end");
+            String weekDay = resultSet.getString("schedule_week_day");
+            UUID courseId_ = UUID.fromString(resultSet.getString("course_id"));
+            return new Schedule(id, startTime, endTime, weekDay, courseId_);
+        }));
+    }
+
+    @Override
+    public List<Schedule> getAllTeacherSchedule(UUID teacherId) {
+        final String sql = String.format("SELECT * FROM Schedule " +
+                "WHERE course_id = ANY (" +
+                "SELECT course_id FROM Courses " +
+                "WHERE user_teacher_id = '%s') " +
+                "ORDER BY schedule_time_start ASC;", teacherId);
+        return jdbcTemplate.query(sql, ((resultSet, i) -> {
+            UUID id = UUID.fromString(resultSet.getString("schedule_id"));
+            String startTime = resultSet.getString("schedule_time_start");
+            String endTime = resultSet.getString("schedule_time_end");
+            String weekDay = resultSet.getString("schedule_week_day");
+            UUID courseId_ = UUID.fromString(resultSet.getString("course_id"));
+            return new Schedule(id, startTime, endTime, weekDay, courseId_);
+        }));
+    }
+
+    @Override
+    public List<Schedule> getAllStudentSchedule(UUID studentId) {
+        final String sql = String.format("SELECT * FROM Schedule " +
+                "WHERE course_id = ANY (" +
+                "SELECT course_id FROM Students_Courses " +
+                "WHERE student_id = '%s') " +
+                "ORDER BY schedule_time_start ASC;", studentId);
         return jdbcTemplate.query(sql, ((resultSet, i) -> {
             UUID id = UUID.fromString(resultSet.getString("schedule_id"));
             String startTime = resultSet.getString("schedule_time_start");
@@ -640,6 +713,21 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
                 "WHERE schedule_id = '%s';", scheduleId);
         jdbcTemplate.execute(sql);
         return true;
+    }
+
+    @Override
+    public Map<Integer, List<Schedule>> getMappedCourseSchedule(UUID courseId) {
+        return createMappedSchedule(getAllCourseSchedule(courseId));
+    }
+
+    @Override
+    public Map<Integer, List<Schedule>> getMappedTeacherSchedule(UUID teacherId) {
+        return createMappedSchedule(getAllTeacherSchedule(teacherId));
+    }
+
+    @Override
+    public Map<Integer, List<Schedule>> getMappedStudentSchedule(UUID studentId) {
+        return createMappedSchedule(getAllStudentSchedule(studentId));
     }
 
     @Override
@@ -795,6 +883,69 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
         return admins.stream().findFirst();
     }
 
+    @Override
+    public boolean changeStudentProfilePicture(UUID studentId, Resource image) {
+        try {
+            Connection connection = postgresDataSource.getHikariDataSource().getConnection();
+            connection.setAutoCommit(false);
+            PGConnection pgConnection;
+            if (connection.isWrapperFor(PGConnection.class)) {
+                pgConnection = connection.unwrap(PGConnection.class);
+            } else {
+                return false;
+            }
+            LargeObjectManager largeObjectManager = pgConnection.getLargeObjectAPI();
+            long oid = largeObjectManager.createLO(LargeObjectManager.READ | LargeObjectManager.WRITE);
+            LargeObject largeObject = largeObjectManager.open(oid, LargeObjectManager.WRITE);
+            byte[] buf = image.getInputStream().readAllBytes();
+            //System.out.println(buf.length);
+            largeObject.write(buf, 0, buf.length);
+            largeObject.close();
+            final String sql = String.format("UPDATE User_Students SET " +
+                    "user_student_profile_image = %d " +
+                    "WHERE user_student_id = '%s';", oid, studentId);
+            jdbcTemplate.execute(sql);
+            connection.commit();
+            connection.setAutoCommit(true);
+            return true;
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public Resource getStudentProfilePicture(UserStudent student) {
+        try {
+            Connection connection = postgresDataSource.getHikariDataSource().getConnection();
+            connection.setAutoCommit(false);
+            PGConnection pgConnection;
+
+            if (connection.isWrapperFor(PGConnection.class)) {
+                pgConnection = connection.unwrap(PGConnection.class);
+            } else {
+                return null;
+            }
+
+            LargeObjectManager largeObjectManager = pgConnection.getLargeObjectAPI();
+            System.out.println(student.getProfileImageOid());
+            if (student.getProfileImageOid() == 0) {
+                return null;
+            }
+            LargeObject largeObject = largeObjectManager.open(student.getProfileImageOid(), LargeObjectManager.READ);
+//            byte[] buf = new byte[largeObject.size()];
+//            largeObject.read(buf, 0, largeObject.size());
+            ByteArrayResource byteArrayResource = new ByteArrayResource(largeObject.getInputStream().readAllBytes());
+            largeObject.close();
+            connection.commit();
+            connection.setAutoCommit(true);
+            return byteArrayResource;
+        } catch (SQLException | IOException throwables) {
+            throwables.printStackTrace();
+            return null;
+        }
+    }
+
     private boolean timeIntersects(String startTime1, String endTime1, String startTime2, String endTime2) {
         int st1 = timeToInt(startTime1);
         int et1 = timeToInt(endTime1);
@@ -807,5 +958,24 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
     private int timeToInt(String time) {
         String[] s = time.split(":");
         return Integer.parseInt(s[0]) * 60 + Integer.parseInt(s[1]);
+    }
+
+    private Map<Integer, List<Schedule>> createMappedSchedule(List<Schedule> scheduleList) {
+        Map<Integer, List<Schedule>> res = new HashMap<>();
+        for (int i = 1; i <= 7; ++i) {
+            res.put(i, new ArrayList<>());
+        }
+        for (Schedule schedule : scheduleList) {
+            switch (schedule.getWeekDay()) {
+                case "Monday": res.get(1).add(schedule); break;
+                case "Tuesday": res.get(2).add(schedule); break;
+                case "Wednesday": res.get(3).add(schedule); break;
+                case "Thursday": res.get(4).add(schedule); break;
+                case "Friday": res.get(5).add(schedule); break;
+                case "Saturday": res.get(6).add(schedule); break;
+                case "Sunday": res.get(7).add(schedule); break;
+            }
+        }
+        return res;
     }
 }

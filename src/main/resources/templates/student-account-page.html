@@ -11,6 +11,8 @@
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
     <link rel="stylesheet" type="text/css" href="/css/style.css"/>
+
+    <link rel="stylesheet" type="text/css" href="/css/special_for_additional_info.css" />
 </head>
 <body>
 <header th:insert="blocks/header :: header"></header>
@@ -19,8 +21,13 @@
 
 <div class="account-content">
     <div class="account-img-box">
-        <img class="account-img" src="/design-flow/avatars/avatar_cat.jpg"><br>
-        <a class="btn btn-default" id="edit-account-btn" href="#">Edit</a>
+        <th:block th:if="${student.getProfileImageOid() == 0}">
+            <img class="account-img" src="/design-flow/avatars/avatar_cat.jpg"><br>
+        </th:block>
+        <th:block th:if="${student.getProfileImageOid() != 0}">
+            <img class="account-img" th:src="@{'~/student_profile_picture/'} + ${student.getId()}"><br>
+        </th:block>
+        <button type="button" class="btn btn-default" id="edit-account-btn" onclick="showAdditionalEditInformation()">Edit</button>
     </div>
 
     <div class="account-info-box">
@@ -57,6 +64,22 @@
         </div>
     </div>
 </div>
+
+<div id="additional-info-edit" class="additional-info-edit hidden" >
+    <form action="/student_profile/change_profile_picture" method="post" enctype="multipart/form-data">
+        <input type="file" name="image" required="">
+        <input type="hidden" name="student_id" th:value="${student.getId()}">
+        <input type="submit">
+    </form>
+    <button type="button" class="btn btn-default" onclick="closeAdditionalEditInformation()">Close</button>
+</div>
+
+<div>
+    <p th:text="${profile_picture}"></p>
+</div>
+
+
+<script th:src="@{/js/special_for_additional_info.js}"></script>
 
 <footer th:insert="blocks/footer :: footer"></footer>
 </body>

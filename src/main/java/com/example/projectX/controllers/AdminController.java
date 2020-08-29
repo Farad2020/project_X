@@ -176,8 +176,15 @@ public class AdminController {
                               @RequestParam(name = "is_able_to_add_student") boolean isAbleToAddStudent,
                               @RequestParam(name = "is_able_to_delete_course") boolean isAbleToDeleteCourse,
                               @RequestParam(name = "is_able_to_add_course") boolean isAbleToAddCourse,
+                              @RequestParam(name = "is_able_to_delete_schedule") boolean isAbleToDeleteSchedule,
+                              @RequestParam(name = "is_able_to_add_schedule") boolean isAbleToAddSchedule,
+                              @RequestParam(name = "is_able_to_edit_manager") boolean isAbleToEditManagement,
+                              @RequestParam(name = "is_able_to_edit_teacher") boolean isAbleToEditTeacher,
+                              @RequestParam(name = "is_able_to_edit_student") boolean isAbleToEditStudent,
+                              @RequestParam(name = "is_able_to_edit_course") boolean isAbleToEditCourse,
+                              @RequestParam(name = "is_able_to_edit_schedule") boolean isAbleToEditSchedule,
                               @RequestParam(name = "manager_id") UUID managerId) {
-        ManagementStaff managementStaff = new ManagementStaff(managerId, name, surname, lastname, login, password, email, telephone, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled, companyId, role, isAbleToDeleteManager, isAbleToDeleteTeacher, isAbleToDeleteStudent, isAbleToAddManager, isAbleToAddTeacher, isAbleToAddStudent, isAbleToDeleteCourse, isAbleToAddCourse);
+        ManagementStaff managementStaff = new ManagementStaff(managerId, name, surname, lastname, login, password, email, telephone, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled, companyId, role, isAbleToDeleteManager, isAbleToDeleteTeacher, isAbleToDeleteStudent, isAbleToAddManager, isAbleToAddTeacher, isAbleToAddStudent, isAbleToDeleteCourse, isAbleToAddCourse, isAbleToDeleteSchedule, isAbleToAddSchedule, isAbleToEditManagement, isAbleToEditTeacher, isAbleToEditStudent, isAbleToEditCourse, isAbleToEditSchedule);
         boolean result = userAuthenticationService.updateManagementStaffById(managerId, managementStaff);
         System.out.println(result);
         return "redirect:/$2a$10$HZR3IGneje95jJVEomN.vuEKlxwRt6Tn5oeLEXySZXh7L/WLiX6fm/company/" + companyId;
@@ -216,8 +223,9 @@ public class AdminController {
                               @RequestParam(name = "is_credentials_non_expired") boolean isCredentialsNonExpired,
                               @RequestParam(name = "is_enabled") boolean isEnabled,
                               @RequestParam(name = "company_id") UUID companyId,
+                              @RequestParam(name = "profile_image_oid") long profileImageOid,
                               @RequestParam(name = "student_id") UUID studentId) {
-        UserStudent userStudent = new UserStudent(studentId, name, surname, lastname, login, password, email, telephone, companyId, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
+        UserStudent userStudent = new UserStudent(studentId, name, surname, lastname, login, password, email, telephone, companyId, profileImageOid, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
         boolean result = userAuthenticationService.updateUserStudentById(studentId, userStudent);
         System.out.println(result);
         return "redirect:/$2a$10$HZR3IGneje95jJVEomN.vuEKlxwRt6Tn5oeLEXySZXh7L/WLiX6fm/company/" + companyId;

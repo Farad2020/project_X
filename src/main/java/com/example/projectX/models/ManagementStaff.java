@@ -30,6 +30,13 @@ public class ManagementStaff implements UserDetails {
     private final boolean isAbleToAddStudent;
     private final boolean isAbleToDeleteCourse;
     private final boolean isAbleToAddCourse;
+    private final boolean isAbleToDeleteSchedule;
+    private final boolean isAbleToAddSchedule;
+    private final boolean isAbleToEditManagement;
+    private final boolean isAbleToEditTeacher;
+    private final boolean isAbleToEditStudent;
+    private final boolean isAbleToEditCourse;
+    private final boolean isAbleToEditSchedule;
 
     public ManagementStaff(UUID id,
                            String name,
@@ -52,7 +59,7 @@ public class ManagementStaff implements UserDetails {
                            boolean isAbleToAddTeacher,
                            boolean isAbleToAddStudent,
                            boolean isAbleToDeleteCourse,
-                           boolean isAbleToAddCourse) {
+                           boolean isAbleToAddCourse, boolean isAbleToDeleteSchedule, boolean isAbleToAddSchedule, boolean isAbleToEditManagement, boolean isAbleToEditTeacher, boolean isAbleToEditStudent, boolean isAbleToEditCourse, boolean isAbleToEditSchedule) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -75,6 +82,13 @@ public class ManagementStaff implements UserDetails {
         this.isAbleToAddStudent = isAbleToAddStudent;
         this.isAbleToDeleteCourse = isAbleToDeleteCourse;
         this.isAbleToAddCourse = isAbleToAddCourse;
+        this.isAbleToDeleteSchedule = isAbleToDeleteSchedule;
+        this.isAbleToAddSchedule = isAbleToAddSchedule;
+        this.isAbleToEditManagement = isAbleToEditManagement;
+        this.isAbleToEditTeacher = isAbleToEditTeacher;
+        this.isAbleToEditStudent = isAbleToEditStudent;
+        this.isAbleToEditCourse = isAbleToEditCourse;
+        this.isAbleToEditSchedule = isAbleToEditSchedule;
     }
 
     @Override
@@ -178,5 +192,33 @@ public class ManagementStaff implements UserDetails {
 
     public boolean isAbleToAddCourse() {
         return isAbleToAddCourse;
+    }
+
+    public boolean isAbleToDeleteSchedule() {
+        return isAbleToDeleteSchedule;
+    }
+
+    public boolean isAbleToAddSchedule() {
+        return isAbleToAddSchedule;
+    }
+
+    public boolean isAbleToEditManager() {
+        return isAbleToEditManagement;
+    }
+
+    public boolean isAbleToEditTeacher() {
+        return isAbleToEditTeacher;
+    }
+
+    public boolean isAbleToEditStudent() {
+        return isAbleToEditStudent;
+    }
+
+    public boolean isAbleToEditCourse() {
+        return isAbleToEditCourse;
+    }
+
+    public boolean isAbleToEditSchedule() {
+        return isAbleToEditSchedule;
     }
 }
