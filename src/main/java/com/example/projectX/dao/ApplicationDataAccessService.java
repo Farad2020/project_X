@@ -3,7 +3,6 @@ package com.example.projectX.dao;
 import com.example.projectX.datasource.PostgresDataSource;
 import com.example.projectX.models.*;
 import org.postgresql.PGConnection;
-import org.postgresql.geometric.PGcircle;
 import org.postgresql.largeobject.LargeObject;
 import org.postgresql.largeobject.LargeObjectManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -728,6 +726,80 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
     @Override
     public Map<Integer, List<Schedule>> getMappedStudentSchedule(UUID studentId) {
         return createMappedSchedule(getAllStudentSchedule(studentId));
+    }
+
+    @Override
+    public List<Attendance> getAllCourseAttendances(UUID courseId) {
+        final String sql = String.format("SELECT * FROM Attendance " +
+                "WHERE student_course_id = ANY (" +
+                "SELECT student_course_id FROM Students_Courses " +
+                "WHERE course_id = '%s') " +
+                "ORDER BY attendance_date DESC;", courseId);
+        return jdbcTemplate.query(sql, ((resultSet, i) -> {
+            UUID id = UUID.fromString(resultSet.getString("attendance_id"));
+            Optional<StudentCourse> studentCourseOptional = getStudentCourseById(UUID.fromString(resultSet.getString("student_course_id")));
+            StudentCourse studentCourse = null;
+            if (studentCourseOptional.isPresent()) {
+                studentCourse = studentCourseOptional.get();
+            }
+            String date = resultSet.getString("attendance_date");
+            int attendanceType = resultSet.getInt("attendance_type");
+            return new Attendance(id, studentCourse, date, attendanceType);
+        }));
+    }
+
+    @Override
+    public Optional<StudentCourse> getStudentCourseById(UUID studentCourseId) {
+        final String sql = String.format("SELECT * FROM Students_Courses " +
+                "WHERE student_course_id = '%s';", studentCourseId);
+        return jdbcTemplate.query(sql, ((resultSet, i) -> {
+            UUID id = UUID.fromString(resultSet.getString("student_course_id"));
+            Optional<UserStudent> studentOptional = getStudentById(UUID.fromString(resultSet.getString("student_id")));
+            UserStudent student = null;
+            if (studentOptional.isPresent()) {
+                student = studentOptional.get();
+            }
+            Optional<Course> courseOptional = getCourseById(UUID.fromString(resultSet.getString("course_id")));
+            Course course = null;
+            if (courseOptional.isPresent()) {
+                course = courseOptional.get();
+            }
+            double reviewScore = resultSet.getDouble("student_course_review_score");
+            return new StudentCourse(id, student, course, reviewScore);
+        })).stream().findFirst();
+    }
+
+    @Override
+    public boolean addAttendanceToCourse(UUID courseId, String date) {
+        final String sql = "INSERT INTO Attendance " +
+                "(attendance_id, student_course_id, attendance_date) " +
+                "VALUES (uuid_generate_v4(), '%s', '%s');";
+        List<StudentCourse> studentCourseList = getAllStudentCourseOfCourse(courseId);
+        for (StudentCourse studentCourse : studentCourseList) {
+            jdbcTemplate.execute(String.format(sql, studentCourse.getId(), date));
+        }
+        return true;
+    }
+
+    @Override
+    public List<StudentCourse> getAllStudentCourseOfCourse(UUID courseId) {
+        final String sql = String.format("SELECT * FROM Students_Courses " +
+                "WHERE course_id = '%s';", courseId);
+        return jdbcTemplate.query(sql, ((resultSet, i) -> {
+            UUID id = UUID.fromString(resultSet.getString("student_course_id"));
+            Optional<UserStudent> studentOptional = getStudentById(UUID.fromString(resultSet.getString("student_id")));
+            UserStudent student = null;
+            if (studentOptional.isPresent()) {
+                student = studentOptional.get();
+            }
+            Optional<Course> courseOptional = getCourseById(UUID.fromString(resultSet.getString("course_id")));
+            Course course = null;
+            if (courseOptional.isPresent()) {
+                course = courseOptional.get();
+            }
+            double reviewScore = resultSet.getDouble("student_course_review_score");
+            return new StudentCourse(id, student, course, reviewScore);
+        }));
     }
 
     @Override

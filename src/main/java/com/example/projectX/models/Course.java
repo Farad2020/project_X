@@ -73,6 +73,6 @@ public class Course {
     }
 
     public String getNameSnippet() {
-        return (name.length() < 11 ? name : name.substring(0, 11) + "...");
+        return (name.length() < 9 ? name : name.substring(0, 9) + "...");
     }
 }

@@ -37,8 +37,11 @@
         <div>
             <button type="button" onclick="showAdditionalInformation()" class="btn btn-info">Показать расписание</button>
         </div>
-        <div>
+        <div th:if="${isManagementStaff}">
             <button type="button" onclick="showAdditionalInformationAboutStudents()" class="btn btn-info">Показать студентов</button>
+        </div>
+        <div th:if="${isTeacher}">
+            <a th:href="@{'~/courses/'} + ${course.getId()} + '/attendance'" class="btn btn-info">Показать посещяемость студентов</a>
         </div>
     </div>
 </div>
@@ -158,7 +161,7 @@
     </div>
 </div>
 
-<div id="additional-info-about-students" class="additional-info hidden">
+<div id="additional-info-about-students" class="additional-info hidden" th:if="${isManagementStaff}">
     <div class="course-students-pop-up">
 
         <table class="table">
@@ -170,7 +173,9 @@
                 <th scope="col">Name</th>
                 <th scope="col">Surname</th>
                 <th scope="col">Lastname</th>
-                <th th:if="${manager.getRole() == 1 or manager.isAbleToEditStudent()}">Action</th>
+                <th:block th:if="${isManagementStaff}">
+                    <th th:if="${manager.getRole() == 1 or manager.isAbleToEditStudent()}">Action</th>
+                </th:block>
             </tr>
             <tbody>
             <th:block th:each="i :  ${#numbers.sequence(0, participating_students.size() -1 )}" th:if="${participating_students.size() > 0}"> <!-- style="cursor: pointer" -->
@@ -191,7 +196,9 @@
                 <td><strong>Name</strong></td>
                 <td><strong>Surname</strong></td>
                 <td><strong>Lastname</strong></td>
-                <td th:if="${manager.getRole() == 1 or manager.isAbleToEditStudent()}"><strong>Action</strong></td>
+                <th:block th:if="${isManagementStaff}">
+                    <td th:if="${manager.getRole() == 1 or manager.isAbleToEditStudent()}"><strong>Action</strong></td>
+                </th:block>
             </tr>
             <tbody>
             <th:block th:each="i :  ${#numbers.sequence(0, not_participating_students.size() -1 )}" th:if="${not_participating_students.size() > 0}"> <!-- style="cursor: pointer" -->

@@ -9,14 +9,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 @RequestMapping("/")
@@ -185,6 +180,39 @@ public class TeacherController {
     @GetMapping("task")
     public String genericTask(Model model) {
         return "task-page";
+    }
+
+    @GetMapping("courses/{course_id}/attendance")
+    public String courseAttendance(@PathVariable(name = "course_id") UUID courseId,
+                                   @AuthenticationPrincipal UserDetails user,
+                                   Model model) {
+        userIdentifier.getUserClass(user, model);
+        if (model.getAttribute("isTeacher") != null) {
+            List<Attendance> attendances = companyService.getAllCourseAttendances(courseId);
+            Optional<Course> course = companyService.getCourseById(courseId);
+            model.addAttribute("attendances", attendances);
+            course.ifPresent(value -> model.addAttribute("course", value));
+            Set<String> dates = new HashSet<>();
+            for (Attendance attendance : attendances) {
+                dates.add(attendance.getDate());
+            }
+            model.addAttribute("unique_dates", dates);
+            return "course-attendance-page";
+        }
+        return "error-page";
+    }
+
+    @PostMapping("add_attendance_to_course")
+    public String addAttendanceToCourse(@RequestParam(name = "date") String date,
+                                        @RequestParam(name = "course_id") UUID courseId) {
+        boolean result = companyService.addAttendanceToCourse(courseId, date);
+        return "redirect:/courses/" + courseId + "/attendance";
+    }
+
+    @PostMapping("update_attendance")
+    public String updateAttendance(@RequestParam Map<String, String> params) {
+        
+        return "redirect:/courses/" + courseId + "/attendance";
     }
 
 }

@@ -137,4 +137,16 @@ public class CompanyService {
         return companyDao.getMappedStudentSchedule(studentId);
     }
 
+    public List<Attendance> getAllCourseAttendances(UUID courseId) {
+        return companyDao.getAllCourseAttendances(courseId);
+    }
+
+    public boolean addAttendanceToCourse(UUID courseId, String date) {
+        return companyDao.addAttendanceToCourse(courseId, date);
+    }
+
+    public List<StudentCourse> getAllStudentCourseOfCourse(UUID courseId) {
+        return companyDao.getAllStudentCourseOfCourse(courseId);
+    }
+
 }
