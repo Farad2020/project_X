@@ -211,7 +211,11 @@ public class TeacherController {
 
     @PostMapping("update_attendance")
     public String updateAttendance(@RequestParam Map<String, String> params) {
-        
+        UUID courseId = UUID.fromString(params.get("course_id"));
+        String date = params.get("date");
+        //List<Attendance> attendances = companyService.getAllCourseAttendancesForSpecificDate(courseId, date);
+        boolean result = companyService.updateAttendances(params);
+        System.out.println(result);
         return "redirect:/courses/" + courseId + "/attendance";
     }
 

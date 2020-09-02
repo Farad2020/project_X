@@ -26,22 +26,24 @@
 
                     <!-- Default inline 1-->
                     <div class="custom-control custom-radio custom-control-inline">
-                        <input type="radio" class="custom-control-input" th:id="${attendance.getId()} + ' 1'" th:name="${attendance.getId()}" value="0">
+                        <input type="radio" class="custom-control-input" th:id="${attendance.getId()} + ' 1'" th:name="${attendance.getId()}" value="0" required="">
                         <label class="custom-control-label" th:for="${attendance.getId()} + ' 1'">Прибыл</label>
                     </div>
 
                     <!-- Default inline 2-->
                     <div class="custom-control custom-radio custom-control-inline">
-                        <input type="radio" class="custom-control-input" th:id="${attendance.getId()} + ' 2'" th:name="${attendance.getId()}" value="1">
+                        <input type="radio" class="custom-control-input" th:id="${attendance.getId()} + ' 2'" th:name="${attendance.getId()}" value="1" required="">
                         <label class="custom-control-label" th:for="${attendance.getId()} + ' 2'">Не прибыл</label>
                     </div>
 
                     <!-- Default inline 3-->
                     <div class="custom-control custom-radio custom-control-inline">
-                        <input type="radio" class="custom-control-input" th:id="${attendance.getId()} + ' 3'" th:name="${attendance.getId()}" value="2">
+                        <input type="radio" class="custom-control-input" th:id="${attendance.getId()} + ' 3'" th:name="${attendance.getId()}" value="2" required="">
                         <label class="custom-control-label" th:for="${attendance.getId()} + ' 3'">Отсутствовал по причине</label>
                     </div>
             </div>
+            <input type="hidden" name="date" th:value="${date}">
+            <input type="hidden" name="course_id" th:value="${course.getId()}">
             <input type="submit">
         </form>
     </div>

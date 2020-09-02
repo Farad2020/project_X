@@ -803,6 +803,37 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
     }
 
     @Override
+    public List<Attendance> getAllCourseAttendancesForSpecificDate(UUID courseId, String date) {
+        final String sql = String.format("SELECT * FROM Attendance " +
+                "WHERE attendance_date = '%s' AND student_course_id = ANY (" +
+                "SELECT student_course_id FROM Students_Courses " +
+                "WHERE course_id = '%s');", date, courseId);
+        return jdbcTemplate.query(sql, ((resultSet, i) -> {
+            UUID id = UUID.fromString(resultSet.getString("attendance_id"));
+            Optional<StudentCourse> studentCourseOptional = getStudentCourseById(UUID.fromString(resultSet.getString("student_course_id")));
+            StudentCourse studentCourse = null;
+            if (studentCourseOptional.isPresent()) {
+                studentCourse = studentCourseOptional.get();
+            }
+            String date_ = resultSet.getString("attendance_date");
+            int attendanceType = resultSet.getInt("attendance_type");
+            return new Attendance(id, studentCourse, date_, attendanceType);
+        }));
+    }
+
+    @Override
+    public boolean updateAttendances(Map<String, String> params) {
+        final String sql = "UPDATE Attendance SET " +
+                "attendance_type = %d " +
+                "WHERE attendance_id = '%s';";
+        Map<UUID, Integer> attendanceMap = createAttendanceMap(params);
+        for (UUID id : attendanceMap.keySet()) {
+            jdbcTemplate.execute(String.format(sql, attendanceMap.get(id), id));
+        }
+        return true;
+    }
+
+    @Override
     public boolean updateManagementStaffById(UUID managerId, ManagementStaff managementStaff) {
         if (selectUserTeacherByLogin(managementStaff.getLogin()).isPresent() ||
             selectUserStudentByLogin(managementStaff.getLogin()).isPresent()) {
@@ -1049,5 +1080,17 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
             }
         }
         return res;
+    }
+
+    private Map<UUID, Integer> createAttendanceMap(Map<String, String> params) {
+        Map<UUID, Integer> attendanceMap = new HashMap<>();
+        for (String param : params.keySet()) {
+            if (param.matches("[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}")) {
+                UUID attendanceId = UUID.fromString(param);
+                int attendanceType = Integer.parseInt(params.get(param));
+                attendanceMap.put(attendanceId, attendanceType);
+            }
+        }
+        return attendanceMap;
     }
 }

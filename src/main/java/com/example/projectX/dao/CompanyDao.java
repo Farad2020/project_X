@@ -86,4 +86,8 @@ public interface CompanyDao {
 
     List<StudentCourse> getAllStudentCourseOfCourse(UUID courseId);
 
+    List<Attendance> getAllCourseAttendancesForSpecificDate(UUID courseId, String date);
+
+    boolean updateAttendances(Map<String, String> params);
+
 }
