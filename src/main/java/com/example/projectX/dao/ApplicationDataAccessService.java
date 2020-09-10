@@ -975,6 +975,141 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
     }
 
     @Override
+    public boolean updateManagementStaffWithoutPasswordById(UUID managerId, ManagementStaff managementStaff) {
+        if (selectUserTeacherByLogin(managementStaff.getLogin()).isPresent() ||
+                selectUserStudentByLogin(managementStaff.getLogin()).isPresent()) {
+            return false;
+        }
+        Optional<ManagementStaff> check = selectManagementStaffByLogin(managementStaff.getLogin());
+        if (check.isPresent() && !check.get().getId().equals(managementStaff.getId())) {
+            return false;
+        }
+        final String sql = String.format("UPDATE Management_Staff SET " +
+                        "management_staff_name = '%s', " +
+                        "management_staff_surname = '%s', " +
+                        "management_staff_lastname = '%s', " +
+                        "management_staff_login = '%s', " +
+                        "management_staff_email = '%s', " +
+                        "management_staff_telephone = '%s', " +
+                        "is_account_non_expired = %s, " +
+                        "is_account_non_locked = %s, " +
+                        "is_credentials_non_expired = %s, " +
+                        "is_enabled = %s, " +
+                        "company_id = '%s', " +
+                        "role = %d, " +
+                        "is_able_to_delete_manager = %s, " +
+                        "is_able_to_delete_teacher = %s, " +
+                        "is_able_to_delete_student = %s, " +
+                        "is_able_to_add_manager = %s, " +
+                        "is_able_to_add_teacher = %s, " +
+                        "is_able_to_add_student = %s, " +
+                        "is_able_to_delete_course = %s, " +
+                        "is_able_to_add_course = %s " +
+                        "WHERE management_staff_id = '%s';",
+                managementStaff.getName(),
+                managementStaff.getSurname(),
+                managementStaff.getLastname(),
+                managementStaff.getUsername(),
+                managementStaff.getEmail(),
+                managementStaff.getTelephone(),
+                managementStaff.isAccountNonExpired(),
+                managementStaff.isAccountNonLocked(),
+                managementStaff.isCredentialsNonExpired(),
+                managementStaff.isEnabled(),
+                managementStaff.getCompanyId(),
+                managementStaff.getRole(),
+                managementStaff.isAbleToDeleteManager(),
+                managementStaff.isAbleToDeleteTeacher(),
+                managementStaff.isAbleToDeleteStudent(),
+                managementStaff.isAbleToAddManager(),
+                managementStaff.isAbleToAddTeacher(),
+                managementStaff.isAbleToAddStudent(),
+                managementStaff.isAbleToDeleteCourse(),
+                managementStaff.isAbleToAddCourse(),
+                managerId);
+        jdbcTemplate.execute(sql);
+        return true;
+    }
+
+    @Override
+    public boolean updateUserTeacherWithoutPasswordById(UUID teacherId, UserTeacher userTeacher) {
+        if (selectManagementStaffByLogin(userTeacher.getLogin()).isPresent() ||
+                selectUserStudentByLogin(userTeacher.getLogin()).isPresent()) {
+            return false;
+        }
+        Optional<UserTeacher> check = selectUserTeacherByLogin(userTeacher.getLogin());
+        if (check.isPresent() && !check.get().getId().equals(userTeacher.getId())) {
+            return false;
+        }
+        final String sql = String.format("UPDATE User_Teachers SET " +
+                        "user_teacher_name = '%s', " +
+                        "user_teacher_surname = '%s', " +
+                        "user_teacher_lastname = '%s', " +
+                        "user_teacher_login = '%s', " +
+                        "user_teacher_email = '%s', " +
+                        "user_teacher_telephone = '%s', " +
+                        "is_account_non_expired = %s, " +
+                        "is_account_non_locked = %s, " +
+                        "is_credentials_non_expired = %s, " +
+                        "is_enabled = %s, " +
+                        "company_id = '%s' " +
+                        "WHERE user_teacher_id = '%s';",
+                userTeacher.getName(),
+                userTeacher.getSurname(),
+                userTeacher.getLastname(),
+                userTeacher.getUsername(),
+                userTeacher.getEmail(),
+                userTeacher.getTelephone(),
+                userTeacher.isAccountNonExpired(),
+                userTeacher.isAccountNonLocked(),
+                userTeacher.isCredentialsNonExpired(),
+                userTeacher.isEnabled(),
+                userTeacher.getCompanyId(),
+                teacherId);
+        jdbcTemplate.execute(sql);
+        return true;
+    }
+
+    @Override
+    public boolean updateUserStudentWithoutPasswordById(UUID studentId, UserStudent userStudent) {
+        if (selectManagementStaffByLogin(userStudent.getLogin()).isPresent() ||
+                selectUserTeacherByLogin(userStudent.getLogin()).isPresent()) {
+            return false;
+        }
+        Optional<UserStudent> check = selectUserStudentByLogin(userStudent.getLogin());
+        if (check.isPresent() && !check.get().getId().equals(userStudent.getId())) {
+            return false;
+        }
+        final String sql = String.format("UPDATE User_Students SET " +
+                        "user_student_name = '%s', " +
+                        "user_student_surname = '%s', " +
+                        "user_student_lastname = '%s', " +
+                        "user_student_login = '%s', " +
+                        "user_student_email = '%s', " +
+                        "user_student_telephone = '%s', " +
+                        "is_account_non_expired = %s, " +
+                        "is_account_non_locked = %s, " +
+                        "is_credentials_non_expired = %s, " +
+                        "is_enabled = %s, " +
+                        "company_id = '%s' " +
+                        "WHERE user_student_id = '%s';",
+                userStudent.getName(),
+                userStudent.getSurname(),
+                userStudent.getLastname(),
+                userStudent.getUsername(),
+                userStudent.getEmail(),
+                userStudent.getTelephone(),
+                userStudent.isAccountNonExpired(),
+                userStudent.isAccountNonLocked(),
+                userStudent.isCredentialsNonExpired(),
+                userStudent.isEnabled(),
+                userStudent.getCompanyId(),
+                studentId);
+        jdbcTemplate.execute(sql);
+        return true;
+    }
+
+    @Override
     public Optional<Admin> selectAdminByLogin(String login) {
         final String sql = String.format("SELECT * FROM Admins WHERE admin_login = '%s'", login);
         List<Admin> admins = jdbcTemplate.query(sql, ((resultSet, i) -> {

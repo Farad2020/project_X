@@ -149,7 +149,7 @@ public class StudentController {
             boolean result = mediaFilesService.changeStudentProfilePicture(studentId, image.getResource());
             System.out.println(result);
         }
-        return "redirect:/student_profile";
+        return "redirect:/student_profile/" + studentId;
     }
 
     @GetMapping("/student_profile_picture/{student_id}")

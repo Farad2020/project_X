@@ -184,6 +184,10 @@ public class AdminController {
                               @RequestParam(name = "is_able_to_edit_course") boolean isAbleToEditCourse,
                               @RequestParam(name = "is_able_to_edit_schedule") boolean isAbleToEditSchedule,
                               @RequestParam(name = "manager_id") UUID managerId) {
+        // TODO if you do not change password then you fucked up
+        // So in order to prevent that shit, you have to check if your previous password is equal to what you have send in request
+        // If they same then do update but without password
+        // otherwise do the same shit as you did before, bitch
         ManagementStaff managementStaff = new ManagementStaff(managerId, name, surname, lastname, login, password, email, telephone, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled, companyId, role, isAbleToDeleteManager, isAbleToDeleteTeacher, isAbleToDeleteStudent, isAbleToAddManager, isAbleToAddTeacher, isAbleToAddStudent, isAbleToDeleteCourse, isAbleToAddCourse, isAbleToDeleteSchedule, isAbleToAddSchedule, isAbleToEditManagement, isAbleToEditTeacher, isAbleToEditStudent, isAbleToEditCourse, isAbleToEditSchedule);
         boolean result = userAuthenticationService.updateManagementStaffById(managerId, managementStaff);
         System.out.println(result);
@@ -204,6 +208,10 @@ public class AdminController {
                               @RequestParam(name = "is_enabled") boolean isEnabled,
                               @RequestParam(name = "company_id") UUID companyId,
                               @RequestParam(name = "teacher_id") UUID teacherId) {
+        // TODO if you do not change password then you fucked up
+        // So in order to prevent that shit, you have to check if your previous password is equal to what you have send in request
+        // If they same then do update but without password
+        // otherwise do the same shit as you did before, bitch
         UserTeacher userTeacher = new UserTeacher(teacherId, name, surname, lastname, login, password, email, telephone, companyId, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
         boolean result = userAuthenticationService.updateUserTeacherById(teacherId, userTeacher);
         System.out.println(result);
@@ -225,6 +233,10 @@ public class AdminController {
                               @RequestParam(name = "company_id") UUID companyId,
                               @RequestParam(name = "profile_image_oid") long profileImageOid,
                               @RequestParam(name = "student_id") UUID studentId) {
+        // TODO if you do not change password then you fucked up
+        // So in order to prevent that shit, you have to check if your previous password is equal to what you have send in request
+        // If they same then do update but without password
+        // otherwise do the same shit as you did before, bitch
         UserStudent userStudent = new UserStudent(studentId, name, surname, lastname, login, password, email, telephone, companyId, profileImageOid, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
         boolean result = userAuthenticationService.updateUserStudentById(studentId, userStudent);
         System.out.println(result);

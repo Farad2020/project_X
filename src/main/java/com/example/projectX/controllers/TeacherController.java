@@ -35,7 +35,7 @@ public class TeacherController {
     public String teacherHome(Model model,
                               @AuthenticationPrincipal UserDetails user) {
         userIdentifier.getUserClass(user, model);
-        if ((Boolean) model.getAttribute("isTeacher")) {
+        if (model.getAttribute("isTeacher") != null) {
             return "teacher-home";
         } else {
             return "error-page";
@@ -44,46 +44,35 @@ public class TeacherController {
 
 
     @GetMapping("teacher_profile/{teacher_id}")
-    public String getStudentTeacherById(Model model,
+    public String getTeacherById(Model model,
                                         @PathVariable(name = "teacher_id") UUID teacher_id,
                                         @AuthenticationPrincipal UserDetails user) {
+        // this page can visit anyone from the same company
+        // common options would be look through teacher's courses and basic info
+        // if visitor of the page is owner himself then he can modify his profile picture and his basic info
+        // if visitor of the page is manager who is the BOSS or has authorities to edit teacher's info then they can do everything what teacher can do
+        // also manager who is able to delete then he can delete this teacher
         userIdentifier.getUserClass(user, model);
-        Optional<UserTeacher> teacher = companyService.getTeacherById(teacher_id);
-        if (!teacher.isPresent()) {
+        UserTeacher userTeacher;
+        Optional<UserTeacher> optionalUserTeacher = companyService.getTeacherById(teacher_id);
+        if (optionalUserTeacher.isPresent()) {
+            userTeacher = optionalUserTeacher.get();
+        } else {
             return "error-page";
         }
-
-        if (model.getAttribute("isTeacher") != null
-                && ((UserTeacher) user).getCompanyId().equals(companyService.getTeacherById(teacher_id).get().getCompanyId())){
-            /*We know that courses are now necessary, since page will be loaded no matter what*/
-            List<Course> courses = companyService.getAllTeacherCourses(teacher_id);
-            /* Checking if the teacher is the same as current user */
-            if (((UserTeacher) user).getId().equals(teacher_id)) {
-                model.addAttribute("isOwner", true);
-                model.addAttribute("teacher", teacher.get());
-            } else {
-                model.addAttribute("teacher", companyService.getTeacherById(teacher_id).get());
-            }
-            // courses means all courses related to chosen teacher
-            model.addAttribute("courses", courses);
-            return "teacher-account-page";
-        }else if ((model.getAttribute("isManagementStaff") != null &&
-                ((ManagementStaff) user).getCompanyId().equals(companyService.getTeacherById(teacher_id).get().getCompanyId())) ||
-                (model.getAttribute("isStudent") != null &&
-                        ((UserStudent) user).getCompanyId().equals(companyService.getTeacherById(teacher_id).get().getCompanyId()))) {
-            List<Course> courses = companyService.getAllTeacherCourses(teacher_id);
-            model.addAttribute("teacher", teacher.get());
-            model.addAttribute("courses", courses);
+        if (model.getAttribute("current_user") != null &&
+            Objects.requireNonNull(model.getAttribute("current_user_company_id")).equals(userTeacher.getCompanyId())) {
+            model.addAttribute("teacher", userTeacher);
+            model.addAttribute("courses", companyService.getAllTeacherCourses(teacher_id));
             return "teacher-account-page";
         }
-        return"error-page";
+        return "error-page";
     }
 
 
     @GetMapping("teacher_courses")
     public String teacherCourses(Model model,
                                  @AuthenticationPrincipal UserDetails user) {
-
         userIdentifier.getUserClass(user, model);
         if ((Boolean) model.getAttribute("isTeacher")) {
 
@@ -217,6 +206,16 @@ public class TeacherController {
         boolean result = companyService.updateAttendances(params);
         System.out.println(result);
         return "redirect:/courses/" + courseId + "/attendance";
+    }
+
+    @PostMapping("teacher_profile/update_info")
+    public String updateTeacherInfo(@RequestParam(name = "name") String name,
+                                    @RequestParam(name = "surname") String surname,
+                                    @RequestParam(name = "lastname") String lastname,
+                                    @RequestParam(name = "login") String login,
+                                    @RequestParam(name = "email") String email,
+                                    @RequestParam(name = "telephone") String telephone) {
+        return null;
     }
 
 }

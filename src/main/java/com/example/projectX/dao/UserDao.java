@@ -26,4 +26,10 @@ public interface UserDao {
 
     boolean updateUserStudentById(UUID studentId, UserStudent userStudent);
 
+    boolean updateManagementStaffWithoutPasswordById(UUID managerId, ManagementStaff managementStaff);
+
+    boolean updateUserTeacherWithoutPasswordById(UUID teacherId, UserTeacher userTeacher);
+
+    boolean updateUserStudentWithoutPasswordById(UUID studentId, UserStudent userStudent);
+
 }

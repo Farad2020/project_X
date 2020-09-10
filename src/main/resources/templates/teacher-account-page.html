@@ -15,6 +15,8 @@
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
     <link rel="stylesheet" type="text/css" href="/css/style.css"/>
+
+    <link rel="stylesheet" type="text/css" href="/css/special_for_additional_info.css" />
 </head>
 <body>
 
@@ -25,7 +27,12 @@
 <div class="account-content">
     <div class="account-img-box">
         <img class="account-img" src="/design-flow/avatars/avatar_cat.jpg"><br>
-        <a th:if="${isOwner}" class="btn btn-default" id="edit-account-btn" href="#">Edit</a>
+        <th:block th:if="${isTeacher}">
+            <button th:if="${current_user_id.equals(teacher.getId())}" class="btn btn-default" id="edit-account-btn" onclick="showAdditionalEditInformation()">Edit</button>
+        </th:block>
+        <th:block th:if="${isManagementStaff}">
+            <button th:if="${current_user.isAbleToEditTeacher() or current_user.getRole() == 1}" class="btn btn-default" id="edit-account-btn" onclick="showAdditionalEditInformation()">Edit</button>
+        </th:block>
     </div>
 
     <div class="account-info-box">
@@ -96,6 +103,27 @@
         </div>
     </div>
 </div>
+
+<div id="additional-info-edit" class="additional-info-edit hidden" >
+    <form action="/student_profile/change_profile_picture" method="post" enctype="multipart/form-data">
+        <input type="file" name="image" required="">
+        <input type="hidden" name="user_id" th:value="${teacher.getId()}">
+        <input type="submit">
+    </form>
+    <form action="/teacher_profile/update_info" method="post">
+        <div><input type="text" name="name" placeholder="name" th:value="${teacher.getName()}"></div>
+        <div><input type="text" name="surname" placeholder="surname" th:value="${teacher.getSurname()}"></div>
+        <div><input type="text" name="lastname" placeholder="lastname" th:value="${teacher.getLastname()}"></div>
+        <div><input type="text" name="login" placeholder="login" th:value="${teacher.getLogin()}"></div>
+        <div><input type="text" name="email" placeholder="email" th:value="${teacher.getEmail()}"></div>
+        <div><input type="text" name="telephone" placeholder="telephone" th:value="${teacher.getTelephone()}"></div>
+        <input type="hidden" name="teacher_id" th:value="${teacher.getId()}">
+        <input type="submit">
+    </form>
+    <button type="button" class="btn btn-default" onclick="closeAdditionalEditInformation()">Close</button>
+</div>
+
+<script th:src="@{/js/special_for_additional_info.js}"></script>
 
 <footer th:insert="blocks/footer :: footer"></footer>
 </body>
