@@ -80,6 +80,26 @@ https://getbootstrap.com/docs/4.0/components/list-group/
         </th:block>
         </tbody>
     </table>
+
+    <div th:if="${current_user.getRole() == 1 or current_user.isAbleToAddCourse()}">
+        <form action="/add_course" method="post">
+            <input type="text" name="name" placeholder="name" required="">
+            <input type="text" name="description" placeholder="description" required="">
+            <select name="is_active" required="">
+                <option value="0">False</option>
+                <option value="1">True</option>
+            </select>
+            <input type="date" name="start_date" required="">
+            <input type="number" name="price" placeholder="price" required="">
+            <input type="number" name="payout_num" placeholder="payout_num" required="">
+            <select name="teacher_id" required="">
+                <option th:each="teacher : ${teachers}" th:value="${teacher.getId()}"
+                        th:text="${teacher.getName()} + ' ' + ${teacher.getSurname()}"></option>
+            </select>
+            <input type="hidden" name="company_id" th:value="${current_user.getCompanyId()}" required="">
+            <input type="submit" required="">
+        </form>
+    </div>
 </div>
 
 <footer th:insert="blocks/footer :: footer"></footer>

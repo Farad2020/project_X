@@ -158,7 +158,9 @@ public class CompanyController {
         userIdentifier.getUserClass(user, model);
         if (model.getAttribute("isManagementStaff") != null) {
             List<Course> courses = companyService.getAllCompanyCourses(((ManagementStaff)user).getCompanyId());
+            List<UserTeacher> userTeachers = companyService.getAllCompanyTeachers(((ManagementStaff)user).getCompanyId());
             model.addAttribute("courses", courses );
+            model.addAttribute("teachers", userTeachers);
             return "company-courses";
         }
         return "error-page";
@@ -277,6 +279,21 @@ public class CompanyController {
         Schedule schedule = new Schedule(UUID.randomUUID(), startTime, endTime, weekDay, courseId);
         boolean result = companyService.addScheduleToCourse(schedule, courseId);
         return "redirect:/company_courses/" + courseId;
+    }
+
+    @PostMapping("add_course")
+    public String addCourse(@RequestParam(name = "name") String courseName,
+                            @RequestParam(name = "description") String description,
+                            @RequestParam(name = "is_active") boolean isActive,
+                            @RequestParam(name = "start_date") String startDate,
+                            @RequestParam(name = "price") double price,
+                            @RequestParam(name = "payout_num") int payoutNum,
+                            @RequestParam(name = "teacher_id") UUID teacherId,
+                            @RequestParam(name = "company_id") UUID companyId) {
+        System.out.println(startDate);
+        Course course = new Course(UUID.randomUUID(), courseName, description, isActive, startDate, null, price, payoutNum, teacherId, companyId);
+        boolean result = companyService.addCourseToCompany(companyId, course);
+        return "redirect:/courses";
     }
 
 }
