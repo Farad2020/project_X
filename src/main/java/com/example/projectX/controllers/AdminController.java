@@ -207,12 +207,13 @@ public class AdminController {
                               @RequestParam(name = "is_credentials_non_expired") boolean isCredentialsNonExpired,
                               @RequestParam(name = "is_enabled") boolean isEnabled,
                               @RequestParam(name = "company_id") UUID companyId,
+                              @RequestParam(name = "profile_image_oid") long profileImageOid,
                               @RequestParam(name = "teacher_id") UUID teacherId) {
         // TODO if you do not change password then you fucked up
         // So in order to prevent that shit, you have to check if your previous password is equal to what you have send in request
         // If they same then do update but without password
         // otherwise do the same shit as you did before, bitch
-        UserTeacher userTeacher = new UserTeacher(teacherId, name, surname, lastname, login, password, email, telephone, companyId, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
+        UserTeacher userTeacher = new UserTeacher(teacherId, name, surname, lastname, login, password, email, telephone, companyId, profileImageOid, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
         boolean result = userAuthenticationService.updateUserTeacherById(teacherId, userTeacher);
         System.out.println(result);
         return "redirect:/$2a$10$HZR3IGneje95jJVEomN.vuEKlxwRt6Tn5oeLEXySZXh7L/WLiX6fm/company/" + companyId;

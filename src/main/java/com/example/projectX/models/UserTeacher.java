@@ -17,6 +17,7 @@ public class UserTeacher implements UserDetails {
     private final String email;
     private final String telephone;
     private final UUID companyId;
+    private final long profileImageOid;
     private final boolean isAccountNonExpired;
     private final boolean isAccountNonLocked;
     private final boolean isCredentialsNonExpired;
@@ -32,7 +33,7 @@ public class UserTeacher implements UserDetails {
             String email,
             String telephone,
             UUID companyId,
-            boolean isAccountNonExpired,
+            long profileImageOid, boolean isAccountNonExpired,
             boolean isAccountNonLocked,
             boolean isCredentialsNonExpired,
             boolean isEnabled) {
@@ -45,6 +46,7 @@ public class UserTeacher implements UserDetails {
         this.email = email;
         this.telephone = telephone;
         this.companyId = companyId;
+        this.profileImageOid = profileImageOid;
         this.isAccountNonExpired = isAccountNonExpired;
         this.isAccountNonLocked = isAccountNonLocked;
         this.isCredentialsNonExpired = isCredentialsNonExpired;
@@ -116,5 +118,9 @@ public class UserTeacher implements UserDetails {
 
     public UUID getCompanyId() {
         return companyId;
+    }
+
+    public long getProfileImageOid() {
+        return profileImageOid;
     }
 }

@@ -3,14 +3,22 @@ package com.example.projectX.controllers;
 import com.example.projectX.helper.UserIdentifier;
 import com.example.projectX.models.*;
 import com.example.projectX.services.CompanyService;
+import com.example.projectX.services.MediaFilesService;
 import com.example.projectX.services.UserAuthenticationService;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
 @Controller
@@ -20,12 +28,14 @@ public class TeacherController {
     private final CompanyService companyService;
     private final UserAuthenticationService userAuthenticationService;
     private final UserIdentifier userIdentifier;
+    private final MediaFilesService mediaFilesService;
 
     @Autowired
-    public TeacherController(CompanyService companyService, UserAuthenticationService userAuthenticationService, UserIdentifier userIdentifier) {
+    public TeacherController(CompanyService companyService, UserAuthenticationService userAuthenticationService, UserIdentifier userIdentifier, MediaFilesService mediaFilesService) {
         this.companyService = companyService;
         this.userAuthenticationService = userAuthenticationService;
         this.userIdentifier = userIdentifier;
+        this.mediaFilesService = mediaFilesService;
     }
 
     //Учителя
@@ -214,8 +224,38 @@ public class TeacherController {
                                     @RequestParam(name = "lastname") String lastname,
                                     @RequestParam(name = "login") String login,
                                     @RequestParam(name = "email") String email,
-                                    @RequestParam(name = "telephone") String telephone) {
-        return null;
+                                    @RequestParam(name = "telephone") String telephone,
+                                    @RequestParam(name = "teacher_id") UUID teacherId) {
+        Optional<UserTeacher> userTeacherOptional = companyService.getTeacherById(teacherId);
+        UserTeacher userTeacher = null;
+        if (userTeacherOptional.isPresent()) {
+            userTeacher = userTeacherOptional.get();
+        } else {
+            return "redirect:/teacher_profile/" + teacherId;
+        }
+        UserTeacher updatedTeacher = new UserTeacher(teacherId, name, surname, lastname, login, userTeacher.getPassword(), email, telephone, userTeacher.getCompanyId(), userTeacher.getProfileImageOid(), userTeacher.isAccountNonExpired(), userTeacher.isAccountNonLocked(), userTeacher.isCredentialsNonExpired(), userTeacher.isEnabled());
+        boolean result = userAuthenticationService.updateUserTeacherWithoutPasswordById(teacherId, updatedTeacher);
+        return "redirect:/teacher_profile/" + teacherId;
+    }
+
+    @PostMapping("teacher_profile/change_profile_picture")
+    public String changeTeacherProfilePicture(@RequestParam(name = "image") MultipartFile image,
+                                              @RequestParam(name = "teacher_id") UUID teacherId) {
+        if (Objects.requireNonNull(image.getContentType()).contains("image")) {
+            boolean result = mediaFilesService.changeTeacherProfilePicture(teacherId, image.getResource());
+            System.out.println(result);
+        }
+        return "redirect:/teacher_profile/" + teacherId;
+    }
+
+    @GetMapping("teacher_profile_picture/{teacher_id}")
+    public void showTeacherProfilePicture(@PathVariable(name = "teacher_id") UUID teacherId,
+                                          HttpServletResponse response) throws IOException {
+        response.setContentType("image/jpeg");
+
+        Resource file = mediaFilesService.getTeacherProfilePicture(companyService.getTeacherById(teacherId).get());
+        InputStream is = new ByteArrayInputStream(file.getInputStream().readAllBytes());
+        IOUtils.copy(is, response.getOutputStream());
     }
 
 }

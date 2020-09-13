@@ -143,7 +143,7 @@ public class StudentController {
     }
 
     @PostMapping("student_profile/change_profile_picture")
-    public String changeProfilePicture(@RequestParam(name = "image") MultipartFile image,
+    public String changeStudentProfilePicture(@RequestParam(name = "image") MultipartFile image,
                                        @RequestParam(name = "student_id") UUID studentId) {
         if (Objects.requireNonNull(image.getContentType()).contains("image")) {
             boolean result = mediaFilesService.changeStudentProfilePicture(studentId, image.getResource());

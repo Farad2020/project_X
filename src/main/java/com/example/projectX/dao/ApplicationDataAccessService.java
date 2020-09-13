@@ -175,12 +175,13 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
             String password = resultSet.getString("user_teacher_password");
             String email = resultSet.getString("user_teacher_email");
             String telephone = resultSet.getString("user_teacher_telephone");
+            long profileImageOid = resultSet.getLong("user_teacher_profile_image");
             boolean isAccountNonExpired = resultSet.getBoolean("is_account_non_expired");
             boolean isAccountNonLocked = resultSet.getBoolean("is_account_non_locked");
             boolean isCredentialsNonExpired = resultSet.getBoolean("is_credentials_non_expired");
             boolean isEnabled = resultSet.getBoolean("is_enabled");
             UUID companyId = UUID.fromString(resultSet.getString("company_id"));
-            return new UserTeacher(id, name, surname, lastname, login_, password, email, telephone, companyId, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
+            return new UserTeacher(id, name, surname, lastname, login_, password, email, telephone, companyId, profileImageOid, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
         }));
         return teachers.stream().findFirst();
     }
@@ -266,12 +267,13 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
             String password = resultSet.getString("user_teacher_password");
             String email = resultSet.getString("user_teacher_email");
             String telephone = resultSet.getString("user_teacher_telephone");
+            long profileImageOid = resultSet.getLong("user_teacher_profile_image");
             boolean isAccountNonExpired = resultSet.getBoolean("is_account_non_expired");
             boolean isAccountNonLocked = resultSet.getBoolean("is_account_non_locked");
             boolean isCredentialsNonExpired = resultSet.getBoolean("is_credentials_non_expired");
             boolean isEnabled = resultSet.getBoolean("is_enabled");
             UUID companyId_ = UUID.fromString(resultSet.getString("company_id"));
-            return new UserTeacher(id, name, surname, lastname, login_, password, email, telephone, companyId_, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
+            return new UserTeacher(id, name, surname, lastname, login_, password, email, telephone, companyId_, profileImageOid, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
 
         }));
     }
@@ -485,12 +487,13 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
             String password = resultSet.getString("user_teacher_password");
             String email = resultSet.getString("user_teacher_email");
             String telephone = resultSet.getString("user_teacher_telephone");
+            long profileImageOid = resultSet.getLong("user_teacher_profile_image");
             boolean isAccountNonExpired = resultSet.getBoolean("is_account_non_expired");
             boolean isAccountNonLocked = resultSet.getBoolean("is_account_non_locked");
             boolean isCredentialsNonExpired = resultSet.getBoolean("is_credentials_non_expired");
             boolean isEnabled = resultSet.getBoolean("is_enabled");
             UUID companyId = UUID.fromString(resultSet.getString("company_id"));
-            return new UserTeacher(id, name, surname, lastname, login_, password, email, telephone, companyId, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
+            return new UserTeacher(id, name, surname, lastname, login_, password, email, telephone, companyId, profileImageOid, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
         }));
         return teachers.stream().findFirst();
     }
@@ -585,12 +588,13 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
             String password = resultSet.getString("user_teacher_password");
             String email = resultSet.getString("user_teacher_email");
             String telephone = resultSet.getString("user_teacher_telephone");
+            long profileImageOid = resultSet.getLong("user_teacher_profile_image");
             boolean isAccountNonExpired = resultSet.getBoolean("is_account_non_expired");
             boolean isAccountNonLocked = resultSet.getBoolean("is_account_non_locked");
             boolean isCredentialsNonExpired = resultSet.getBoolean("is_credentials_non_expired");
             boolean isEnabled = resultSet.getBoolean("is_enabled");
             UUID companyId_ = UUID.fromString(resultSet.getString("company_id"));
-            return new UserTeacher(id, name, surname, lastname, login_, password, email, telephone, companyId_, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
+            return new UserTeacher(id, name, surname, lastname, login_, password, email, telephone, companyId_, profileImageOid, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
         }));
     }
 
@@ -1171,6 +1175,69 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
                 return null;
             }
             LargeObject largeObject = largeObjectManager.open(student.getProfileImageOid(), LargeObjectManager.READ);
+//            byte[] buf = new byte[largeObject.size()];
+//            largeObject.read(buf, 0, largeObject.size());
+            ByteArrayResource byteArrayResource = new ByteArrayResource(largeObject.getInputStream().readAllBytes());
+            largeObject.close();
+            connection.commit();
+            connection.setAutoCommit(true);
+            return byteArrayResource;
+        } catch (SQLException | IOException throwables) {
+            throwables.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public boolean changeTeacherProfilePicture(UUID teacherId, Resource image) {
+        try {
+            Connection connection = postgresDataSource.getHikariDataSource().getConnection();
+            connection.setAutoCommit(false);
+            PGConnection pgConnection;
+            if (connection.isWrapperFor(PGConnection.class)) {
+                pgConnection = connection.unwrap(PGConnection.class);
+            } else {
+                return false;
+            }
+            LargeObjectManager largeObjectManager = pgConnection.getLargeObjectAPI();
+            long oid = largeObjectManager.createLO(LargeObjectManager.READ | LargeObjectManager.WRITE);
+            LargeObject largeObject = largeObjectManager.open(oid, LargeObjectManager.WRITE);
+            byte[] buf = image.getInputStream().readAllBytes();
+            //System.out.println(buf.length);
+            largeObject.write(buf, 0, buf.length);
+            largeObject.close();
+            final String sql = String.format("UPDATE User_Teachers SET " +
+                    "user_teacher_profile_image = %d " +
+                    "WHERE user_teacher_id = '%s';", oid, teacherId);
+            jdbcTemplate.execute(sql);
+            connection.commit();
+            connection.setAutoCommit(true);
+            return true;
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public Resource getTeacherProfilePicture(UserTeacher teacher) {
+        try {
+            Connection connection = postgresDataSource.getHikariDataSource().getConnection();
+            connection.setAutoCommit(false);
+            PGConnection pgConnection;
+
+            if (connection.isWrapperFor(PGConnection.class)) {
+                pgConnection = connection.unwrap(PGConnection.class);
+            } else {
+                return null;
+            }
+
+            LargeObjectManager largeObjectManager = pgConnection.getLargeObjectAPI();
+            System.out.println(teacher.getProfileImageOid());
+            if (teacher.getProfileImageOid() == 0) {
+                return null;
+            }
+            LargeObject largeObject = largeObjectManager.open(teacher.getProfileImageOid(), LargeObjectManager.READ);
 //            byte[] buf = new byte[largeObject.size()];
 //            largeObject.read(buf, 0, largeObject.size());
             ByteArrayResource byteArrayResource = new ByteArrayResource(largeObject.getInputStream().readAllBytes());

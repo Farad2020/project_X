@@ -26,7 +26,12 @@
 
 <div class="account-content">
     <div class="account-img-box">
-        <img class="account-img" src="/design-flow/avatars/avatar_cat.jpg"><br>
+        <th:block th:if="${teacher.getProfileImageOid() == 0}">
+            <img class="account-img" src="/design-flow/avatars/avatar_cat.jpg"><br>
+        </th:block>
+        <th:block th:if="${teacher.getProfileImageOid() != 0}">
+            <img class="account-img" th:src="@{'~/teacher_profile_picture/'} + ${teacher.getId()}"><br>
+        </th:block>
         <th:block th:if="${isTeacher}">
             <button th:if="${current_user_id.equals(teacher.getId())}" class="btn btn-default" id="edit-account-btn" onclick="showAdditionalEditInformation()">Edit</button>
         </th:block>
@@ -53,7 +58,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <th:block th:each="i :  ${#numbers.sequence(0, courses.size() -1 )}" >
+                <th:block th:each="i :  ${#numbers.sequence(0, courses.size() -1 )}" th:if="${courses.size() > 0}" >
                     <tr class="course-list-item table-item">
                         <th scope="row"  th:text="${i+1}"></th>
                         <td>
@@ -105,9 +110,9 @@
 </div>
 
 <div id="additional-info-edit" class="additional-info-edit hidden" >
-    <form action="/student_profile/change_profile_picture" method="post" enctype="multipart/form-data">
+    <form action="/teacher_profile/change_profile_picture" method="post" enctype="multipart/form-data">
         <input type="file" name="image" required="">
-        <input type="hidden" name="user_id" th:value="${teacher.getId()}">
+        <input type="hidden" name="teacher_id" th:value="${teacher.getId()}">
         <input type="submit">
     </form>
     <form action="/teacher_profile/update_info" method="post">

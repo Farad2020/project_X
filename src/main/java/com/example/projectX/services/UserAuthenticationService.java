@@ -56,4 +56,16 @@ public class UserAuthenticationService implements UserDetailsService {
     public boolean updateUserStudentById(UUID studentId, UserStudent userStudent) {
         return userDao.updateUserStudentById(studentId, userStudent);
     }
+
+    public boolean updateManagementStaffWithoutPasswordById(UUID managerId, ManagementStaff managementStaff) {
+        return userDao.updateManagementStaffWithoutPasswordById(managerId, managementStaff);
+    }
+
+    public boolean updateUserTeacherWithoutPasswordById(UUID teacherId, UserTeacher userTeacher) {
+        return userDao.updateUserTeacherWithoutPasswordById(teacherId, userTeacher);
+    }
+
+    public boolean updateUserStudentWithoutPasswordById(UUID studentId, UserStudent student) {
+        return userDao.updateUserStudentWithoutPasswordById(studentId, student);
+    }
 }
