@@ -166,19 +166,35 @@ public class TeacherController {
     }
 
     @GetMapping("teacher_posts")
-    public String teacherPosts(Model model) {
-        return "teacher-posts-page";
+    public String teacherPosts(Model model,
+                               @AuthenticationPrincipal UserDetails user) {
+        userIdentifier.getUserClass(user, model);
+        if (model.getAttribute("isTeacher") != null){
+            return "teacher-posts-page";
+        }
+        return "error-page";
     }
 
 
     @GetMapping("teacher_tasks")
-    public String teacherTasks(Model model) {
-        return "teacher-tasks-page";
+    public String teacherTasks(Model model,
+                               @AuthenticationPrincipal UserDetails user) {
+        userIdentifier.getUserClass(user, model);
+        if (model.getAttribute("isTeacher") != null){
+            return "teacher-tasks-page";
+        }
+        return "error-page";
+
     }
 
     @GetMapping("task")
-    public String genericTask(Model model) {
-        return "task-page";
+    public String genericTask(Model model,
+                              @AuthenticationPrincipal UserDetails user) {
+        userIdentifier.getUserClass(user, model);
+        if (model.getAttribute("isTeacher") != null){
+            return "task-page";
+        }
+        return "error-page";
     }
 
     @GetMapping("courses/{course_id}/attendance")
@@ -257,5 +273,4 @@ public class TeacherController {
         InputStream is = new ByteArrayInputStream(file.getInputStream().readAllBytes());
         IOUtils.copy(is, response.getOutputStream());
     }
-
 }
