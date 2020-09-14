@@ -27,7 +27,12 @@
         <th:block th:if="${student.getProfileImageOid() != 0}">
             <img class="account-img" th:src="@{'~/student_profile_picture/'} + ${student.getId()}"><br>
         </th:block>
-        <button th:if="${isOwner}" type="button" class="btn btn-default" id="edit-account-btn" onclick="showAdditionalEditInformation()">Edit</button>
+        <th:block th:if="${isStudent}">
+            <button th:if="${current_user_id.equals(student.getId())}" class="btn btn-default" id="edit-account-btn" onclick="showAdditionalEditInformation()">Edit</button>
+        </th:block>
+        <th:block th:if="${isManagementStaff}">
+            <button th:if="${current_user.isAbleToEditStudent() or current_user.getRole() == 1}" class="btn btn-default" id="edit-account-btn" onclick="showAdditionalEditInformation()">Edit</button>
+        </th:block>
     </div>
 
     <div class="account-info-box">
@@ -68,6 +73,16 @@
 <div id="additional-info-edit" class="additional-info-edit hidden" >
     <form action="/student_profile/change_profile_picture" method="post" enctype="multipart/form-data">
         <input type="file" name="image" required="">
+        <input type="hidden" name="student_id" th:value="${student.getId()}">
+        <input type="submit">
+    </form>
+    <form action="/student_profile/update_info" method="post">
+        <div><input type="text" name="name" placeholder="name" th:value="${student.getName()}"></div>
+        <div><input type="text" name="surname" placeholder="surname" th:value="${student.getSurname()}"></div>
+        <div><input type="text" name="lastname" placeholder="lastname" th:value="${student.getLastname()}"></div>
+        <div><input type="text" name="login" placeholder="login" th:value="${student.getLogin()}"></div>
+        <div><input type="text" name="email" placeholder="email" th:value="${student.getEmail()}"></div>
+        <div><input type="text" name="telephone" placeholder="telephone" th:value="${student.getTelephone()}"></div>
         <input type="hidden" name="student_id" th:value="${student.getId()}">
         <input type="submit">
     </form>

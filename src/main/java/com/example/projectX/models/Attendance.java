@@ -31,4 +31,13 @@ public class Attendance {
     public int getAttendanceType() {
         return attendanceType;
     }
+
+    public String getAttendanceTypeString() {
+        switch (attendanceType) {
+            case 0: return "Прибыл";
+            case 1: return "Не прибыл";
+            case 2: return "Отсутствовал по причине";
+            default: return "";
+        }
+    }
 }
