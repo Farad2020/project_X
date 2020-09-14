@@ -10,11 +10,11 @@
   --main-colors-black: #000000;
 
   /* Color palletes 2 */
-  --main-colors-grey: #adadad;
-  --main-colors-heathery: #83687b;
-  --main-colors-mauve: #64495c;
-  --main-colors-syrup: #4f1b1d;
-  --main-colors-brown: #2e1115;
+  --main-colors-dark-bg: #262226;
+  --main-colors-heathery: #1f1b24;
+  --main-colors-nav-bg: #000000;
+  --main-colors-syrup: #4f4f4f;
+  --main-colors-link-bg: #473943;
   --main-colors-white: #ffffff;
 
 }
@@ -34,12 +34,12 @@ html{
 }
 
 html[data-theme='dark']{
-  --bg: var(--main-colors-grey);
-  --main-color: var(--main-colors-mauve);
+  --bg: var(--main-colors-dark-bg);
+  --main-color: var(--main-colors-nav-bg);
   --text-color: var(--main-colors-white);
   --color-1: var(--main-colors-heathery);
   --color-2: var(--main-colors-syrup);
-  --color-3: var(--main-colors-brown);
+  --color-3: var(--main-colors-link-bg);
 
 }
 
@@ -56,6 +56,14 @@ html.transition *:after {
   transition-delay: 0 !important;
 }
 
+html[data-theme='dark'] .bg-light{
+  color: var(--bg);
+}
+
+.text-primary{
+  color: var(--text-color);
+}
+
 /*navbar */
 
 .navbar-light{
@@ -63,6 +71,18 @@ html.transition *:after {
   color: var(--text-color);
   margin-bottom: 0.5em;
  }
+
+.navbar-light .navbar-brand{
+  color: var(--text-color);
+}
+
+.navbar-light .navbar-brand:hover{
+  color: var(--text-color);
+}
+
+.navbar-light .navbar-nav .active>.nav-link{
+  color: var(--text-color);
+}
 
  /*Main menu bar*/
 
@@ -188,6 +208,14 @@ html.transition *:after {
 .card{
   background-color: var(--bg);
   color: var(--text-color);
+}
+
+html[data-theme='dark'] .card{
+  border-color: white;
+}
+
+html[data-theme='dark'] .card-header:first-child{
+  border-color: white;
 }
 
 .btn-default{
@@ -347,6 +375,8 @@ background-color: black;
     max-height: 7em;
     min-height: 7em;
 }
+
+
 
 p.course-name-link{
   text-decoration: none;

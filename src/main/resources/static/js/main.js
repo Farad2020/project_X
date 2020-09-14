@@ -28,7 +28,10 @@ var reloadData = function() {
 
 */
 
-document.getElementById('change-theme-btn').addEventListener('click', function(){
+document.getElementById('change-theme-btn').addEventListener('click', this.changeTheme );
+
+
+function changeTheme(){
     if(document.documentElement.getAttribute('data-theme') == 'light' ){
         trans()
         document.documentElement.setAttribute('data-theme', 'dark')
@@ -37,14 +40,14 @@ document.getElementById('change-theme-btn').addEventListener('click', function()
         document.documentElement.setAttribute('data-theme', 'light')
 
     }
-});
+};
 
 let trans = () => {
     document.documentElement.classList.add('transition');
     window.setTimeout(() => {
         document.documentElement.classList.remove('transition')
     }, 100)
-}
+};
 
 function showMoreAccountInfo() {
     var fullInfo = document.getElementById("account-info-card-text");
@@ -57,8 +60,27 @@ function showMoreAccountInfo() {
         fullInfo.style.display = "none";
         btnShowAll.innerHTML = "Показать подробную информацию"; 
     }
-  }
+};
+/*
+const options = {
+    bottom: '64px', // default: '32px'
+    right: '32px', // default: '32px'
+    left: 'unset', // default: 'unset'
+    time: '0.5s', // default: '0.3s'
+    mixColor: '#fff', // default: '#fff'
+    backgroundColor: '#fff',  // default: '#fff'
+    buttonColorDark: '#100f2c',  // default: '#100f2c'
+    buttonColorLight: '#fff', // default: '#fff'
+    saveInCookies: true, // default: true,
+    label: '🌓', // default: ''
+    autoMatchOsTheme: true // default: true
+};
 
-$(document).ready(function(){
+const darkmode =  new Darkmode(options);
+darkmode.showWidget();
+*/
+
+(document).readyState(function(){
   $('[data-toggle="tooltip"]').tooltip();
 });
+

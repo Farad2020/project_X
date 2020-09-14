@@ -133,13 +133,23 @@ public class StudentController {
     }
 
     @GetMapping("student_attendance")
-    public String userAttendance(Model model) {
-        return "student-attendance-journal";
+    public String userAttendance(Model model,
+                                 @AuthenticationPrincipal UserDetails user){
+        userIdentifier.getUserClass(user,model);
+        if( model.getAttribute("isStudent") != null){
+            return "student-attendance-journal";
+        }
+        return "error-page";
     }
 
     @GetMapping("student_tasks")
-    public String userTasks(Model model) {
-        return "student-tasks-page";
+    public String userTasks(Model model,
+                            @AuthenticationPrincipal UserDetails user){
+        userIdentifier.getUserClass(user,model);
+        if( model.getAttribute("isStudent") != null){
+            return "student-tasks-page";
+        }
+        return "error-page";
     }
 
     @PostMapping("student_profile/change_profile_picture")
