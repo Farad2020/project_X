@@ -10,7 +10,7 @@
   --main-colors-black: #000000;
 
   /* Color palletes 2 */
-  --main-colors-dark-bg: #262226;
+  --main-colors-dark-bg: #1a1a1a; /*1f1f1f*/
   --main-colors-heathery: #1f1b24;
   --main-colors-nav-bg: #000000;
   --main-colors-syrup: #4f4f4f;
@@ -46,6 +46,11 @@ html[data-theme='dark']{
 body{
   height: 100%;
   background-color: var(--bg);
+  color: var(--text-color);
+}
+
+html[data-theme='dark'] .bg-light{
+  background-color: #757575 !important;
 }
 
 html.transition,
@@ -72,15 +77,20 @@ html[data-theme='dark'] .bg-light{
   margin-bottom: 0.5em;
  }
 
-.navbar-light .navbar-brand{
-  color: var(--text-color);
+.nav-link{
+  color: var(--text-color)!important;
 }
 
-.navbar-light .navbar-brand:hover{
-  color: var(--text-color);
+html[data-theme='dark'] .btn-outline-success{
+  color: #000000;
+  border-color: #000000;
 }
 
-.navbar-light .navbar-nav .active>.nav-link{
+html[data-theme='dark'] .btn-outline-success:hover{
+  background-color: #ffffff;
+}
+
+html[data-theme='dark'] .navbar-brand{
   color: var(--text-color);
 }
 
@@ -336,8 +346,8 @@ a.info-link:hover{
 }
 
 hr.schedule-hr{
-color: black;
-background-color: black;
+color: var(--text-color);
+background-color: var(--text-color);
 }
 
 .schedule-title{

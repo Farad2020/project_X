@@ -35,12 +35,17 @@ function changeTheme(){
     if(document.documentElement.getAttribute('data-theme') == 'light' ){
         trans()
         document.documentElement.setAttribute('data-theme', 'dark')
+        localStorage.setItem('theme', 'dark')
     }else{
         trans()
         document.documentElement.setAttribute('data-theme', 'light')
-
+        localStorage.setItem('theme', 'light')
     }
 };
+
+if(localStorage.getItem('theme') == 'dark'){
+    document.documentElement.setAttribute('data-theme', 'dark')
+}
 
 let trans = () => {
     document.documentElement.classList.add('transition');
