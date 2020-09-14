@@ -278,7 +278,7 @@ public class CompanyController {
                                       @RequestParam(name = "company_id") UUID companyId) {
         Schedule schedule = new Schedule(UUID.randomUUID(), startTime, endTime, weekDay, courseId);
         boolean result = companyService.addScheduleToCourse(schedule, courseId);
-        return "redirect:/company_courses/" + courseId;
+        return "redirect:/courses/" + courseId;
     }
 
     @PostMapping("add_course")
@@ -294,6 +294,31 @@ public class CompanyController {
         Course course = new Course(UUID.randomUUID(), courseName, description, isActive, startDate, null, price, payoutNum, teacherId, companyId);
         boolean result = companyService.addCourseToCompany(companyId, course);
         return "redirect:/courses";
+    }
+
+    @PostMapping("add_student")
+    public String addStudent(@RequestParam(name = "name") String studentName,
+                             @RequestParam(name = "login") String studentLogin,
+                             @RequestParam(name = "company_id") UUID companyId) {
+        boolean result = userAuthenticationService.saveUserStudent(studentLogin, studentName, "123", companyId);
+        System.out.println(result);
+        return "redirect:/company_students";
+    }
+
+    @PostMapping("delete_student_from_course")
+    public String deleteStudentFromCourse(@RequestParam(name = "course_id") UUID courseId,
+                                          @RequestParam(name = "student_id") UUID studentId) {
+        boolean result = companyService.deleteStudentFromCourse(studentId, courseId);
+        System.out.println(result);
+        return "redirect:/courses/" + courseId;
+    }
+
+    @PostMapping("add_student_to_course")
+    public String addStudentToCourse(@RequestParam(name = "course_id") UUID courseId,
+                                     @RequestParam(name = "student_id") UUID studentId) {
+        boolean result = companyService.addStudentToCourse(studentId, courseId);
+        System.out.println(result);
+        return "redirect:/courses/" + courseId;
     }
 
 }

@@ -174,7 +174,7 @@
                 <th scope="col">Surname</th>
                 <th scope="col">Lastname</th>
                 <th:block th:if="${isManagementStaff}">
-                    <th th:if="${manager.getRole() == 1 or manager.isAbleToEditStudent()}">Action</th>
+                    <th th:if="${current_user.getRole() == 1 or current_user.isAbleToEditStudent()}">Action</th>
                 </th:block>
             </tr>
             <tbody>
@@ -187,6 +187,13 @@
                            th:text="${participating_students.get(i).getSurname()}"/></td>
                     <td><a class="table-row-link" th:href="@{'students_profile/'} + ${participating_students.get(i).getId()}"
                            th:text="${participating_students.get(i).getLastname()}"/></td>
+                    <td>
+                        <form action="/delete_student_from_course" method="post">
+                            <input type="hidden" name="course_id" th:value="${course.getId()}">
+                            <input type="hidden" name="student_id" th:value="${participating_students.get(i).getId()}">
+                            <input type="submit" class="table-row-link" value="Delete From Course">
+                        </form>
+                    </td>
                 </tr>
             </th:block>
             </tbody>
@@ -197,7 +204,7 @@
                 <td><strong>Surname</strong></td>
                 <td><strong>Lastname</strong></td>
                 <th:block th:if="${isManagementStaff}">
-                    <td th:if="${manager.getRole() == 1 or manager.isAbleToEditStudent()}"><strong>Action</strong></td>
+                    <td th:if="${current_user.getRole() == 1 or current_user.isAbleToEditStudent()}"><strong>Action</strong></td>
                 </th:block>
             </tr>
             <tbody>
@@ -210,6 +217,13 @@
                            th:text="${not_participating_students.get(i).getSurname()}"/></td>
                     <td><a class="table-row-link" th:href="@{'students_profile/'} + ${not_participating_students.get(i).getId()}"
                            th:text="${not_participating_students.get(i).getLastname()}"/></td>
+                    <td>
+                        <form action="/add_student_to_course" method="post">
+                            <input type="hidden" name="course_id" th:value="${course.getId()}">
+                            <input type="hidden" name="student_id" th:value="${not_participating_students.get(i).getId()}">
+                            <input type="submit" class="table-row-link" value="Add To Course">
+                        </form>
+                    </td>
                 </tr>
             </th:block>
             </tbody>
