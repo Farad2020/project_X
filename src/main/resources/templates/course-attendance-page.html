@@ -1,0 +1,65 @@
+<!DOCTYPE HTML>
+<!--
+список(который фильтруется по разным параметрам/ поиск)
+-->
+<html xmlns:th="http://www.thymeleaf.org" data-theme="light">
+<head>
+    <title th:text="${title}" > </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" href="/css/style.css" />
+</head>
+<body>
+<header th:insert="blocks/header :: header"></header>
+
+<div th:insert="blocks/default-left-menu-bar :: default-left-menu-bar"></div>
+
+<div class="main-content">
+
+    <div th:each="date : ${unique_dates}">
+        <p th:text="${date}"></p>
+        <form action="/update_attendance" method="post">
+            <div th:each="attendance : ${attendances}" th:if="${attendance.getDate().equals(date)}">
+                <p th:text="${attendance.getStudentCourse().getStudent().getName()}" style="display: inline-block;"></p>
+
+                    <!-- Default inline 1-->
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" class="custom-control-input" th:id="${attendance.getId()} + ' 1'" th:name="${attendance.getId()}" value="0" required="">
+                        <label class="custom-control-label" th:for="${attendance.getId()} + ' 1'">Прибыл</label>
+                    </div>
+
+                    <!-- Default inline 2-->
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" class="custom-control-input" th:id="${attendance.getId()} + ' 2'" th:name="${attendance.getId()}" value="1" required="">
+                        <label class="custom-control-label" th:for="${attendance.getId()} + ' 2'">Не прибыл</label>
+                    </div>
+
+                    <!-- Default inline 3-->
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" class="custom-control-input" th:id="${attendance.getId()} + ' 3'" th:name="${attendance.getId()}" value="2" required="">
+                        <label class="custom-control-label" th:for="${attendance.getId()} + ' 3'">Отсутствовал по причине</label>
+                    </div>
+            </div>
+            <input type="hidden" name="date" th:value="${date}">
+            <input type="hidden" name="course_id" th:value="${course.getId()}">
+            <input type="submit">
+        </form>
+    </div>
+
+    <div>
+        <form action="/add_attendance_to_course" method="post">
+            <h3>Add new Attendance:</h3>
+            <input type="date" name="date" required="">
+
+            <input type="hidden" name="course_id" th:value="${course.getId()}">
+            <input type="submit">
+        </form>
+    </div>
+
+</div>
+
+<footer th:insert="blocks/footer :: footer"></footer>
+</body>
+</html>

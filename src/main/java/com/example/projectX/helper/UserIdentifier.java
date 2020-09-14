@@ -22,12 +22,18 @@ public class UserIdentifier {
         if( userAuthenticationService.getUserStudentByLogin(user.getUsername()).isPresent() ){
             model.addAttribute("isStudent", true);
             model.addAttribute("current_user", (UserStudent)user);
+            model.addAttribute("current_user_id", ((UserStudent) user).getId());
+            model.addAttribute("current_user_company_id", ((UserStudent) user).getCompanyId());
         }else if( userAuthenticationService.getManagerStaffByLogin(user.getUsername()).isPresent() ){
             model.addAttribute("isManagementStaff", true);
             model.addAttribute("current_user", (ManagementStaff)user);
+            model.addAttribute("current_user_id", ((ManagementStaff) user).getId());
+            model.addAttribute("current_user_company_id", ((ManagementStaff) user).getCompanyId());
         }else if( userAuthenticationService.getUserTeacherByLogin(user.getUsername()).isPresent() ){
             model.addAttribute("isTeacher", true);
             model.addAttribute("current_user", (UserTeacher)user);
+            model.addAttribute("current_user_id", ((UserTeacher)user).getId());
+            model.addAttribute("current_user_company_id", ((UserTeacher) user).getCompanyId());
         }
     }
 }

@@ -3,7 +3,6 @@ package com.example.projectX.dao;
 import com.example.projectX.datasource.PostgresDataSource;
 import com.example.projectX.models.*;
 import org.postgresql.PGConnection;
-import org.postgresql.geometric.PGcircle;
 import org.postgresql.largeobject.LargeObject;
 import org.postgresql.largeobject.LargeObjectManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -177,12 +175,13 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
             String password = resultSet.getString("user_teacher_password");
             String email = resultSet.getString("user_teacher_email");
             String telephone = resultSet.getString("user_teacher_telephone");
+            long profileImageOid = resultSet.getLong("user_teacher_profile_image");
             boolean isAccountNonExpired = resultSet.getBoolean("is_account_non_expired");
             boolean isAccountNonLocked = resultSet.getBoolean("is_account_non_locked");
             boolean isCredentialsNonExpired = resultSet.getBoolean("is_credentials_non_expired");
             boolean isEnabled = resultSet.getBoolean("is_enabled");
             UUID companyId = UUID.fromString(resultSet.getString("company_id"));
-            return new UserTeacher(id, name, surname, lastname, login_, password, email, telephone, companyId, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
+            return new UserTeacher(id, name, surname, lastname, login_, password, email, telephone, companyId, profileImageOid, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
         }));
         return teachers.stream().findFirst();
     }
@@ -268,12 +267,13 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
             String password = resultSet.getString("user_teacher_password");
             String email = resultSet.getString("user_teacher_email");
             String telephone = resultSet.getString("user_teacher_telephone");
+            long profileImageOid = resultSet.getLong("user_teacher_profile_image");
             boolean isAccountNonExpired = resultSet.getBoolean("is_account_non_expired");
             boolean isAccountNonLocked = resultSet.getBoolean("is_account_non_locked");
             boolean isCredentialsNonExpired = resultSet.getBoolean("is_credentials_non_expired");
             boolean isEnabled = resultSet.getBoolean("is_enabled");
             UUID companyId_ = UUID.fromString(resultSet.getString("company_id"));
-            return new UserTeacher(id, name, surname, lastname, login_, password, email, telephone, companyId_, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
+            return new UserTeacher(id, name, surname, lastname, login_, password, email, telephone, companyId_, profileImageOid, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
 
         }));
     }
@@ -487,12 +487,13 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
             String password = resultSet.getString("user_teacher_password");
             String email = resultSet.getString("user_teacher_email");
             String telephone = resultSet.getString("user_teacher_telephone");
+            long profileImageOid = resultSet.getLong("user_teacher_profile_image");
             boolean isAccountNonExpired = resultSet.getBoolean("is_account_non_expired");
             boolean isAccountNonLocked = resultSet.getBoolean("is_account_non_locked");
             boolean isCredentialsNonExpired = resultSet.getBoolean("is_credentials_non_expired");
             boolean isEnabled = resultSet.getBoolean("is_enabled");
             UUID companyId = UUID.fromString(resultSet.getString("company_id"));
-            return new UserTeacher(id, name, surname, lastname, login_, password, email, telephone, companyId, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
+            return new UserTeacher(id, name, surname, lastname, login_, password, email, telephone, companyId, profileImageOid, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
         }));
         return teachers.stream().findFirst();
     }
@@ -587,12 +588,13 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
             String password = resultSet.getString("user_teacher_password");
             String email = resultSet.getString("user_teacher_email");
             String telephone = resultSet.getString("user_teacher_telephone");
+            long profileImageOid = resultSet.getLong("user_teacher_profile_image");
             boolean isAccountNonExpired = resultSet.getBoolean("is_account_non_expired");
             boolean isAccountNonLocked = resultSet.getBoolean("is_account_non_locked");
             boolean isCredentialsNonExpired = resultSet.getBoolean("is_credentials_non_expired");
             boolean isEnabled = resultSet.getBoolean("is_enabled");
             UUID companyId_ = UUID.fromString(resultSet.getString("company_id"));
-            return new UserTeacher(id, name, surname, lastname, login_, password, email, telephone, companyId_, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
+            return new UserTeacher(id, name, surname, lastname, login_, password, email, telephone, companyId_, profileImageOid, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled);
         }));
     }
 
@@ -728,6 +730,111 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
     @Override
     public Map<Integer, List<Schedule>> getMappedStudentSchedule(UUID studentId) {
         return createMappedSchedule(getAllStudentSchedule(studentId));
+    }
+
+    @Override
+    public List<Attendance> getAllCourseAttendances(UUID courseId) {
+        final String sql = String.format("SELECT * FROM Attendance " +
+                "WHERE student_course_id = ANY (" +
+                "SELECT student_course_id FROM Students_Courses " +
+                "WHERE course_id = '%s') " +
+                "ORDER BY attendance_date DESC;", courseId);
+        return jdbcTemplate.query(sql, ((resultSet, i) -> {
+            UUID id = UUID.fromString(resultSet.getString("attendance_id"));
+            Optional<StudentCourse> studentCourseOptional = getStudentCourseById(UUID.fromString(resultSet.getString("student_course_id")));
+            StudentCourse studentCourse = null;
+            if (studentCourseOptional.isPresent()) {
+                studentCourse = studentCourseOptional.get();
+            }
+            String date = resultSet.getString("attendance_date");
+            int attendanceType = resultSet.getInt("attendance_type");
+            return new Attendance(id, studentCourse, date, attendanceType);
+        }));
+    }
+
+    @Override
+    public Optional<StudentCourse> getStudentCourseById(UUID studentCourseId) {
+        final String sql = String.format("SELECT * FROM Students_Courses " +
+                "WHERE student_course_id = '%s';", studentCourseId);
+        return jdbcTemplate.query(sql, ((resultSet, i) -> {
+            UUID id = UUID.fromString(resultSet.getString("student_course_id"));
+            Optional<UserStudent> studentOptional = getStudentById(UUID.fromString(resultSet.getString("student_id")));
+            UserStudent student = null;
+            if (studentOptional.isPresent()) {
+                student = studentOptional.get();
+            }
+            Optional<Course> courseOptional = getCourseById(UUID.fromString(resultSet.getString("course_id")));
+            Course course = null;
+            if (courseOptional.isPresent()) {
+                course = courseOptional.get();
+            }
+            double reviewScore = resultSet.getDouble("student_course_review_score");
+            return new StudentCourse(id, student, course, reviewScore);
+        })).stream().findFirst();
+    }
+
+    @Override
+    public boolean addAttendanceToCourse(UUID courseId, String date) {
+        final String sql = "INSERT INTO Attendance " +
+                "(attendance_id, student_course_id, attendance_date) " +
+                "VALUES (uuid_generate_v4(), '%s', '%s');";
+        List<StudentCourse> studentCourseList = getAllStudentCourseOfCourse(courseId);
+        for (StudentCourse studentCourse : studentCourseList) {
+            jdbcTemplate.execute(String.format(sql, studentCourse.getId(), date));
+        }
+        return true;
+    }
+
+    @Override
+    public List<StudentCourse> getAllStudentCourseOfCourse(UUID courseId) {
+        final String sql = String.format("SELECT * FROM Students_Courses " +
+                "WHERE course_id = '%s';", courseId);
+        return jdbcTemplate.query(sql, ((resultSet, i) -> {
+            UUID id = UUID.fromString(resultSet.getString("student_course_id"));
+            Optional<UserStudent> studentOptional = getStudentById(UUID.fromString(resultSet.getString("student_id")));
+            UserStudent student = null;
+            if (studentOptional.isPresent()) {
+                student = studentOptional.get();
+            }
+            Optional<Course> courseOptional = getCourseById(UUID.fromString(resultSet.getString("course_id")));
+            Course course = null;
+            if (courseOptional.isPresent()) {
+                course = courseOptional.get();
+            }
+            double reviewScore = resultSet.getDouble("student_course_review_score");
+            return new StudentCourse(id, student, course, reviewScore);
+        }));
+    }
+
+    @Override
+    public List<Attendance> getAllCourseAttendancesForSpecificDate(UUID courseId, String date) {
+        final String sql = String.format("SELECT * FROM Attendance " +
+                "WHERE attendance_date = '%s' AND student_course_id = ANY (" +
+                "SELECT student_course_id FROM Students_Courses " +
+                "WHERE course_id = '%s');", date, courseId);
+        return jdbcTemplate.query(sql, ((resultSet, i) -> {
+            UUID id = UUID.fromString(resultSet.getString("attendance_id"));
+            Optional<StudentCourse> studentCourseOptional = getStudentCourseById(UUID.fromString(resultSet.getString("student_course_id")));
+            StudentCourse studentCourse = null;
+            if (studentCourseOptional.isPresent()) {
+                studentCourse = studentCourseOptional.get();
+            }
+            String date_ = resultSet.getString("attendance_date");
+            int attendanceType = resultSet.getInt("attendance_type");
+            return new Attendance(id, studentCourse, date_, attendanceType);
+        }));
+    }
+
+    @Override
+    public boolean updateAttendances(Map<String, String> params) {
+        final String sql = "UPDATE Attendance SET " +
+                "attendance_type = %d " +
+                "WHERE attendance_id = '%s';";
+        Map<UUID, Integer> attendanceMap = createAttendanceMap(params);
+        for (UUID id : attendanceMap.keySet()) {
+            jdbcTemplate.execute(String.format(sql, attendanceMap.get(id), id));
+        }
+        return true;
     }
 
     @Override
@@ -872,6 +979,141 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
     }
 
     @Override
+    public boolean updateManagementStaffWithoutPasswordById(UUID managerId, ManagementStaff managementStaff) {
+        if (selectUserTeacherByLogin(managementStaff.getLogin()).isPresent() ||
+                selectUserStudentByLogin(managementStaff.getLogin()).isPresent()) {
+            return false;
+        }
+        Optional<ManagementStaff> check = selectManagementStaffByLogin(managementStaff.getLogin());
+        if (check.isPresent() && !check.get().getId().equals(managementStaff.getId())) {
+            return false;
+        }
+        final String sql = String.format("UPDATE Management_Staff SET " +
+                        "management_staff_name = '%s', " +
+                        "management_staff_surname = '%s', " +
+                        "management_staff_lastname = '%s', " +
+                        "management_staff_login = '%s', " +
+                        "management_staff_email = '%s', " +
+                        "management_staff_telephone = '%s', " +
+                        "is_account_non_expired = %s, " +
+                        "is_account_non_locked = %s, " +
+                        "is_credentials_non_expired = %s, " +
+                        "is_enabled = %s, " +
+                        "company_id = '%s', " +
+                        "role = %d, " +
+                        "is_able_to_delete_manager = %s, " +
+                        "is_able_to_delete_teacher = %s, " +
+                        "is_able_to_delete_student = %s, " +
+                        "is_able_to_add_manager = %s, " +
+                        "is_able_to_add_teacher = %s, " +
+                        "is_able_to_add_student = %s, " +
+                        "is_able_to_delete_course = %s, " +
+                        "is_able_to_add_course = %s " +
+                        "WHERE management_staff_id = '%s';",
+                managementStaff.getName(),
+                managementStaff.getSurname(),
+                managementStaff.getLastname(),
+                managementStaff.getUsername(),
+                managementStaff.getEmail(),
+                managementStaff.getTelephone(),
+                managementStaff.isAccountNonExpired(),
+                managementStaff.isAccountNonLocked(),
+                managementStaff.isCredentialsNonExpired(),
+                managementStaff.isEnabled(),
+                managementStaff.getCompanyId(),
+                managementStaff.getRole(),
+                managementStaff.isAbleToDeleteManager(),
+                managementStaff.isAbleToDeleteTeacher(),
+                managementStaff.isAbleToDeleteStudent(),
+                managementStaff.isAbleToAddManager(),
+                managementStaff.isAbleToAddTeacher(),
+                managementStaff.isAbleToAddStudent(),
+                managementStaff.isAbleToDeleteCourse(),
+                managementStaff.isAbleToAddCourse(),
+                managerId);
+        jdbcTemplate.execute(sql);
+        return true;
+    }
+
+    @Override
+    public boolean updateUserTeacherWithoutPasswordById(UUID teacherId, UserTeacher userTeacher) {
+        if (selectManagementStaffByLogin(userTeacher.getLogin()).isPresent() ||
+                selectUserStudentByLogin(userTeacher.getLogin()).isPresent()) {
+            return false;
+        }
+        Optional<UserTeacher> check = selectUserTeacherByLogin(userTeacher.getLogin());
+        if (check.isPresent() && !check.get().getId().equals(userTeacher.getId())) {
+            return false;
+        }
+        final String sql = String.format("UPDATE User_Teachers SET " +
+                        "user_teacher_name = '%s', " +
+                        "user_teacher_surname = '%s', " +
+                        "user_teacher_lastname = '%s', " +
+                        "user_teacher_login = '%s', " +
+                        "user_teacher_email = '%s', " +
+                        "user_teacher_telephone = '%s', " +
+                        "is_account_non_expired = %s, " +
+                        "is_account_non_locked = %s, " +
+                        "is_credentials_non_expired = %s, " +
+                        "is_enabled = %s, " +
+                        "company_id = '%s' " +
+                        "WHERE user_teacher_id = '%s';",
+                userTeacher.getName(),
+                userTeacher.getSurname(),
+                userTeacher.getLastname(),
+                userTeacher.getUsername(),
+                userTeacher.getEmail(),
+                userTeacher.getTelephone(),
+                userTeacher.isAccountNonExpired(),
+                userTeacher.isAccountNonLocked(),
+                userTeacher.isCredentialsNonExpired(),
+                userTeacher.isEnabled(),
+                userTeacher.getCompanyId(),
+                teacherId);
+        jdbcTemplate.execute(sql);
+        return true;
+    }
+
+    @Override
+    public boolean updateUserStudentWithoutPasswordById(UUID studentId, UserStudent userStudent) {
+        if (selectManagementStaffByLogin(userStudent.getLogin()).isPresent() ||
+                selectUserTeacherByLogin(userStudent.getLogin()).isPresent()) {
+            return false;
+        }
+        Optional<UserStudent> check = selectUserStudentByLogin(userStudent.getLogin());
+        if (check.isPresent() && !check.get().getId().equals(userStudent.getId())) {
+            return false;
+        }
+        final String sql = String.format("UPDATE User_Students SET " +
+                        "user_student_name = '%s', " +
+                        "user_student_surname = '%s', " +
+                        "user_student_lastname = '%s', " +
+                        "user_student_login = '%s', " +
+                        "user_student_email = '%s', " +
+                        "user_student_telephone = '%s', " +
+                        "is_account_non_expired = %s, " +
+                        "is_account_non_locked = %s, " +
+                        "is_credentials_non_expired = %s, " +
+                        "is_enabled = %s, " +
+                        "company_id = '%s' " +
+                        "WHERE user_student_id = '%s';",
+                userStudent.getName(),
+                userStudent.getSurname(),
+                userStudent.getLastname(),
+                userStudent.getUsername(),
+                userStudent.getEmail(),
+                userStudent.getTelephone(),
+                userStudent.isAccountNonExpired(),
+                userStudent.isAccountNonLocked(),
+                userStudent.isCredentialsNonExpired(),
+                userStudent.isEnabled(),
+                userStudent.getCompanyId(),
+                studentId);
+        jdbcTemplate.execute(sql);
+        return true;
+    }
+
+    @Override
     public Optional<Admin> selectAdminByLogin(String login) {
         final String sql = String.format("SELECT * FROM Admins WHERE admin_login = '%s'", login);
         List<Admin> admins = jdbcTemplate.query(sql, ((resultSet, i) -> {
@@ -946,6 +1188,69 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
         }
     }
 
+    @Override
+    public boolean changeTeacherProfilePicture(UUID teacherId, Resource image) {
+        try {
+            Connection connection = postgresDataSource.getHikariDataSource().getConnection();
+            connection.setAutoCommit(false);
+            PGConnection pgConnection;
+            if (connection.isWrapperFor(PGConnection.class)) {
+                pgConnection = connection.unwrap(PGConnection.class);
+            } else {
+                return false;
+            }
+            LargeObjectManager largeObjectManager = pgConnection.getLargeObjectAPI();
+            long oid = largeObjectManager.createLO(LargeObjectManager.READ | LargeObjectManager.WRITE);
+            LargeObject largeObject = largeObjectManager.open(oid, LargeObjectManager.WRITE);
+            byte[] buf = image.getInputStream().readAllBytes();
+            //System.out.println(buf.length);
+            largeObject.write(buf, 0, buf.length);
+            largeObject.close();
+            final String sql = String.format("UPDATE User_Teachers SET " +
+                    "user_teacher_profile_image = %d " +
+                    "WHERE user_teacher_id = '%s';", oid, teacherId);
+            jdbcTemplate.execute(sql);
+            connection.commit();
+            connection.setAutoCommit(true);
+            return true;
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public Resource getTeacherProfilePicture(UserTeacher teacher) {
+        try {
+            Connection connection = postgresDataSource.getHikariDataSource().getConnection();
+            connection.setAutoCommit(false);
+            PGConnection pgConnection;
+
+            if (connection.isWrapperFor(PGConnection.class)) {
+                pgConnection = connection.unwrap(PGConnection.class);
+            } else {
+                return null;
+            }
+
+            LargeObjectManager largeObjectManager = pgConnection.getLargeObjectAPI();
+            System.out.println(teacher.getProfileImageOid());
+            if (teacher.getProfileImageOid() == 0) {
+                return null;
+            }
+            LargeObject largeObject = largeObjectManager.open(teacher.getProfileImageOid(), LargeObjectManager.READ);
+//            byte[] buf = new byte[largeObject.size()];
+//            largeObject.read(buf, 0, largeObject.size());
+            ByteArrayResource byteArrayResource = new ByteArrayResource(largeObject.getInputStream().readAllBytes());
+            largeObject.close();
+            connection.commit();
+            connection.setAutoCommit(true);
+            return byteArrayResource;
+        } catch (SQLException | IOException throwables) {
+            throwables.printStackTrace();
+            return null;
+        }
+    }
+
     private boolean timeIntersects(String startTime1, String endTime1, String startTime2, String endTime2) {
         int st1 = timeToInt(startTime1);
         int et1 = timeToInt(endTime1);
@@ -977,5 +1282,17 @@ public class ApplicationDataAccessService implements CompanyDao, UserDao, AdminD
             }
         }
         return res;
+    }
+
+    private Map<UUID, Integer> createAttendanceMap(Map<String, String> params) {
+        Map<UUID, Integer> attendanceMap = new HashMap<>();
+        for (String param : params.keySet()) {
+            if (param.matches("[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}")) {
+                UUID attendanceId = UUID.fromString(param);
+                int attendanceType = Integer.parseInt(params.get(param));
+                attendanceMap.put(attendanceId, attendanceType);
+            }
+        }
+        return attendanceMap;
     }
 }

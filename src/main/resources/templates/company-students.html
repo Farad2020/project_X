@@ -72,6 +72,15 @@
 
     </ul>
 
+    <div th:if="${current_user.getRole() == 1 or current_user.isAbleToAddStudents()}">
+        <form action="/add_student" method="post">
+            <input type="text" name="login" placeholder="Login" required="">
+            <input type="text" name="name" placeholder="Name" required="">
+            <input type="hidden" name="company_id" th:value="${current_user.getCompanyId()}">
+            <input type="submit">
+        </form>
+    </div>
+
 
 </div>
 <footer th:insert="blocks/footer :: footer"></footer>

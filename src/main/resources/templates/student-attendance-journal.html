@@ -30,10 +30,8 @@
                         Course: None
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="#">None</a>
-                        <a class="dropdown-item" href="#">Course 1</a>
-                        <a class="dropdown-item" href="#">Course 2</a>
-                        <a class="dropdown-item" href="#">Course 3</a>
+                        <a class="dropdown-item">None</a>
+                        <a class="dropdown-item" th:each="course : ${course_attendance_map.keySet()}" th:text="${course.getName()}"></a>
                     </div>
                 </li>
 
@@ -50,13 +48,12 @@
         </div>
     </nav>
 
-
-    <ul class="list-group course-list">
-        <li class="course-list-item">Date : Status</li>
-        <li class="course-list-item">Date : Status</li>
-        <li class="course-list-item">Date : Status</li>
-        <li class="course-list-item">Date : Status</li>
-    </ul>
+    <div th:each="course : ${course_attendance_map.keySet()}">
+        <p th:text="${course.getName()}"></p>
+        <ul class="list-group course-list">
+            <li class="course-list-item" th:each="attendance : ${course_attendance_map.get(course)}" th:text="${attendance.getDate()} + ':' + ${attendance.getAttendanceTypeString()}">Date : Status</li>
+        </ul>
+    </div>
 </div>
 
 <footer th:insert="blocks/footer :: footer"></footer>

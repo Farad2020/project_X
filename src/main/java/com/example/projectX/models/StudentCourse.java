@@ -5,14 +5,14 @@ import java.util.UUID;
 public class StudentCourse {
 
     private final UUID id;
-    private final UUID studentId;
-    private final UUID courseId;
+    private final UserStudent student;
+    private final Course course;
     private final double reviewScore;
 
-    public StudentCourse(UUID id, UUID studentId, UUID courseId, double reviewScore) {
+    public StudentCourse(UUID id, UserStudent student, Course course, double reviewScore) {
         this.id = id;
-        this.studentId = studentId;
-        this.courseId = courseId;
+        this.student = student;
+        this.course = course;
         this.reviewScore = reviewScore;
     }
 
@@ -20,12 +20,12 @@ public class StudentCourse {
         return id;
     }
 
-    public UUID getStudentId() {
-        return studentId;
+    public UserStudent getStudent() {
+        return student;
     }
 
-    public UUID getCourseId() {
-        return courseId;
+    public Course getCourse() {
+        return course;
     }
 
     public double getReviewScore() {

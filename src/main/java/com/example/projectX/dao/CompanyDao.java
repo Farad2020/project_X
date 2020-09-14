@@ -78,4 +78,16 @@ public interface CompanyDao {
 
     Map<Integer, List<Schedule>> getMappedStudentSchedule(UUID studentId);
 
+    List<Attendance> getAllCourseAttendances(UUID courseId);
+
+    Optional<StudentCourse> getStudentCourseById(UUID studentCourseId);
+
+    boolean addAttendanceToCourse(UUID courseId, String date);
+
+    List<StudentCourse> getAllStudentCourseOfCourse(UUID courseId);
+
+    List<Attendance> getAllCourseAttendancesForSpecificDate(UUID courseId, String date);
+
+    boolean updateAttendances(Map<String, String> params);
+
 }

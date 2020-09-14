@@ -16,13 +16,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.swing.text.html.Option;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
-import java.util.Objects;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 @RequestMapping("/")
@@ -46,19 +44,16 @@ public class StudentController {
                                           @PathVariable(name = "student_id") UUID student_id,
                                           @AuthenticationPrincipal UserDetails user){
         userIdentifier.getUserClass(user,model);
-        if( model.getAttribute("isStudent") != null && ((UserStudent)user).getCompanyId().equals( companyService.getStudentById(student_id).get().getCompanyId() ) ){
-            if( ((UserStudent)user).getId().equals(student_id) ){
-                model.addAttribute("isOwner", true);
-                model.addAttribute("student", (UserStudent)user);
-            }else{
-                model.addAttribute("student", companyService.getStudentById(student_id).get());
-            }
-            return "student-account-page";
-        }else if( (model.getAttribute("isManagementStaff") != null &&
-                        ((ManagementStaff)user).getCompanyId().equals( companyService.getStudentById(student_id).get().getCompanyId() ) )||
-                (model.getAttribute("isTeacher") != null &&
-                        ((UserTeacher)user).getCompanyId().equals( companyService.getStudentById(student_id).get().getCompanyId() ) )){
-            model.addAttribute("student", companyService.getStudentById(student_id).get());
+        UserStudent userStudent;
+        Optional<UserStudent> optionalUserStudent = companyService.getStudentById(student_id);
+        if (optionalUserStudent.isPresent()) {
+            userStudent = optionalUserStudent.get();
+        } else {
+            return "error-page";
+        }
+        if (model.getAttribute("current_user") != null &&
+            Objects.requireNonNull(model.getAttribute("current_user_company_id")).equals(userStudent.getCompanyId())) {
+            model.addAttribute("student", userStudent);
             return "student-account-page";
         }
         return "error-page";
@@ -90,10 +85,6 @@ public class StudentController {
             return "error-page";
         }
     }
-
-
-
-    /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  */
 
     @GetMapping("student_schedule/{course_id}")
     public String studentCourseSchedule(Model model,
@@ -133,8 +124,19 @@ public class StudentController {
     }
 
     @GetMapping("student_attendance")
-    public String userAttendance(Model model) {
-        return "student-attendance-journal";
+    public String userAttendance(Model model,
+                                 @AuthenticationPrincipal UserDetails user) {
+        userIdentifier.getUserClass(user, model);
+        if (model.getAttribute("isStudent") != null) {
+            List<Course> courses = companyService.getAllStudentCourses((UUID)model.getAttribute("current_user_id"));
+            Map<Course, List<Attendance>> courseAttendanceMap = new HashMap<>();
+            for (Course course : courses) {
+                courseAttendanceMap.put(course, companyService.getAllCourseAttendances(course.getId()));
+            }
+            model.addAttribute("course_attendance_map", courseAttendanceMap);
+            return "student-attendance-journal";
+        }
+        return "error-page";
     }
 
     @GetMapping("student_tasks")
@@ -142,14 +144,34 @@ public class StudentController {
         return "student-tasks-page";
     }
 
+    @PostMapping("student_profile/update_info")
+    public String updateStudentInfo(@RequestParam(name = "name") String name,
+                                    @RequestParam(name = "surname") String surname,
+                                    @RequestParam(name = "lastname") String lastname,
+                                    @RequestParam(name = "login") String login,
+                                    @RequestParam(name = "email") String email,
+                                    @RequestParam(name = "telephone") String telephone,
+                                    @RequestParam(name = "student_id") UUID studentId) {
+        Optional<UserStudent> userStudentOptional = companyService.getStudentById(studentId);
+        UserStudent userStudent = null;
+        if (userStudentOptional.isPresent()) {
+            userStudent = userStudentOptional.get();
+        } else {
+            return "redirect:/student_profile/" + studentId;
+        }
+        UserStudent updatedStudent = new UserStudent(studentId, name, surname, lastname, login, userStudent.getPassword(), email, telephone, userStudent.getCompanyId(), userStudent.getProfileImageOid(), userStudent.isAccountNonExpired(), userStudent.isAccountNonLocked(), userStudent.isCredentialsNonExpired(), userStudent.isEnabled());
+        boolean result = userAuthenticationService.updateUserStudentWithoutPasswordById(studentId, updatedStudent);
+        return "redirect:/student_profile/" + studentId;
+    }
+
     @PostMapping("student_profile/change_profile_picture")
-    public String changeProfilePicture(@RequestParam(name = "image") MultipartFile image,
+    public String changeStudentProfilePicture(@RequestParam(name = "image") MultipartFile image,
                                        @RequestParam(name = "student_id") UUID studentId) {
         if (Objects.requireNonNull(image.getContentType()).contains("image")) {
             boolean result = mediaFilesService.changeStudentProfilePicture(studentId, image.getResource());
             System.out.println(result);
         }
-        return "redirect:/student_profile";
+        return "redirect:/student_profile/" + studentId;
     }
 
     @GetMapping("/student_profile_picture/{student_id}")
