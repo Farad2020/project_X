@@ -9,58 +9,62 @@
 <body>
 <header th:insert="blocks/header :: header"></header>
 
-<div th:insert="blocks/default-left-menu-bar :: default-left-menu-bar"></div>
+<div class="container wrapper">
 
-<div class="main-content">
+    <div th:insert="blocks/default-left-menu-bar :: default-left-menu-bar"></div>
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light filter-navbar">
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Filter By: Date, Ascending
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="#">Date, Ascending</a>
-                        <a class="dropdown-item" href="#">Date, Descending</a>
-                        <a class="dropdown-item" href="#">Alphabet, Ascending</a>
-                        <a class="dropdown-item" href="#">Alphabet, Descending</a>
-                    </div>
-                </li>
-            </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>
-        </div>
-    </nav>
+    <div class="main-content">
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light filter-navbar">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Filter By: Date, Ascending
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="#">Date, Ascending</a>
+                            <a class="dropdown-item" href="#">Date, Descending</a>
+                            <a class="dropdown-item" href="#">Alphabet, Ascending</a>
+                            <a class="dropdown-item" href="#">Alphabet, Descending</a>
+                        </div>
+                    </li>
+                </ul>
+                <form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </div>
+        </nav>
 
 
-    <table class="table">
-        <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Name</th>
-            <th scope="col">Surname</th>
-            <th scope="col">Lastname</th>
-        </tr>
-        </thead>
-        <tbody>
-        <th:block th:each="i :  ${#numbers.sequence(0, teachers.size() -1 )}" th:if="${teachers.size() > 0}"> <!-- style="cursor: pointer" -->
-            <tr class="course-list-item table-item">
-                <th scope="row" th:text="${i+1}"></th>
-                <td><a class="table-row-link" th:href="@{'teachers_profile/'} + ${teachers.get(i).getId()}"
-                       th:text="${teachers.get(i).getName()}"/></td>
-                <td><a class="table-row-link" th:href="@{'teachers_profile/'} + ${teachers.get(i).getId()}"
-                       th:text="${teachers.get(i).getSurname()}"/></td>
-                <td><a class="table-row-link" th:href="@{'teachers_profile/'} + ${teachers.get(i).getId()}"
-                       th:text="${teachers.get(i).getLastname()}"/></td>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Surname</th>
+                <th scope="col">Lastname</th>
             </tr>
-        </th:block>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            <th:block th:each="i :  ${#numbers.sequence(0, teachers.size() -1 )}" th:if="${teachers.size() > 0}">
+                <!-- style="cursor: pointer" -->
+                <tr class="course-list-item table-item">
+                    <th scope="row" th:text="${i+1}"></th>
+                    <td><a class="table-row-link" th:href="@{'teachers_profile/'} + ${teachers.get(i).getId()}"
+                           th:text="${teachers.get(i).getName()}"/></td>
+                    <td><a class="table-row-link" th:href="@{'teachers_profile/'} + ${teachers.get(i).getId()}"
+                           th:text="${teachers.get(i).getSurname()}"/></td>
+                    <td><a class="table-row-link" th:href="@{'teachers_profile/'} + ${teachers.get(i).getId()}"
+                           th:text="${teachers.get(i).getLastname()}"/></td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+    </div>
 </div>
-
 <footer th:insert="blocks/footer :: footer"></footer>
 </body>
 </html>

@@ -9,58 +9,60 @@
 <body>
 <header th:insert="blocks/header :: header"></header>
 
-<div th:insert="blocks/default-left-menu-bar :: default-left-menu-bar"></div>
+<div class="container wrapper">
+    <div th:insert="blocks/default-left-menu-bar :: default-left-menu-bar"></div>
 
-<div class="main-content">
+    <div class="main-content">
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light filter-navbar">
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Filter By: None
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" th:href="alp_asc">Name, Alphabet, Ascending</a>
-                        <a class="dropdown-item" th:href="alp_desc">Name, Alphabet, Descending</a>
-                        <a class="dropdown-item" th:href="none">None</a>
-                    </div>
-                </li>
-            </ul>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light filter-navbar">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Filter By: None
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" th:href="alp_asc">Name, Alphabet, Ascending</a>
+                            <a class="dropdown-item" th:href="alp_desc">Name, Alphabet, Descending</a>
+                            <a class="dropdown-item" th:href="none">None</a>
+                        </div>
+                    </li>
+                </ul>
 
-            <input class="form-control mr-sm-2" id="company-students-search-bar" type="search" placeholder="Search"
-                   aria-label="Search" name="searchKey">
-        </div>
-    </nav>
+                <input class="form-control mr-sm-2" id="company-students-search-bar" type="search" placeholder="Search"
+                       aria-label="Search" name="searchKey">
+            </div>
+        </nav>
 
 
-    <table class="table" id="company-students-table">
-        <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Name</th>
-            <th scope="col">Surname</th>
-            <th scope="col">Login</th>
-        </tr>
-        </thead>
-        <tbody>
-        <th:block th:each="i :  ${#numbers.sequence(0, students.size() -1 )}">
-            <tr class="course-list-item table-item">
-                <th scope="row" th:text="${i+1}"></th>
-                <td th:text="${students.get(i).getName()}"></td>
-                <td th:text="${students.get(i).getSurname()}"></td>
-                <td th:text="${students.get(i).getLogin()}"></td>
+        <table class="table" id="company-students-table">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Surname</th>
+                <th scope="col">Login</th>
             </tr>
-        </th:block>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            <th:block th:each="i :  ${#numbers.sequence(0, students.size() -1 )}">
+                <tr class="course-list-item table-item">
+                    <th scope="row" th:text="${i+1}"></th>
+                    <td th:text="${students.get(i).getName()}"></td>
+                    <td th:text="${students.get(i).getSurname()}"></td>
+                    <td th:text="${students.get(i).getLogin()}"></td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
 
-    <ul class="list-group course-list">
+        <ul class="list-group course-list">
 
 
-    </ul>
+        </ul>
 
+    </div>
 </div>
 
 <footer th:insert="blocks/footer :: footer"></footer>
@@ -72,7 +74,7 @@
     var students = /*[[${students}]]*/ [];
     /*]]>*/
 
-    $('#company-students-search-bar').on('keyup', function(){
+    $('#company-students-search-bar').on('keyup', function () {
         var value = $(this).val();
         console.log('Value = ' + value);
         console.log('Value = ' + students.values);
@@ -86,14 +88,14 @@
 
     });
 
-    function FilterFunction(value, data){
+    function FilterFunction(value, data) {
         var filterData = [];
-        for(var i = 0; i < data.length; i++){
+        for (var i = 0; i < data.length; i++) {
             value = value.toLowerCase();
             var fname = data[i].surname.toLowerCase();
             var name = data[i].name.toLowerCase();
 
-            if( fname.includes(value) || name.includes(value)){
+            if (fname.includes(value) || name.includes(value)) {
                 filterData.push(data[i])
             }
         }
@@ -101,10 +103,10 @@
     }
 
 
-    function rebuildTable(data){
+    function rebuildTable(data) {
         var table = document.getElementById('company-students-table')
-        table.innerHTML='';
-        for(var i = 0; i < data.length; i++){
+        table.innerHTML = '';
+        for (var i = 0; i < data.length; i++) {
             var row = `<tr class="course-list-item table-item">
                 <th scope="row">i+1</th>
                 <td>${data[i].name}</td>
@@ -113,8 +115,8 @@
             </tr>`
 
             table.innerHTML += row
-            }
         }
+    }
 
 
 </script>

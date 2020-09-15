@@ -17,82 +17,86 @@ https://getbootstrap.com/docs/4.0/components/list-group/
 <!--<div th:if="${isTeacher}" th:insert="blocks/teacher-left-menu-bar :: teacher-left-menu-bar"></div>-->
 <!--<div th:if="${isStudent}" th:insert="blocks/student-left-menu-bar :: student-left-menu-bar"></div>-->
 
-<div th:insert="blocks/default-left-menu-bar :: default-left-menu-bar"></div>
+<div class="container wrapper">
+
+    <div th:insert="blocks/default-left-menu-bar :: default-left-menu-bar"></div>
 
 
-<div class="main-content">
+    <div class="main-content">
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light filter-navbar">
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Filter By: Date, Ascending
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="#">Date, Ascending</a>
-                        <a class="dropdown-item" href="#">Date, Descending</a>
-                        <a class="dropdown-item" href="#">Alphabet, Ascending</a>
-                        <a class="dropdown-item" href="#">Alphabet, Descending</a>
-                    </div>
-                </li>
-            </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light filter-navbar">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Filter By: Date, Ascending
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="#">Date, Ascending</a>
+                            <a class="dropdown-item" href="#">Date, Descending</a>
+                            <a class="dropdown-item" href="#">Alphabet, Ascending</a>
+                            <a class="dropdown-item" href="#">Alphabet, Descending</a>
+                        </div>
+                    </li>
+                </ul>
+                <form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </div>
+        </nav>
+
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Starting Date</th>
+                <th scope="col">Currently Active</th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="i :  ${#numbers.sequence(0, courses.size() -1 )}" th:if="${courses.size() > 0}">
+                <tr class="course-list-item table-item">
+                    <th scope="row" th:text="${i+1}"></th>
+                    <td>
+                        <a class="table-row-link" th:href="@{'courses/'} + ${courses.get(i).getId()}"
+                           th:text="${courses.get(i).getName()}"/>
+                    </td>
+                    <td>
+                        <a class="table-row-link" th:href="@{'courses/'} + ${courses.get(i).getId()}"
+                           th:text="${courses.get(i).getStartDate()}"/>
+                    </td>
+                    <td>
+                        <a class="table-row-link" th:href="@{'courses/'} + ${courses.get(i).getId()}"
+                           th:text="${courses.get(i).isActive()}"/>
+                    </td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+
+        <div th:if="${current_user.getRole() == 1 or current_user.isAbleToAddCourse()}">
+            <form action="/add_course" method="post">
+                <input type="text" name="name" placeholder="name" required="">
+                <input type="text" name="description" placeholder="description" required="">
+                <select name="is_active" required="">
+                    <option value="0">False</option>
+                    <option value="1">True</option>
+                </select>
+                <input type="date" name="start_date" required="">
+                <input type="number" name="price" placeholder="price" required="">
+                <input type="number" name="payout_num" placeholder="payout_num" required="">
+                <select name="teacher_id" required="">
+                    <option th:each="teacher : ${teachers}" th:value="${teacher.getId()}"
+                            th:text="${teacher.getName()} + ' ' + ${teacher.getSurname()}"></option>
+                </select>
+                <input type="hidden" name="company_id" th:value="${current_user.getCompanyId()}" required="">
+                <input type="submit" required="">
             </form>
         </div>
-    </nav>
-
-
-    <table class="table">
-        <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Name</th>
-            <th scope="col">Starting Date</th>
-            <th scope="col">Currently Active</th>
-        </tr>
-        </thead>
-        <tbody>
-        <th:block th:each="i :  ${#numbers.sequence(0, courses.size() -1 )}" th:if="${courses.size() > 0}" >
-            <tr class="course-list-item table-item">
-                <th scope="row"  th:text="${i+1}"></th>
-                <td>
-                    <a class="table-row-link" th:href="@{'courses/'} + ${courses.get(i).getId()}"
-                       th:text="${courses.get(i).getName()}"/>
-                </td>
-                <td >
-                    <a class="table-row-link" th:href="@{'courses/'} + ${courses.get(i).getId()}"
-                       th:text="${courses.get(i).getStartDate()}"/>
-                </td>
-                <td>
-                    <a class="table-row-link" th:href="@{'courses/'} + ${courses.get(i).getId()}"
-                       th:text="${courses.get(i).isActive()}"/>
-                </td>
-            </tr>
-        </th:block>
-        </tbody>
-    </table>
-
-    <div th:if="${current_user.getRole() == 1 or current_user.isAbleToAddCourse()}">
-        <form action="/add_course" method="post">
-            <input type="text" name="name" placeholder="name" required="">
-            <input type="text" name="description" placeholder="description" required="">
-            <select name="is_active" required="">
-                <option value="0">False</option>
-                <option value="1">True</option>
-            </select>
-            <input type="date" name="start_date" required="">
-            <input type="number" name="price" placeholder="price" required="">
-            <input type="number" name="payout_num" placeholder="payout_num" required="">
-            <select name="teacher_id" required="">
-                <option th:each="teacher : ${teachers}" th:value="${teacher.getId()}"
-                        th:text="${teacher.getName()} + ' ' + ${teacher.getSurname()}"></option>
-            </select>
-            <input type="hidden" name="company_id" th:value="${current_user.getCompanyId()}" required="">
-            <input type="submit" required="">
-        </form>
     </div>
 </div>
 

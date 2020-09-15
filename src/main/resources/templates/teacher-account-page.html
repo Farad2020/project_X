@@ -11,115 +11,122 @@
     <div th:insert="blocks/head :: head"></div>
 </head>
 <body>
-
 <header th:insert="blocks/header :: header"></header>
 
-<div th:insert="blocks/default-left-menu-bar :: default-left-menu-bar"></div>
+<div class="container wrapper">
 
-<div class="account-content">
-    <div class="account-img-box">
-        <th:block th:if="${teacher.getProfileImageOid() == 0}">
-            <img class="account-img" src="/design-flow/avatars/avatar_cat.jpg"><br>
-        </th:block>
-        <th:block th:if="${teacher.getProfileImageOid() != 0}">
-            <img class="account-img" th:src="@{'~/teacher_profile_picture/'} + ${teacher.getId()}"><br>
-        </th:block>
-        <th:block th:if="${isTeacher}">
-            <button th:if="${current_user_id.equals(teacher.getId())}" class="btn btn-default" id="edit-account-btn" onclick="showAdditionalEditInformation()">Edit</button>
-        </th:block>
-        <th:block th:if="${isManagementStaff}">
-            <button th:if="${current_user.isAbleToEditTeacher() or current_user.getRole() == 1}" class="btn btn-default" id="edit-account-btn" onclick="showAdditionalEditInformation()">Edit</button>
-        </th:block>
-    </div>
+    <div th:insert="blocks/default-left-menu-bar :: default-left-menu-bar"></div>
 
-    <div class="account-info-box">
-        <div class="card" id="account-info-card">
-            <h5 th:text="${teacher.getUsername()}"></h5>
-            <h6 class="account-status" th:text="${teacher.getName()} + ' ' + ${teacher.getSurname()} + ' ' + ${teacher.getLastname()}"></h6>
-            <div class="account-divider"></div>
-            <p th:text="'Почта: ' + ${teacher.getEmail()}"></p>
+    <div class="account-content">
+        <div class="account-img-box">
+            <th:block th:if="${teacher.getProfileImageOid() == 0}">
+                <img class="account-img" src="/design-flow/avatars/avatar_cat.jpg"><br>
+            </th:block>
+            <th:block th:if="${teacher.getProfileImageOid() != 0}">
+                <img class="account-img" th:src="@{'~/teacher_profile_picture/'} + ${teacher.getId()}"><br>
+            </th:block>
+            <th:block th:if="${isTeacher}">
+                <button th:if="${current_user_id.equals(teacher.getId())}" class="btn btn-default" id="edit-account-btn"
+                        onclick="showAdditionalEditInformation()">Edit
+                </button>
+            </th:block>
+            <th:block th:if="${isManagementStaff}">
+                <button th:if="${current_user.isAbleToEditTeacher() or current_user.getRole() == 1}"
+                        class="btn btn-default" id="edit-account-btn" onclick="showAdditionalEditInformation()">Edit
+                </button>
+            </th:block>
+        </div>
+
+        <div class="account-info-box">
+            <div class="card" id="account-info-card">
+                <h5 th:text="${teacher.getUsername()}"></h5>
+                <h6 class="account-status"
+                    th:text="${teacher.getName()} + ' ' + ${teacher.getSurname()} + ' ' + ${teacher.getLastname()}"></h6>
+                <div class="account-divider"></div>
+                <p th:text="'Почта: ' + ${teacher.getEmail()}"></p>
 
 
-            <table th:if="courses" class="table">
-                <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Starting Date</th>
-                    <th scope="col">Currently Active</th>
-                </tr>
-                </thead>
-                <tbody>
-                <th:block th:each="i :  ${#numbers.sequence(0, courses.size() -1 )}" th:if="${courses.size() > 0}" >
-                    <tr class="course-list-item table-item">
-                        <th scope="row"  th:text="${i+1}"></th>
-                        <td>
-                            <p class="table-row-link"
-                               th:text="${courses.get(i).getName()}"/>
-                        </td>
-                        <td >
-                            <p class="table-row-link"
-                               th:text="${courses.get(i).getStartDate()}"/>
-                        </td>
-                        <td>
-                            <p class="table-row-link"
-                               th:text="${courses.get(i).isActive()}"/>
-                        </td>
+                <table th:if="courses" class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Starting Date</th>
+                        <th scope="col">Currently Active</th>
                     </tr>
-                </th:block>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    <th:block th:each="i :  ${#numbers.sequence(0, courses.size() -1 )}" th:if="${courses.size() > 0}">
+                        <tr class="course-list-item table-item">
+                            <th scope="row" th:text="${i+1}"></th>
+                            <td>
+                                <p class="table-row-link"
+                                   th:text="${courses.get(i).getName()}"/>
+                            </td>
+                            <td>
+                                <p class="table-row-link"
+                                   th:text="${courses.get(i).getStartDate()}"/>
+                            </td>
+                            <td>
+                                <p class="table-row-link"
+                                   th:text="${courses.get(i).isActive()}"/>
+                            </td>
+                        </tr>
+                    </th:block>
+                    </tbody>
+                </table>
 
-            <p th:unless="courses" th:text="'На данный момент курсы не записаны'"></p>
-            <!--
-            <button class="btn btn-default" id="show-full-account-desc-btn" onclick="showMoreAccountInfo()">Показать
-                подробную информацию
-            </button>
+                <p th:unless="courses" th:text="'На данный момент курсы не записаны'"></p>
+                <!--
+                <button class="btn btn-default" id="show-full-account-desc-btn" onclick="showMoreAccountInfo()">Показать
+                    подробную информацию
+                </button>
 
-            <div class="info-card-text" id="account-info-card-text">
-            <p>So, I'm just a cat that lives on a streets. I may be dead, or I may be alive,
-                depends on how friendly streets will be during my lifeyime. May be it sucks in a way, but atleast Im not
-                smart enough to get into deep feelings and be dreadful about vicious life cycle that awaits me and everyone else.
-                Is it good? Idk, Im just a cat! :)
+                <div class="info-card-text" id="account-info-card-text">
+                <p>So, I'm just a cat that lives on a streets. I may be dead, or I may be alive,
+                    depends on how friendly streets will be during my lifeyime. May be it sucks in a way, but atleast Im not
+                    smart enough to get into deep feelings and be dreadful about vicious life cycle that awaits me and everyone else.
+                    Is it good? Idk, Im just a cat! :)
 
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item"><img class="soc-media-link-ico" src="/design-flow/soc-media icons/icons8-реддит.svg" > my reddit link</li>
-                    <li class="list-group-item"><img class="soc-media-link-ico" src="/design-flow/soc-media icons/icons8-вконтакте-480.svg" > my vk link</li>
-                    <li class="list-group-item"><img class="soc-media-link-ico" src="/design-flow/soc-media icons/icons8-instagram-480.svg" > my instagram link</li>
-                    <li class="list-group-item"><img class="soc-media-link-ico" src="/design-flow/soc-media icons/icons8-whatsapp.svg" > my whatsapp link</li>
-                    <li class="list-group-item"><img class="soc-media-link-ico" src="/design-flow/soc-media icons/icons8-facebook-480.svg" > my facebook link</li>
-                    <li class="list-group-item"><img class="soc-media-link-ico" src="/design-flow/soc-media icons/icons8-github-octocat-480.svg" > my github link</li>
-                    <li class="list-group-item"><img class="soc-media-link-ico" src="/design-flow/soc-media icons/icons8-гугл-плюс.svg" > my gmail link</li>
-                    <li class="list-group-item"><img class="soc-media-link-ico" src="/design-flow/soc-media icons/icons8-телеграмма-app.svg" > my telegram link</li>
-                    <li class="list-group-item"><img class="soc-media-link-ico" src="/design-flow/soc-media icons/icons8-тик-так.svg" > my tik tok link</li>
-                  </ul>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><img class="soc-media-link-ico" src="/design-flow/soc-media icons/icons8-реддит.svg" > my reddit link</li>
+                        <li class="list-group-item"><img class="soc-media-link-ico" src="/design-flow/soc-media icons/icons8-вконтакте-480.svg" > my vk link</li>
+                        <li class="list-group-item"><img class="soc-media-link-ico" src="/design-flow/soc-media icons/icons8-instagram-480.svg" > my instagram link</li>
+                        <li class="list-group-item"><img class="soc-media-link-ico" src="/design-flow/soc-media icons/icons8-whatsapp.svg" > my whatsapp link</li>
+                        <li class="list-group-item"><img class="soc-media-link-ico" src="/design-flow/soc-media icons/icons8-facebook-480.svg" > my facebook link</li>
+                        <li class="list-group-item"><img class="soc-media-link-ico" src="/design-flow/soc-media icons/icons8-github-octocat-480.svg" > my github link</li>
+                        <li class="list-group-item"><img class="soc-media-link-ico" src="/design-flow/soc-media icons/icons8-гугл-плюс.svg" > my gmail link</li>
+                        <li class="list-group-item"><img class="soc-media-link-ico" src="/design-flow/soc-media icons/icons8-телеграмма-app.svg" > my telegram link</li>
+                        <li class="list-group-item"><img class="soc-media-link-ico" src="/design-flow/soc-media icons/icons8-тик-так.svg" > my tik tok link</li>
+                      </ul>
 
-            </p>
-        </div>
--->
+                </p>
+            </div>
+    -->
+            </div>
         </div>
     </div>
-</div>
 
-<div id="additional-info-edit" class="additional-info-edit hidden" >
-    <form action="/teacher_profile/change_profile_picture" method="post" enctype="multipart/form-data">
-        <input type="file" name="image" required="">
-        <input type="hidden" name="teacher_id" th:value="${teacher.getId()}">
-        <input type="submit">
-    </form>
-    <form action="/teacher_profile/update_info" method="post">
-        <div><input type="text" name="name" placeholder="name" th:value="${teacher.getName()}"></div>
-        <div><input type="text" name="surname" placeholder="surname" th:value="${teacher.getSurname()}"></div>
-        <div><input type="text" name="lastname" placeholder="lastname" th:value="${teacher.getLastname()}"></div>
-        <div><input type="text" name="login" placeholder="login" th:value="${teacher.getLogin()}"></div>
-        <div><input type="text" name="email" placeholder="email" th:value="${teacher.getEmail()}"></div>
-        <div><input type="text" name="telephone" placeholder="telephone" th:value="${teacher.getTelephone()}"></div>
-        <input type="hidden" name="teacher_id" th:value="${teacher.getId()}">
-        <input type="submit">
-    </form>
-    <button type="button" class="btn btn-default" onclick="closeAdditionalEditInformation()">Close</button>
-</div>
+    <div id="additional-info-edit" class="additional-info-edit hidden">
+        <form action="/teacher_profile/change_profile_picture" method="post" enctype="multipart/form-data">
+            <input type="file" name="image" required="">
+            <input type="hidden" name="teacher_id" th:value="${teacher.getId()}">
+            <input type="submit">
+        </form>
+        <form action="/teacher_profile/update_info" method="post">
+            <div><input type="text" name="name" placeholder="name" th:value="${teacher.getName()}"></div>
+            <div><input type="text" name="surname" placeholder="surname" th:value="${teacher.getSurname()}"></div>
+            <div><input type="text" name="lastname" placeholder="lastname" th:value="${teacher.getLastname()}"></div>
+            <div><input type="text" name="login" placeholder="login" th:value="${teacher.getLogin()}"></div>
+            <div><input type="text" name="email" placeholder="email" th:value="${teacher.getEmail()}"></div>
+            <div><input type="text" name="telephone" placeholder="telephone" th:value="${teacher.getTelephone()}"></div>
+            <input type="hidden" name="teacher_id" th:value="${teacher.getId()}">
+            <input type="submit">
+        </form>
+        <button type="button" class="btn btn-default" onclick="closeAdditionalEditInformation()">Close</button>
+    </div>
 
+</div>
 <script th:src="@{/js/special_for_additional_info.js}"></script>
 
 <footer th:insert="blocks/footer :: footer"></footer>

@@ -3,232 +3,272 @@
 <head>
     <div th:insert="blocks/head :: head"></div>
 
-    <link rel="stylesheet" type="text/css" href="/css/special_for_additional_info.css" />
+    <link rel="stylesheet" type="text/css" href="/css/special_for_additional_info.css"/>
 </head>
 <body>
 <header th:insert="blocks/header :: header"></header>
 
-<div th:insert="blocks/default-left-menu-bar :: default-left-menu-bar"></div>
+<div class="container wrapper">
 
-<div class="account-content">
-    <div class="account-info-box">
-        <div class="card" id="account-info-card">
-            <h5 class="company-name" th:text="'Название: ' + ${course.getName()}"><button type="button" class="btn btn-light">Edit</button></h5>
-            <p class="company-name" th:text="'Описание: ' + ${course.getDescription()}"> Almost As Good As Eating Burgers When You're Hungry</p>
+    <div th:insert="blocks/default-left-menu-bar :: default-left-menu-bar"></div>
 
-            <a th:text="Расписание" th:if="isStudent" th:href="@{~/student_schedule/} + ${course.getId()}"></a>
+    <div class="account-content">
+        <div class="account-info-box">
+            <div class="card" id="account-info-card">
+                <h5 class="company-name" th:text="'Название: ' + ${course.getName()}">
+                    <button type="button" class="btn btn-light">Edit</button>
+                </h5>
+                <p class="company-name" th:text="'Описание: ' + ${course.getDescription()}"> Almost As Good As Eating
+                    Burgers When You're Hungry</p>
 
-            <p th:if="${course.isActive()}" th:text="'Статус: Активен'"></p>
-            <p th:unless="${course.isActive()}" th:text="'Статус: Не Активен'"></p>
+                <a th:text="Расписание" th:if="isStudent" th:href="@{~/student_schedule/} + ${course.getId()}"></a>
 
-            <p th:text="'Дата Начала: ' + ${course.getStartDate()}"></p>
-            <p th:text="'Дата Завершения: ' + ${course.getEndDate()}"></p>
+                <p th:if="${course.isActive()}" th:text="'Статус: Активен'"></p>
+                <p th:unless="${course.isActive()}" th:text="'Статус: Не Активен'"></p>
 
-            <p th:text="'Цена: ' + ${course.getPrice()}"></p>
-            <p th:text="'Payout Number: ' + ${course.getPayoutNum()}"></p>
-            <a class="info-link" th:text="'Учитель: ' + ${teacher.getName()} + ' ' + ${teacher.getSurname()} + ' ' + ${teacher.getLastname()}"
-               th:href="@{'~/teacher_profile/'} + ${teacher.getId()}"></a>
-        </div>
-        <div>
-            <button type="button" onclick="showAdditionalInformation()" class="btn btn-info">Показать расписание</button>
-        </div>
-        <div th:if="${isManagementStaff}">
-            <button type="button" onclick="showAdditionalInformationAboutStudents()" class="btn btn-info">Показать студентов</button>
-        </div>
-        <div th:if="${isTeacher}">
-            <a th:href="@{'~/courses/'} + ${course.getId()} + '/attendance'" class="btn btn-info">Показать посещяемость студентов</a>
+                <p th:text="'Дата Начала: ' + ${course.getStartDate()}"></p>
+                <p th:text="'Дата Завершения: ' + ${course.getEndDate()}"></p>
+
+                <p th:text="'Цена: ' + ${course.getPrice()}"></p>
+                <p th:text="'Payout Number: ' + ${course.getPayoutNum()}"></p>
+                <a class="info-link"
+                   th:text="'Учитель: ' + ${teacher.getName()} + ' ' + ${teacher.getSurname()} + ' ' + ${teacher.getLastname()}"
+                   th:href="@{'~/teacher_profile/'} + ${teacher.getId()}"></a>
+            </div>
+            <div>
+                <button type="button" onclick="showAdditionalInformation()" class="btn btn-info">Показать расписание
+                </button>
+            </div>
+            <div th:if="${isManagementStaff}">
+                <button type="button" onclick="showAdditionalInformationAboutStudents()" class="btn btn-info">Показать
+                    студентов
+                </button>
+            </div>
+            <div th:if="${isTeacher}">
+                <a th:href="@{'~/courses/'} + ${course.getId()} + '/attendance'" class="btn btn-info">Показать
+                    посещяемость студентов</a>
+            </div>
         </div>
     </div>
-</div>
 
-<div id="additional-info" class="additional-info hidden">
-    <div class="schedule-pop-up">
-        <!--
-        <div th:each="i :  ${#numbers.sequence(1, schedule_map.keySet().size())}" th:if="${schedule_map.keySet().size() > 0}">
-            <div th:each="schedule : ${schedule_map.get(i)}">
-                <h3 th:text="${schedule.getWeekDay()}"></h3>
-                <p th:text="${schedule.getStartTime()}"></p>
-                <p th:text="${schedule.getEndTime()}"></p>
+    <div id="additional-info" class="additional-info hidden">
+        <div class="schedule-pop-up">
+            <!--
+            <div th:each="i :  ${#numbers.sequence(1, schedule_map.keySet().size())}" th:if="${schedule_map.keySet().size() > 0}">
+                <div th:each="schedule : ${schedule_map.get(i)}">
+                    <h3 th:text="${schedule.getWeekDay()}"></h3>
+                    <p th:text="${schedule.getStartTime()}"></p>
+                    <p th:text="${schedule.getEndTime()}"></p>
 
+                    <th:block th:if="${ isManagementStaff}">
+                    <a th:if="сurrent_user.getRole() == 1 or current_user.isAbleToDeleteSchedule() }" th:href="@{${course.getId()}} + '/delete_schedule/' + ${schedule.getId()}">DELETE</a>
+                    </th:block>
+                    <br>
+                </div>
+            </div>
+            -->
+            <div class="container schedule-block">
+
+                <h4 class="schedule-title" th:text="${course.getName()}"></h4>
+                <hr class="schedule-hr"/>
+                <div class="container schedule-table">
+                    <div class="schedule-col">
+                        <h6>Monday</h6>
+                        <div class="card border-dark bg-light weekday Monday"
+                             th:each="schedule : ${schedule_map.get(1)}">
+                            <p class="course-name-link" th:text="${course.getNameSnippet()}" data-toggle="tooltip"
+                               th:title="${course.getName()}"></p>
+                            <p th:text="${schedule.getStartTime()}"></p>
+                            <p th:text="${schedule.getEndTime()}"></p>
+                        </div>
+                    </div>
+
+                    <div class="schedule-col">
+                        <h6>Tuesday</h6>
+                        <div class="card border-dark bg-light weekday Tuesday"
+                             th:each="schedule : ${schedule_map.get(2)}">
+                            <p class="course-name-link" th:text="${course.getNameSnippet()}" data-toggle="tooltip"
+                               th:title="${course.getName()}"></p>
+                            <p th:text="${schedule.getStartTime()}"></p>
+                            <p th:text="${schedule.getEndTime()}"></p>
+                        </div>
+                    </div>
+
+                    <div class="schedule-col">
+                        <h6>Wednesday</h6>
+                        <div class="card border-dark bg-light weekday Wednesday"
+                             th:each="schedule : ${schedule_map.get(3)}">
+                            <p class="course-name-link" th:text="${course.getNameSnippet()}" data-toggle="tooltip"
+                               th:title="${course.getName()}"></p>
+                            <p th:text="${schedule.getStartTime()}"></p>
+                            <p th:text="${schedule.getEndTime()}"></p>
+                        </div>
+                    </div>
+
+                    <div class="schedule-col">
+                        <h6>Thursday</h6>
+                        <div class="card border-dark bg-light weekday Thursday"
+                             th:each="schedule : ${schedule_map.get(4)}">
+                            <p class="course-name-link" th:text="${course.getNameSnippet()}" data-toggle="tooltip"
+                               th:title="${course.getName()}"></p>
+                            <p th:text="${schedule.getStartTime()}"></p>
+                            <p th:text="${schedule.getEndTime()}"></p>
+                            <br>
+                        </div>
+                    </div>
+
+                    <div class="schedule-col">
+                        <h6>Friday</h6>
+                        <div class="card border-dark bg-light weekday Friday"
+                             th:each="schedule : ${schedule_map.get(5)}">
+                            <p class="course-name-link" th:text="${course.getNameSnippet()}" data-toggle="tooltip"
+                               th:title="${course.getName()}"></p>
+                            <p th:text="${schedule.getStartTime()}"></p>
+                            <p th:text="${schedule.getEndTime()}"></p>
+                        </div>
+                    </div>
+
+                    <div class="schedule-col">
+                        <h6>Saturday</h6>
+                        <div class="card border-dark bg-light weekday Saturday"
+                             th:each="schedule : ${schedule_map.get(6)}">
+                            <p class="course-name-link" th:text="${course.getNameSnippet()}" data-toggle="tooltip"
+                               th:title="${course.getName()}"></p>
+                            <p th:text="${schedule.getStartTime()}"></p>
+                            <p th:text="${schedule.getEndTime()}"></p>
+                        </div>
+                    </div>
+
+                    <div class="schedule-col">
+                        <h6>Sunday</h6>
+                        <div class="card border-dark bg-light weekday Sunday"
+                             th:each="schedule : ${schedule_map.get(i)}">
+                            <p class="course-name-link" th:text="${course.getNameSnippet()}" data-toggle="tooltip"
+                               th:title="${course.getName()}"></p>
+                            <p th:text="${schedule.getStartTime()}"></p>
+                            <p th:text="${schedule.getEndTime()}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
                 <th:block th:if="${ isManagementStaff}">
-                <a th:if="сurrent_user.getRole() == 1 or current_user.isAbleToDeleteSchedule() }" th:href="@{${course.getId()}} + '/delete_schedule/' + ${schedule.getId()}">DELETE</a>
+                    <th:block th:if="${current_user.getRole() == 1 or current_user.isAbleToAddSchedule()}">
+
+                        <form action="/add_schedule_to_course" method="post">
+                            <input type="time" name="start_time" placeholder="Start time" required="">
+                            <input type="time" name="end_time" placeholder="End time" required="">
+                            <select name="week_day" required="">
+                                <option value="Monday">Monday</option>
+                                <option value="Tuesday">Tuesday</option>
+                                <option value="Wednesday">Wednesday</option>
+                                <option value="Thursday">Thursday</option>
+                                <option value="Friday">Friday</option>
+                                <option value="Saturday">Saturday</option>
+                                <option value="Sunday">Sunday</option>
+                            </select>
+                            <input type="hidden" name="course_id" th:value="${course.getId()}">
+                            <input type="hidden" name="company_id" th:value="${company_id}">
+                            <input type="submit">
+                        </form>
+                    </th:block>
                 </th:block>
-                <br>
             </div>
-        </div>
-        -->
-        <div class="container schedule-block">
-
-            <h4 class="schedule-title" th:text="${course.getName()}"></h4>
-            <hr class="schedule-hr"/>
-            <div class="container schedule-table">
-                <div class="schedule-col">
-                    <h6>Monday</h6>
-                    <div class="card border-dark bg-light weekday Monday" th:each="schedule : ${schedule_map.get(1)}">
-                        <p class="course-name-link" th:text="${course.getNameSnippet()}" data-toggle="tooltip" th:title="${course.getName()}"></p>
-                        <p th:text="${schedule.getStartTime()}"></p>
-                        <p th:text="${schedule.getEndTime()}"></p>
-                    </div>
-                </div>
-
-                <div class="schedule-col">
-                    <h6>Tuesday</h6>
-                    <div class="card border-dark bg-light weekday Tuesday" th:each="schedule : ${schedule_map.get(2)}">
-                        <p class="course-name-link" th:text="${course.getNameSnippet()}" data-toggle="tooltip" th:title="${course.getName()}"></p>
-                        <p th:text="${schedule.getStartTime()}"></p>
-                        <p th:text="${schedule.getEndTime()}"></p>
-                    </div>
-                </div>
-
-                <div class="schedule-col">
-                    <h6>Wednesday</h6>
-                    <div class="card border-dark bg-light weekday Wednesday" th:each="schedule : ${schedule_map.get(3)}">
-                        <p class="course-name-link" th:text="${course.getNameSnippet()}" data-toggle="tooltip" th:title="${course.getName()}"></p>
-                        <p th:text="${schedule.getStartTime()}"></p>
-                        <p th:text="${schedule.getEndTime()}"></p>
-                    </div>
-                </div>
-
-                <div class="schedule-col">
-                    <h6>Thursday</h6>
-                    <div class="card border-dark bg-light weekday Thursday" th:each="schedule : ${schedule_map.get(4)}">
-                        <p class="course-name-link" th:text="${course.getNameSnippet()}" data-toggle="tooltip" th:title="${course.getName()}"></p>
-                        <p th:text="${schedule.getStartTime()}"></p>
-                        <p th:text="${schedule.getEndTime()}"></p>
-                        <br>
-                    </div>
-                </div>
-
-                <div class="schedule-col">
-                    <h6>Friday</h6>
-                    <div class="card border-dark bg-light weekday Friday" th:each="schedule : ${schedule_map.get(5)}">
-                        <p class="course-name-link" th:text="${course.getNameSnippet()}" data-toggle="tooltip" th:title="${course.getName()}"></p>
-                        <p th:text="${schedule.getStartTime()}"></p>
-                        <p th:text="${schedule.getEndTime()}"></p>
-                    </div>
-                </div>
-
-                <div class="schedule-col">
-                    <h6>Saturday</h6>
-                    <div class="card border-dark bg-light weekday Saturday" th:each="schedule : ${schedule_map.get(6)}">
-                        <p class="course-name-link" th:text="${course.getNameSnippet()}" data-toggle="tooltip" th:title="${course.getName()}"></p>
-                        <p th:text="${schedule.getStartTime()}"></p>
-                        <p th:text="${schedule.getEndTime()}"></p>
-                    </div>
-                </div>
-
-                <div class="schedule-col">
-                    <h6>Sunday</h6>
-                    <div class="card border-dark bg-light weekday Sunday" th:each="schedule : ${schedule_map.get(i)}">
-                        <p class="course-name-link" th:text="${course.getNameSnippet()}" data-toggle="tooltip" th:title="${course.getName()}"></p>
-                        <p th:text="${schedule.getStartTime()}"></p>
-                        <p th:text="${schedule.getEndTime()}"></p>
-                    </div>
-                </div>
+            <div>
+                <button type="button" onclick="closeAdditionalInformation()" class="btn btn-info">Закрыть</button>
             </div>
-        </div>
-        <div>
-            <th:block th:if="${ isManagementStaff}">
-                <th:block th:if="${current_user.getRole() == 1 or current_user.isAbleToAddSchedule()}">
-
-                <form action="/add_schedule_to_course" method="post">
-                    <input type="time" name="start_time" placeholder="Start time" required="">
-                    <input type="time" name="end_time" placeholder="End time" required="">
-                    <select name = "week_day" required="">
-                        <option value="Monday">Monday</option>
-                        <option value="Tuesday">Tuesday</option>
-                        <option value="Wednesday">Wednesday</option>
-                        <option value="Thursday">Thursday</option>
-                        <option value="Friday">Friday</option>
-                        <option value="Saturday">Saturday</option>
-                        <option value="Sunday">Sunday</option>
-                    </select>
-                    <input type="hidden" name="course_id" th:value="${course.getId()}">
-                    <input type="hidden" name="company_id" th:value="${company_id}">
-                    <input type="submit">
-                </form>
-                </th:block>
-            </th:block>
-        </div>
-        <div>
-            <button type="button" onclick="closeAdditionalInformation()" class="btn btn-info">Закрыть</button>
         </div>
     </div>
-</div>
 
-<div id="additional-info-about-students" class="additional-info hidden" th:if="${isManagementStaff}">
-    <div class="course-students-pop-up">
+    <div id="additional-info-about-students" class="additional-info hidden" th:if="${isManagementStaff}">
+        <div class="course-students-pop-up">
 
-        <table class="table">
-            <thead>
+            <table class="table">
+                <thead>
                 <tr scope="col"><strong>Students who enrolled to this course</strong></tr>
-            </thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Surname</th>
-                <th scope="col">Lastname</th>
-                <th:block th:if="${isManagementStaff}">
-                    <th th:if="${current_user.getRole() == 1 or current_user.isAbleToEditStudent()}">Action</th>
-                </th:block>
-            </tr>
-            <tbody>
-            <th:block th:each="i :  ${#numbers.sequence(0, participating_students.size() -1 )}" th:if="${participating_students.size() > 0}"> <!-- style="cursor: pointer" -->
-                <tr class="course-list-item table-item">
-                    <th scope="row" th:text="${i+1}"></th>
-                    <td><a class="table-row-link" th:href="@{'students_profile/'} + ${participating_students.get(i).getId()}"
-                           th:text="${participating_students.get(i).getName()}"/></td>
-                    <td><a class="table-row-link" th:href="@{'students_profile/'} + ${participating_students.get(i).getId()}"
-                           th:text="${participating_students.get(i).getSurname()}"/></td>
-                    <td><a class="table-row-link" th:href="@{'students_profile/'} + ${participating_students.get(i).getId()}"
-                           th:text="${participating_students.get(i).getLastname()}"/></td>
-                    <td>
-                        <form action="/delete_student_from_course" method="post">
-                            <input type="hidden" name="course_id" th:value="${course.getId()}">
-                            <input type="hidden" name="student_id" th:value="${participating_students.get(i).getId()}">
-                            <input type="submit" class="table-row-link" value="Delete From Course">
-                        </form>
-                    </td>
+                </thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Surname</th>
+                    <th scope="col">Lastname</th>
+                    <th:block th:if="${isManagementStaff}">
+                        <th th:if="${current_user.getRole() == 1 or current_user.isAbleToEditStudent()}">Action</th>
+                    </th:block>
                 </tr>
-            </th:block>
-            </tbody>
-            <tr ><td colspan="4" style="text-align:center"><hr class="schedule-hr"/><br><strong>Students who is not enrolled to this course</strong></td></tr>
-            <tr>
-                <td><strong>#</strong></td>
-                <td><strong>Name</strong></td>
-                <td><strong>Surname</strong></td>
-                <td><strong>Lastname</strong></td>
-                <th:block th:if="${isManagementStaff}">
-                    <td th:if="${current_user.getRole() == 1 or current_user.isAbleToEditStudent()}"><strong>Action</strong></td>
+                <tbody>
+                <th:block th:each="i :  ${#numbers.sequence(0, participating_students.size() -1 )}"
+                          th:if="${participating_students.size() > 0}"> <!-- style="cursor: pointer" -->
+                    <tr class="course-list-item table-item">
+                        <th scope="row" th:text="${i+1}"></th>
+                        <td><a class="table-row-link"
+                               th:href="@{'students_profile/'} + ${participating_students.get(i).getId()}"
+                               th:text="${participating_students.get(i).getName()}"/></td>
+                        <td><a class="table-row-link"
+                               th:href="@{'students_profile/'} + ${participating_students.get(i).getId()}"
+                               th:text="${participating_students.get(i).getSurname()}"/></td>
+                        <td><a class="table-row-link"
+                               th:href="@{'students_profile/'} + ${participating_students.get(i).getId()}"
+                               th:text="${participating_students.get(i).getLastname()}"/></td>
+                        <td>
+                            <form action="/delete_student_from_course" method="post">
+                                <input type="hidden" name="course_id" th:value="${course.getId()}">
+                                <input type="hidden" name="student_id"
+                                       th:value="${participating_students.get(i).getId()}">
+                                <input type="submit" class="table-row-link" value="Delete From Course">
+                            </form>
+                        </td>
+                    </tr>
                 </th:block>
-            </tr>
-            <tbody>
-            <th:block th:each="i :  ${#numbers.sequence(0, not_participating_students.size() -1 )}" th:if="${not_participating_students.size() > 0}"> <!-- style="cursor: pointer" -->
-                <tr class="course-list-item table-item">
-                    <th scope="row" th:text="${i+1}"></th>
-                    <td><a class="table-row-link" th:href="@{'students_profile/'} + ${not_participating_students.get(i).getId()}"
-                           th:text="${not_participating_students.get(i).getName()}"/></td>
-                    <td><a class="table-row-link" th:href="@{'students_profile/'} + ${not_participating_students.get(i).getId()}"
-                           th:text="${not_participating_students.get(i).getSurname()}"/></td>
-                    <td><a class="table-row-link" th:href="@{'students_profile/'} + ${not_participating_students.get(i).getId()}"
-                           th:text="${not_participating_students.get(i).getLastname()}"/></td>
-                    <td>
-                        <form action="/add_student_to_course" method="post">
-                            <input type="hidden" name="course_id" th:value="${course.getId()}">
-                            <input type="hidden" name="student_id" th:value="${not_participating_students.get(i).getId()}">
-                            <input type="submit" class="table-row-link" value="Add To Course">
-                        </form>
-                    </td>
+                </tbody>
+                <tr>
+                    <td colspan="4" style="text-align:center">
+                        <hr class="schedule-hr"/>
+                        <br><strong>Students who is not enrolled to this course</strong></td>
                 </tr>
-            </th:block>
-            </tbody>
-        </table>
-        <div>
-            <button type="button" onclick="closeAdditionalInformationAboutStudents()" class="btn btn-info">Закрыть</button>
+                <tr>
+                    <td><strong>#</strong></td>
+                    <td><strong>Name</strong></td>
+                    <td><strong>Surname</strong></td>
+                    <td><strong>Lastname</strong></td>
+                    <th:block th:if="${isManagementStaff}">
+                        <td th:if="${current_user.getRole() == 1 or current_user.isAbleToEditStudent()}">
+                            <strong>Action</strong></td>
+                    </th:block>
+                </tr>
+                <tbody>
+                <th:block th:each="i :  ${#numbers.sequence(0, not_participating_students.size() -1 )}"
+                          th:if="${not_participating_students.size() > 0}"> <!-- style="cursor: pointer" -->
+                    <tr class="course-list-item table-item">
+                        <th scope="row" th:text="${i+1}"></th>
+                        <td><a class="table-row-link"
+                               th:href="@{'students_profile/'} + ${not_participating_students.get(i).getId()}"
+                               th:text="${not_participating_students.get(i).getName()}"/></td>
+                        <td><a class="table-row-link"
+                               th:href="@{'students_profile/'} + ${not_participating_students.get(i).getId()}"
+                               th:text="${not_participating_students.get(i).getSurname()}"/></td>
+                        <td><a class="table-row-link"
+                               th:href="@{'students_profile/'} + ${not_participating_students.get(i).getId()}"
+                               th:text="${not_participating_students.get(i).getLastname()}"/></td>
+                        <td>
+                            <form action="/add_student_to_course" method="post">
+                                <input type="hidden" name="course_id" th:value="${course.getId()}">
+                                <input type="hidden" name="student_id"
+                                       th:value="${not_participating_students.get(i).getId()}">
+                                <input type="submit" class="table-row-link" value="Add To Course">
+                            </form>
+                        </td>
+                    </tr>
+                </th:block>
+                </tbody>
+            </table>
+            <div>
+                <button type="button" onclick="closeAdditionalInformationAboutStudents()" class="btn btn-info">Закрыть
+                </button>
+            </div>
         </div>
     </div>
 </div>
-
 <script th:src="@{/js/special_for_additional_info.js}"></script>
 
 <footer th:insert="blocks/footer :: footer"></footer>

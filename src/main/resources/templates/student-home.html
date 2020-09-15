@@ -9,15 +9,16 @@
 <body>
 <header th:insert="blocks/header :: header"></header>
 
-<div th:insert="blocks/default-left-menu-bar :: default-left-menu-bar"></div>
+<div class="container wrapper">
+    <div th:insert="blocks/default-left-menu-bar :: default-left-menu-bar"></div>
 
     <div class="main-content">
         <div class="container mt-5">
             <div class="card mt-2">
                 <h5 class="card-header">Test Title</h5>
-                <p class="info-card-text">Here is general text that will be displayed on show, 
+                <p class="info-card-text">Here is general text that will be displayed on show,
                     Btw, dont forget to create snippet function,
-                    that retunrs on part of an whole textHere is general text that will be displayed on show, 
+                    that retunrs on part of an whole textHere is general text that will be displayed on show,
                     Btw, dont forget to create snippet function,
                     that retunrs on part of an whole text</p>
                 <a class="btn btn-default" th:href="@{generic_task}">More...</a>
@@ -28,9 +29,9 @@
         <div class="container mt-5">
             <div class="card mt-2">
                 <h5 class="card-header">Test Title</h5>
-                <p class="info-card-text">Here is general text that will be displayed on show, 
+                <p class="info-card-text">Here is general text that will be displayed on show,
                     Btw, dont forget to create snippet function,
-                    that retunrs on part of an whole textHere is general text that will be displayed on show, 
+                    that retunrs on part of an whole textHere is general text that will be displayed on show,
                     Btw, dont forget to create snippet function,
                     that retunrs on part of an whole text</p>
                 <a class="btn btn-default">More...</a>
@@ -51,7 +52,7 @@
 
         </div>
     </div>
-
+</div>
 
 <footer th:insert="blocks/footer :: footer"></footer>
 </body>

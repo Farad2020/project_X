@@ -1,4 +1,4 @@
- <!DOCTYPE HTML>
+<!DOCTYPE HTML>
 <!--
 взять как список
 -->
@@ -8,57 +8,63 @@
 </head>
 <body>
 <header th:insert="blocks/header :: header"></header>
-<div th:insert="blocks/default-left-menu-bar :: default-left-menu-bar"></div>
 
-<div class="main-content">
+<div class="container wrapper">
 
-    <!-- Второй фильтр виден если первый не Равен Нулю -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light filter-navbar">
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Filter Teachers By : Alphabet, Ascending
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="#">Alphabet, Ascending</a>
-                        <a class="dropdown-item" href="#">Alphabet, Descending</a>
-                    </div>
-                </li>
-            </ul>
+    <div th:insert="blocks/default-left-menu-bar :: default-left-menu-bar"></div>
 
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>
-        </div>
-    </nav>
+    <div class="main-content">
+
+        <!-- Второй фильтр виден если первый не Равен Нулю -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light filter-navbar">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Filter Teachers By : Alphabet, Ascending
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="#">Alphabet, Ascending</a>
+                            <a class="dropdown-item" href="#">Alphabet, Descending</a>
+                        </div>
+                    </li>
+                </ul>
+
+                <form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </div>
+        </nav>
 
 
-    <p th:unless="teachers"> Не удалось найти соответсвующие записи. </p>
-    <table th:if="teachers" class="table">
-        <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Name</th>
-            <th scope="col">Surname</th>
-            <th scope="col">Lastname</th>
-        </tr>
-        </thead>
-        <tbody>
-        <th:block th:each="i :  ${#numbers.sequence(0, teachers.size() -1 )}" th:if="${teachers.size() > 0}"> <!-- style="cursor: pointer" -->
-            <tr class="course-list-item table-item">
-                <th scope="row" th:text="${i+1}"></th>
-                <td><a class="table-row-link" th:href="@{'~/teacher_profile/'} + ${teachers.get(i).getId()}"
-                       th:text="${teachers.get(i).getName()}"/></td>
-                <td><a class="table-row-link" th:href="@{'~/teacher_profile/'} + ${teachers.get(i).getId()}"
-                       th:text="${teachers.get(i).getSurname()}"/></td>
-                <td><a class="table-row-link" th:href="@{'~/teacher_profile/'} + ${teachers.get(i).getId()}"
-                       th:text="${teachers.get(i).getLastname()}"/></td>
+        <p th:unless="teachers"> Не удалось найти соответсвующие записи. </p>
+        <table th:if="teachers" class="table">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Surname</th>
+                <th scope="col">Lastname</th>
             </tr>
-        </th:block>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            <th:block th:each="i :  ${#numbers.sequence(0, teachers.size() -1 )}" th:if="${teachers.size() > 0}">
+                <!-- style="cursor: pointer" -->
+                <tr class="course-list-item table-item">
+                    <th scope="row" th:text="${i+1}"></th>
+                    <td><a class="table-row-link" th:href="@{'~/teacher_profile/'} + ${teachers.get(i).getId()}"
+                           th:text="${teachers.get(i).getName()}"/></td>
+                    <td><a class="table-row-link" th:href="@{'~/teacher_profile/'} + ${teachers.get(i).getId()}"
+                           th:text="${teachers.get(i).getSurname()}"/></td>
+                    <td><a class="table-row-link" th:href="@{'~/teacher_profile/'} + ${teachers.get(i).getId()}"
+                           th:text="${teachers.get(i).getLastname()}"/></td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+    </div>
 </div>
 <footer th:insert="blocks/footer :: footer"></footer>
 </body>

@@ -11,43 +11,51 @@
 </head>
 <body>
 <header th:insert="blocks/header :: header"></header>
-<div th:insert="blocks/default-left-menu-bar :: default-left-menu-bar"></div>
+
+<div class="container wrapper">
+    <div th:insert="blocks/default-left-menu-bar :: default-left-menu-bar"></div>
 
 
-<div class="main-content">
+    <div class="main-content">
 
-    <!-- Второй фильтр виден если первый не Равен Нулю -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light filter-navbar">
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Course: None
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item">None</a>
-                        <a class="dropdown-item" th:each="course : ${course_attendance_map.keySet()}" th:text="${course.getName()}"></a>
-                    </div>
-                </li>
+        <!-- Второй фильтр виден если первый не Равен Нулю -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light filter-navbar">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Course: None
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item">None</a>
+                            <a class="dropdown-item" th:each="course : ${course_attendance_map.keySet()}"
+                               th:text="${course.getName()}"></a>
+                        </div>
+                    </li>
 
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Filter By: Date, Ascending
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="#">Date, Ascending</a>
-                        <a class="dropdown-item" href="#">Date, Descending</a>
-                    </div>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Filter By: Date, Ascending
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="#">Date, Ascending</a>
+                            <a class="dropdown-item" href="#">Date, Descending</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <div th:each="course : ${course_attendance_map.keySet()}">
+            <p th:text="${course.getName()}"></p>
+            <ul class="list-group course-list">
+                <li class="course-list-item" th:each="attendance : ${course_attendance_map.get(course)}"
+                    th:text="${attendance.getDate()} + ':' + ${attendance.getAttendanceTypeString()}">Date : Status
                 </li>
             </ul>
         </div>
-    </nav>
-
-    <div th:each="course : ${course_attendance_map.keySet()}">
-        <p th:text="${course.getName()}"></p>
-        <ul class="list-group course-list">
-            <li class="course-list-item" th:each="attendance : ${course_attendance_map.get(course)}" th:text="${attendance.getDate()} + ':' + ${attendance.getAttendanceTypeString()}">Date : Status</li>
-        </ul>
     </div>
 </div>
 
